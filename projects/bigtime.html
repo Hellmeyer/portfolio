@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BigTime — UI/UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#hud">HUD</a>
+      <a href="#inventory">Inventory</a>
+      <a href="#crafting">Crafting</a>
+      <a href="#systems">Systems</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Case Study 01 — Game UX/UI</p>
+      <h1>Designing the systems layer<br>of <em>BigTime</em></h1>
+      <p class="lede">
+        A full UI system for BigTime, a multiplayer online RPG — combat HUD,
+        inventory and equipment, progression, quests, crafting economy, world
+        customization, and the social/settings shell that holds it together.
+        Built around the <strong>Pocketwatch</strong>, a wearable item that
+        swaps your entire class on the fly.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UI/UX Designer</span>
+        <span class="tag">Tool: Figma</span>
+        <span class="tag epic">Scope: 7 systems, 26 screens</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          BigTime is a multiplayer online RPG built around a story of time
+          travel and historical figures. Its core hook is the Pocketwatch —
+          a wearable item that fully swaps your class — and every cosmetic
+          you earn is tradeable on the Openloot platform, so your loot is
+          truly yours. The challenge was building an interface that could
+          make these interconnected systems feel instinctive rather than
+          overwhelming.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="hud">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>HUD</h2>
+        <p>
+          The Simple HUD is what you start the game with — chat, player
+          health bars and XP, weapon swap, consumables stash, hotbar, quest
+          tracker, map, and currencies. The Full HUD layers everything else
+          on top: party UI, center-screen messages, Combo UI, notifications,
+          item pickups, and ailments/buffs sitting right next to health,
+          along with the enemy's health bars. Together, the two versions
+          show the best-case and worst-case density a player will ever see
+          on screen.
+        </p>
+      </div>
+    </div>
+    <div class="compare" id="hudCompare">
+      <img class="compare-img" src="../assets/images/rpg/hud-full.jpg" alt="Full HUD with party UI, notifications, item pickups, combo UI, and enemy health bars">
+      <img class="compare-img compare-top" src="../assets/images/rpg/hud-simple.jpg" alt="Simple HUD with chat, health, weapon swap, consumables, hotbar, quest tracker, map, and currencies">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Simple</span>
+      <span class="compare-label compare-label-right">Full</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal Simple vs Full HUD">
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/hud-simple.jpg" alt="Simple HUD with chat, health, weapon swap, consumables, hotbar, quest tracker, map, and currencies" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Simple HUD</strong>What you start the game with: chat, health and XP, weapon swap, consumables stash, hotbar, quest tracker, map, and currencies.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/hud-full.jpg" alt="Full HUD with party UI, notifications, item pickups, combo UI, and enemy health bars" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Full HUD</strong>Everything layered on top of Simple: party UI, center-screen messages, Combo UI, notifications, item pickups, ailments/buffs, and enemy health bars.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="inventory">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>Inventory &amp; Equipment</h2>
+        <p>
+          Every equipment slot follows the same three-column pattern: browse
+          on the left, compare stats in the middle, see what's currently
+          equipped on the right. Rarity is color-coded consistently (common
+          white, uncommon green, rare blue, epic purple, legendary orange)
+          across every screen in the system, so a player can price an item
+          at a glance before ever opening the details.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot full">
+        <img src="../assets/images/rpg/inventory-main.jpg" alt="Main character equipment screen with stat panel and equipped item slots" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Character overview</strong>Core stats on the left, full equipment loadout on the character model, selected item detail on the right.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Pocketwatch selection</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-pocketwatch.jpg" alt="Pocketwatch selection screen comparing an equipped rare watch to an epic alternative" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Pocketwatch select</strong>Your choice of watch determines your class, giving you the flexibility to play exactly how you want or fill whatever role your party needs.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-pocketwatch-gears.jpg" alt="Pocketwatch gear socketing screen with four slot loadout" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Pocketwatch slots</strong>Pocketwatch Gears are a type of in-game item that can provide various benefits to the player's character.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Weapons</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-weapons.jpg" alt="Weapon selection filtered to dual swords" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Weapons</strong>Filterable by weapon type, with the same compare/equip pattern used everywhere else.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-weapons-gems.jpg" alt="Weapon gem socketing screen comparing an Ice Gem to an equipped Fire Gem" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Weapon slots</strong>Elemental socketing for weapons — same interaction pattern as Pocketwatch slots, reinforcing that "socket an item" means one thing everywhere in the game.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-weapons-cosmetics.jpg" alt="Weapon cosmetics grid with large weapon preview" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Weapon cosmetics</strong>Cosmetics separated from functional gear entirely, with a large preview so the choice is visual first.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Other gear</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-head.jpg" alt="Head armor comparison screen" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Head armor</strong>Consistent comparison UI for all gear.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/inventory-head-cosmetics.jpg" alt="Head cosmetics grid with full-body character preview" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Head cosmetics</strong>Cosmetics separated from functional gear entirely, with a large preview so the choice is visual first.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="progression">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>Progression</h2>
+        <p>
+          A branching skill tree where node state reads at a glance: unlocked
+          nodes are colored, locked-but-available nodes are colorless, and
+          not-yet-reachable nodes are greyed out — no reliance on a legend to
+          parse the tree. Highlighted tracks tie each branch together for even
+          easier reading. The active-skill detail panel shows current vs.
+          next-rank specs side by side, so upgrading is a comparison, not a
+          guess.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot wide">
+        <img src="../assets/images/rpg/skilltree.jpg" alt="Branching skill tree with a selected skill's specs and level requirement shown" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Skill tree</strong>Named branches (Bravery, Warrior Core) give players a mental map of build identity, not just a maze of nodes. The right panel spells out current vs. next stats for whatever's selected.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="quests">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">IV.</span>
+      <div>
+        <h2>Quests</h2>
+        <p>
+          Quests are grouped by type (Main, Secondary, Bounties, Completed) with
+          a single tracked quest pinned at the top. The detail panel always
+          shows the same three things in the same order — brief, objectives,
+          rewards — so a player scanning quickly always knows where to look
+          for "what do I get."
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot wide">
+        <img src="../assets/images/rpg/quests.jpg" alt="Quest log showing brief, objectives, and reward breakdown for a tracked main quest" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Quest log</strong>Objectives are listed in completion order and rewards are broken into XP, gold, and drop chance — giving the player a reason to weigh a quest before starting it.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="crafting">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">V.</span>
+      <div>
+        <h2>Crafting</h2>
+        <p>
+          The crafting flow breaks a single decision into three legible
+          steps — pick the category, pick the item, confirm the cost — before
+          committing a player to a real-time craft timer. Bonus Rolls sit as an
+          optional side-system: spend extra currency for better odds, entirely
+          separate from the core recipe.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot full">
+        <img src="../assets/images/rpg/armory-main.jpg" alt="Crafting specs screen showing ingredients and a continue to craft button" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Crafting specs</strong>Ingredients shown with current/required counts before the player can commit — no surprise shortfalls at the confirm step.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Crafting process</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/armory-select.jpg" alt="Armor piece and item selection screen in the Armory" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Bonus rolls or craft?</strong>An optional choice to enhance your craft is presented here.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/armory-bonus-rolls.jpg" alt="Bonus rolls screen with small, medium, and high tiers for modchips, currency, schematics, and cosmetics" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Bonus rolls</strong>Here the player has a chance to improve their odds by spending some currency, and can continue to the craft as well.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Craft in progress</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/armory-progress-a.jpg" alt="Craft in progress screen with remaining time and skip time option" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Craft in progress</strong>A visible countdown plus a "skip time" currency sink — the monetization hook is transparent, not hidden.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/armory-progress-b.jpg" alt="Craft in progress alternate view with item flavor text" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Craft in progress nav</strong>This shows that you can still navigate the screen while crafting, even with limited space.</figcaption>
+      </figure>
+    </div>
+
+  </div>
+</section>
+
+<section class="plate" id="vendor">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">VI.</span>
+      <div>
+        <h2>Vendor</h2>
+        <p>
+          Buying and selling share the same three-column browse/detail/action
+          layout used everywhere else in the shell — a player who's learned
+          any other screen in the game has already learned this one, just
+          with a tab switch between the two directions.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/vendor-buy.jpg" alt="Vendor buy screen with consumables grid and selected item panel" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Buy</strong>Same three-column browse/detail/action pattern as inventory — a player who's learned one screen has learned most of the game's shell.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/vendor-sell.jpg" alt="Vendor sell screen mirroring the buy layout" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Sell</strong>Sell mirrors Buy exactly — tab switch only, no layout relearning required.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="world">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">VII.</span>
+      <div>
+        <h2>World Customization</h2>
+        <p>
+          Placing a decoration keeps the world visible behind the picker —
+          rarity, category, and deco text sit in a callout without ever
+          pausing or fading the 3D scene, so the player can see exactly where
+          the object will land before confirming.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/rpg/deco-inventory.jpg" alt="Decoration inventory panel expanded over the game world" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Deco search</strong>The full catalog opens as an overlay, sorted by category tab, without leaving the placement scene.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/deco-placement.jpg" alt="Final table placement confirmation in the game world" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Deco placement</strong>The object is already rendered at full fidelity in the world before the player commits — no abstract placeholder.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="systems">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">VIII.</span>
+      <div>
+        <h2>Supporting Systems</h2>
+        <p>
+          The shell around the game: config and social. None of it is
+          glamorous, but a group-focused RPG lives or dies on how easy this
+          layer is to use.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="../assets/images/rpg/settings-controls.jpg" alt="Rebindable controls screen grouped by mouse options, movement, abilities, and combat" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Controls</strong>Grouped by function rather than listed alphabetically — movement, abilities, and combat each get their own column.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/social-party.jpg" alt="Party screen showing current party, invite search, and pending invitations" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Party</strong>Current party, invite search, and pending invitations live side by side — no tab-switching to build a group.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/social-friends.jpg" alt="Friends list with online and offline groupings and a player stat overview panel" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Friends</strong>Online friends surface above offline ones automatically; selecting anyone shows their stat overview without opening a separate profile screen.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/rpg/social-guilds.jpg" alt="Guild management screen with member list and permission toggles" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Guilds</strong>Role permissions are exposed as individual toggles rather than locked to fixed ranks — a guild can shape its own hierarchy.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          The throughline is pattern reuse, not novelty: the same
+          three-column browse/detail/action layout runs through Inventory,
+          Weapons, and the Vendor; rarity is color-coded identically
+          everywhere; skill nodes read their state through fill alone. Learn
+          one screen and you've learned most of the game's shell — so new
+          systems layer onto a vocabulary the player already has, instead of
+          teaching a new one.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+    <p><a href="../index.html">← Back to all projects</a></p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close full-size image">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <img id="lightboxImg" src="" alt="">
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
