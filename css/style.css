@@ -44,6 +44,7 @@ body {
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img { max-width: 100%; display: block; }
@@ -304,29 +305,33 @@ a:hover { color: var(--frost); }
 }
 .plate-head .fill-me { display: block; margin-top: 10px; }
 
-/* gear divider */
+/* gear divider — the line spans the full viewport width */
 .gear-divider {
   display: flex;
   align-items: center;
   gap: 14px;
   margin: 56px 0 20px;
+  margin-left: calc(50% - 50vw + 16px);
+  margin-right: calc(50% - 50vw + 16px);
   color: var(--brass-dim);
 }
-.gear-divider svg { width: 20px; height: 20px; flex-shrink: 0; }
 .gear-divider .line {
   flex: 1;
   height: 1px;
   background: rgba(201, 162, 78, 0.22);
 }
 
-/* image grid */
+/* image grid — breaks out of .wrap to span the viewport width, minus a small side margin */
 .shot-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 11px;
+  margin-left: calc(50% - 50vw + 16px);
+  margin-right: calc(50% - 50vw + 16px);
 }
 .shot-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
 .shot {
+  margin: 0;
   background: var(--ink-2);
   border: var(--edge);
   border-radius: 4px;
@@ -357,11 +362,39 @@ a:hover { color: var(--frost); }
 }
 
 /* ============================================
+   ITEM ICON MARQUEE
+   ============================================ */
+.marquee-row {
+  overflow: hidden;
+  margin: 0 0 14px;
+  margin-left: calc(50% - 50vw + 16px);
+  margin-right: calc(50% - 50vw + 16px);
+}
+.marquee-row:last-child { margin-bottom: 0; }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+}
+.marquee-track.marquee-right { animation-direction: reverse; }
+.marquee-track img {
+  height: 90px;
+  width: auto;
+  display: block;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============================================
    DRAG-TO-COMPARE SLIDER
    ============================================ */
 .compare {
   position: relative;
-  width: 100%;
+  margin-top: 32px;
+  margin-left: calc(50% - 50vw + 16px);
+  margin-right: calc(50% - 50vw + 16px);
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 4px;
@@ -509,6 +542,13 @@ a:hover { color: var(--frost); }
   overflow: hidden;
 }
 .card-thumb img, .card-thumb video { width: 100%; height: 100%; object-fit: cover; }
+.card-thumb video { filter: grayscale(1); }
+.card-thumb-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(20, 22, 31, 0.3);
+}
 .card-thumb .soon-badge {
   position: absolute;
   inset: 0;

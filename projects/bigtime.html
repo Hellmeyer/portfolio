@@ -38,17 +38,11 @@
     <div class="wrap hero-text">
       <p class="eyebrow">Case Study 01 — Game UX/UI</p>
       <h1>Designing the systems layer<br>of <em>BigTime</em></h1>
-      <p class="lede">
-        A full UI system for BigTime, a multiplayer online RPG — combat HUD,
-        inventory and equipment, progression, quests, crafting economy, world
-        customization, and the social/settings shell that holds it together.
-        Built around the <strong>Pocketwatch</strong>, a wearable item that
-        swaps your entire class on the fly.
-      </p>
+      <p class="lede">A full UI system for BigTime, a multiplayer online RPG. This is just a small sample of the full project.</p>
       <div class="meta-row">
         <span class="tag brass">Role: UI/UX Designer</span>
         <span class="tag">Tool: Figma</span>
-        <span class="tag epic">Scope: 7 systems, 26 screens</span>
+        <span class="tag">Tool: Unreal Engine</span>
       </div>
       <a class="btn" href="#overview">↓ Begin the tour</a>
     </div>
@@ -68,7 +62,7 @@
           a wearable item that fully swaps your class — and every cosmetic
           you earn is tradeable on the Openloot platform, so your loot is
           truly yours. The challenge was building an interface that could
-          make these interconnected systems feel instinctive rather than
+          make all interconnected systems feel instinctive rather than
           overwhelming.
         </p>
       </div>
@@ -94,14 +88,6 @@
         </p>
       </div>
     </div>
-    <div class="compare" id="hudCompare">
-      <img class="compare-img" src="../assets/images/rpg/hud-full.jpg" alt="Full HUD with party UI, notifications, item pickups, combo UI, and enemy health bars">
-      <img class="compare-img compare-top" src="../assets/images/rpg/hud-simple.jpg" alt="Simple HUD with chat, health, weapon swap, consumables, hotbar, quest tracker, map, and currencies">
-      <div class="compare-handle" aria-hidden="true"></div>
-      <span class="compare-label compare-label-left">Simple</span>
-      <span class="compare-label compare-label-right">Full</span>
-      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal Simple vs Full HUD">
-    </div>
     <div class="shot-grid cols-2">
       <figure class="shot">
         <img src="../assets/images/rpg/hud-simple.jpg" alt="Simple HUD with chat, health, weapon swap, consumables, hotbar, quest tracker, map, and currencies" loading="lazy" tabindex="0" role="button">
@@ -111,6 +97,14 @@
         <img src="../assets/images/rpg/hud-full.jpg" alt="Full HUD with party UI, notifications, item pickups, combo UI, and enemy health bars" loading="lazy" tabindex="0" role="button">
         <figcaption><strong>Full HUD</strong>Everything layered on top of Simple: party UI, center-screen messages, Combo UI, notifications, item pickups, ailments/buffs, and enemy health bars.</figcaption>
       </figure>
+    </div>
+    <div class="compare" id="hudCompare">
+      <img class="compare-img" src="../assets/images/rpg/hud-full.jpg" alt="Full HUD with party UI, notifications, item pickups, combo UI, and enemy health bars">
+      <img class="compare-img compare-top" src="../assets/images/rpg/hud-simple.jpg" alt="Simple HUD with chat, health, weapon swap, consumables, hotbar, quest tracker, map, and currencies">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Simple</span>
+      <span class="compare-label compare-label-right">Full</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal Simple vs Full HUD">
     </div>
   </div>
 </section>
@@ -139,7 +133,6 @@
     </div>
 
     <div class="gear-divider">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       <span class="line"></span>
       <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Pocketwatch selection</span>
       <span class="line"></span>
@@ -157,7 +150,6 @@
     </div>
 
     <div class="gear-divider">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       <span class="line"></span>
       <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Weapons</span>
       <span class="line"></span>
@@ -179,7 +171,6 @@
     </div>
 
     <div class="gear-divider">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       <span class="line"></span>
       <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Other gear</span>
       <span class="line"></span>
@@ -194,6 +185,39 @@
         <img src="../assets/images/rpg/inventory-head-cosmetics.jpg" alt="Head cosmetics grid with full-body character preview" loading="lazy" tabindex="0" role="button">
         <figcaption><strong>Head cosmetics</strong>Cosmetics separated from functional gear entirely, with a large preview so the choice is visual first.</figcaption>
       </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="item-icons">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Item Icons</h2>
+        <p>
+          Consumables, gems, gears, and equipment icons were modeled and
+          rendered from scratch in Blender.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="marquee-row">
+    <div class="marquee-track marquee-right">
+      <img src="../assets/images/rpg/ItemA.png" alt="Row of hand-modeled potion and gem icons, set A">
+      <img src="../assets/images/rpg/ItemA.png" alt="" aria-hidden="true">
+    </div>
+  </div>
+  <div class="marquee-row">
+    <div class="marquee-track marquee-left">
+      <img src="../assets/images/rpg/ItemB.png" alt="Row of hand-modeled potion and gem icons, set B">
+      <img src="../assets/images/rpg/ItemB.png" alt="" aria-hidden="true">
+    </div>
+  </div>
+  <div class="marquee-row">
+    <div class="marquee-track marquee-right">
+      <img src="../assets/images/rpg/ItemC.png" alt="Row of hand-modeled ring and gem icons, set C">
+      <img src="../assets/images/rpg/ItemC.png" alt="" aria-hidden="true">
     </div>
   </div>
 </section>
@@ -271,7 +295,6 @@
     </div>
 
     <div class="gear-divider">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       <span class="line"></span>
       <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Crafting process</span>
       <span class="line"></span>
@@ -289,7 +312,6 @@
     </div>
 
     <div class="gear-divider">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       <span class="line"></span>
       <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Craft in progress</span>
       <span class="line"></span>
