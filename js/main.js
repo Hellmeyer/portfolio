@@ -115,8 +115,13 @@
 
   function open(img) {
     lastFocused = document.activeElement;
-    var section = img.closest('section') || document;
-    group = Array.prototype.slice.call(section.querySelectorAll('.shot img'));
+    var slideshow = img.closest('.phone-slideshow');
+    if (slideshow) {
+      group = Array.prototype.slice.call(slideshow.querySelectorAll('.phone-slide'));
+    } else {
+      var section = img.closest('section') || document;
+      group = Array.prototype.slice.call(section.querySelectorAll('.shot img'));
+    }
     if (!group.length) group = [img];
     index = group.indexOf(img);
     var multi = group.length > 1;
@@ -138,7 +143,7 @@
   }
 
   document.addEventListener('click', function (e) {
-    var img = e.target.closest('.shot img');
+    var img = e.target.closest('.shot img, .phone-slide');
     if (img) {
       open(img);
       return;
@@ -171,6 +176,117 @@
     } else if (e.key === 'ArrowRight') {
       show(index + 1);
     }
+  });
+})();
+
+// Phone-frame slideshow (auto-advancing, with dots + caption sync).
+// Slideshows inside a [data-sync-group] wrapper advance together in lockstep,
+// so side-by-side examples of "the same screen, different item" stay aligned.
+(function () {
+  var allShows = document.querySelectorAll('.phone-slideshow');
+  if (!allShows.length) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function initGroup(roots) {
+    var members = roots.map(function (root) {
+      var slides = Array.prototype.slice.call(root.querySelectorAll('.phone-slide'));
+      var dotsWrap = root.querySelector('.phone-slideshow-dots');
+      var captionEl = root.querySelector('.phone-slideshow-caption');
+      var dots = dotsWrap ? slides.map(function (slide, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', 'Show slide ' + (i + 1) + ' of ' + slides.length);
+        dotsWrap.appendChild(dot);
+        return dot;
+      }) : [];
+      return { root: root, slides: slides, dots: dots, captionEl: captionEl };
+    }).filter(function (m) { return m.slides.length; });
+
+    if (!members.length) return;
+
+    var maxLen = members.reduce(function (m, g) { return Math.max(m, g.slides.length); }, 0);
+    var current = 0;
+    var timer = null;
+
+    function render() {
+      members.forEach(function (g) {
+        var idx = current % g.slides.length;
+        g.slides.forEach(function (slide, i) { slide.classList.toggle('is-active', i === idx); });
+        g.dots.forEach(function (dot, i) { dot.classList.toggle('is-active', i === idx); });
+        if (g.captionEl) {
+          var active = g.slides[idx];
+          g.captionEl.innerHTML = '';
+          var strong = document.createElement('strong');
+          strong.textContent = active.getAttribute('data-title') || '';
+          g.captionEl.appendChild(strong);
+        }
+      });
+    }
+
+    function goTo(i) {
+      current = (i + maxLen) % maxLen;
+      render();
+    }
+
+    function startAuto() {
+      if (reduceMotion || maxLen < 2) return;
+      stopAuto();
+      timer = window.setInterval(function () { goTo(current + 1); }, 4000);
+    }
+    function stopAuto() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+    }
+
+    members.forEach(function (g) {
+      g.dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          goTo(i);
+          startAuto();
+        });
+      });
+      g.root.addEventListener('mouseenter', stopAuto);
+      g.root.addEventListener('mouseleave', startAuto);
+    });
+
+    render();
+    startAuto();
+  }
+
+  var grouped = [];
+  document.querySelectorAll('[data-sync-group]').forEach(function (wrap) {
+    var members = Array.prototype.slice.call(wrap.querySelectorAll('.phone-slideshow'));
+    if (!members.length) return;
+    initGroup(members);
+    grouped = grouped.concat(members);
+  });
+
+  Array.prototype.slice.call(allShows).forEach(function (root) {
+    if (grouped.indexOf(root) === -1) initGroup([root]);
+  });
+})();
+
+// Phone-frame tabs: swap which item set a phone-slideshow's slides show,
+// without touching which slide (list/grid/detail) is currently active.
+(function () {
+  document.querySelectorAll('.phone-tabs').forEach(function (tabsWrap) {
+    var slideshow = tabsWrap.closest('.phone-slideshow');
+    if (!slideshow) return;
+    var tabs = Array.prototype.slice.call(tabsWrap.querySelectorAll('.phone-tab'));
+    var slides = Array.prototype.slice.call(slideshow.querySelectorAll('.phone-slide'));
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.toggle('is-active', t === tab); });
+        slides.forEach(function (img, i) {
+          var src = tab.getAttribute('data-src-' + i);
+          var alt = tab.getAttribute('data-alt-' + i);
+          if (src) img.src = src;
+          if (alt) img.alt = alt;
+        });
+      });
+    });
   });
 })();
 

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Time — UX/UI Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#hud">HUD</a>
+      <a href="#inventory">Inventory</a>
+      <a href="#farming">Farming</a>
+      <a href="#shop">Shop</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/pets-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/pets-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Case Study 02 — Mobile Game UX/UI</p>
+      <h1>Designing the systems layer<br>of <em>Pet Time</em></h1>
+      <p class="lede">
+        A cozy mobile game about exploring, collecting, crafting, and raising
+        pets — hatched from eggs, caught while exploring the different
+        biomes. This is a small sample from early concept UI screens, still
+        very much a work in progress.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UX/UI Designer</span>
+        <span class="tag">Tool: Figma</span>
+        <span class="tag">Tool: Unreal Engine</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          Pet Time is a cozy mobile collector: hatch pets from eggs, catch
+          them in the wild, grow crops on a farm to feed them, and level
+          them up. There's also collectible gear for your character. The
+          challenge was making all systems feel like one cohesive thing.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="hud">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>HUD</h2>
+        <p>
+          The world HUD keeps few things on screen at once: character level,
+          backpack (inventory), and the support screens (settings, login,
+          etc.). Activities and other interactions nearby are shown
+          dynamically when you get closer. A guided onboarding pass walks
+          new players through each shortcut the first time it appears,
+          instead of front-loading a tutorial before they can move.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/hud-main.jpg" alt="Mobile world HUD with level badge, backpack, support screen shortcuts, and a glowing central portal" data-title="World HUD" data-desc="Character level, backpack, and support screens (settings, login) stay fixed in the corners; nearby activities and interactions surface dynamically as you approach them, instead of cluttering the screen all at once.">
+          <img class="phone-slide" src="../assets/images/pets/hud-dialog.jpg" alt="Tutorial dialog box with a character explaining the inventory shortcut" data-title="Guided onboarding" data-desc="A narrator character explains each shortcut in place, the first time a new player encounters it.">
+        </div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="inventory">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>Inventory &amp; Collection</h2>
+        <p>
+          One inventory hub, three tabs — Gear, Bag, Pets — sharing the same
+          balance bar, search field, and grid/list toggle. Every detail
+          screen underneath, whether it's a pet or a chestpiece, reuses the
+          same rarity badge, type tags, and description block. Learn one
+          screen and you'll learn them all.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/inventory-main-gear.jpg" alt="Equipment paperdoll with head, chest, gloves, legs, shoulders, weapon, and two ring slots" data-title="Equip loadout" data-desc="A paperdoll with five armor slots plus a weapon and two ring slots — everything you're wearing, in one screen.">
+        </div>
+      </div>
+      <p class="phone-slideshow-caption"><strong>Equip loadout</strong></p>
+    </div>
+
+    <div class="phone-slideshow phone-slideshow-tabs">
+      <div class="phone-tabs">
+        <button type="button" class="phone-tab is-active"
+          data-src-0="../assets/images/pets/inventory-head-list.jpg" data-alt-0="Head armor list with Cadet Helm equipped and Rubi Helm available"
+          data-src-1="../assets/images/pets/inventory-head-grid.jpg" data-alt-1="Head armor grid view with two helmets"
+          data-src-2="../assets/images/pets/inventory-head-detail.jpg" data-alt-2="Head armor detail screen">Head</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/inventory-chest-list.jpg" data-alt-0="Chest armor list view"
+          data-src-1="../assets/images/pets/inventory-chest-grid.jpg" data-alt-1="Chest armor grid view"
+          data-src-2="../assets/images/pets/inventory-chest-detail.jpg" data-alt-2="Chest armor detail screen with rarity, tag, lore description, and an equip button">Chest</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/inventory-gloves-list.jpg" data-alt-0="Gloves list view"
+          data-src-1="../assets/images/pets/inventory-gloves-grid.jpg" data-alt-1="Gloves grid view with one glove icon"
+          data-src-2="../assets/images/pets/inventory-gloves-detail.jpg" data-alt-2="Gloves detail screen">Gloves</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/inventory-main-bag.jpg" data-alt-0="Bag categories: Eggs, Farming, Fishing, and Crafting"
+          data-src-1="../assets/images/pets/inventory-bag-farming-crops-grid.jpg" data-alt-1="Farming sub-inventory grid with crops and crafting canisters, each with a quantity badge"
+          data-src-2="../assets/images/pets/inventory-bag-farming-crops-detail.jpg" data-alt-2="Cryothorn Bloom item detail with rarity, Lure tag, and lore description">Bag</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/inventory-main-pets-list.jpg" data-alt-0="Pet collection list view showing rarity number and name for each pet"
+          data-src-1="../assets/images/pets/inventory-main-pets-grid.jpg" data-alt-1="Pet collection grid with discovered pets shown and undiscovered ones as locked silhouettes"
+          data-src-2="../assets/images/pets/inventory-main-pets-detail.jpg" data-alt-2="Pet detail screen with rarity, type tags, description, and four stat bars">Pets</button>
+      </div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/inventory-head-list.jpg" alt="Head armor list with Cadet Helm equipped and Rubi Helm available" data-title="List">
+          <img class="phone-slide" src="../assets/images/pets/inventory-head-grid.jpg" alt="Head armor grid view with two helmets" data-title="Grid">
+          <img class="phone-slide" src="../assets/images/pets/inventory-head-detail.jpg" alt="Head armor detail screen" data-title="Detail">
+        </div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+
+  </div>
+</section>
+
+<section class="plate" id="farming">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>Farming &amp; Incubator</h2>
+        <p>
+          Farming and the Incubator, and other crafting systems in the game
+          share one pick → commit → wait → collect loop, just skinned two
+          ways: plant a crop or set an egg incubating, let a real-time timer
+          run (or spend currency to skip it), then open a reward card for the
+          crop, creature, and XP you earned. Hatch odds are shown up front, so
+          crafting is a calculated bet, not a blind one.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow phone-slideshow-tabs">
+      <div class="phone-tabs">
+        <button type="button" class="phone-tab is-active"
+          data-src-0="../assets/images/pets/farming-select.jpg" data-alt-0="Plant picker listing four plants, one marked as craftable"
+          data-src-1="../assets/images/pets/farming-craft.jpg" data-alt-1="Plant detail screen with description, harvest time, and an ingredients checklist before starting"
+          data-src-2="../assets/images/pets/farming-start.jpg" data-alt-2="Farming plot overview with a craft-in-progress panel showing time left and a skip-time option"
+          data-src-3="../assets/images/pets/farm-finished.jpg" data-alt-3="New Plants reward card showing the harvested crop, its rarity, and character XP gained">Farming</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/incubator-select.jpg" data-alt-0="Egg picker listing three egg types, one marked as craftable"
+          data-src-1="../assets/images/pets/incubator-craft.jpg" data-alt-1="Egg detail screen listing possible hatch outcomes with percentage odds"
+          data-src-2="../assets/images/pets/incubator-start.jpg" data-alt-2="Incubator panel with a craft-in-progress egg, time left, and a skip-time option"
+          data-src-3="../assets/images/pets/incubator-finished.jpg" data-alt-3="New Creature reward card showing a hatched pet, its rarity, and character XP gained">Incubator</button>
+      </div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/farming-select.jpg" alt="Plant picker listing four plants, one marked as craftable" data-title="Pick one">
+          <img class="phone-slide" src="../assets/images/pets/farming-craft.jpg" alt="Plant detail screen with description, harvest time, and an ingredients checklist before starting" data-title="Detail">
+          <img class="phone-slide" src="../assets/images/pets/farming-start.jpg" alt="Farming plot overview with a craft-in-progress panel showing time left and a skip-time option" data-title="Start">
+          <img class="phone-slide" src="../assets/images/pets/farm-finished.jpg" alt="New Plants reward card showing the harvested crop, its rarity, and character XP gained" data-title="Reward">
+        </div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="fishing">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">IV.</span>
+      <div>
+        <h2>Fishing (early concept)</h2>
+        <p>
+          Fishing trades the farm's time-gated wait for an active, one-tap
+          moment: pick a lure, cast, and the catch resolves into the same
+          reward card as everything else — just with a pet instead of a crop.
+          This is an oversimplified fishing interaction, no line tension or
+          fish struggling added to the equation by request.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/fishing-main.jpg" alt="Fishing scene from a boat with lure and rod shortcuts above a single Cast button" data-title="Cast" data-desc="Lure and rod sit as quick-access shortcuts above one large Cast button — no menu diving mid-cast.">
+          <img class="phone-slide" src="../assets/images/pets/fishing-lures.jpg" alt="Lure picker with quantity counts and a selected item preview" data-title="Choose a lure" data-desc="Owned quantity shown per lure, with the same select/full-list pattern used in the shop.">
+          <img class="phone-slide" src="../assets/images/pets/fishing-finish.jpg" alt="Nice Catch reward card showing a caught pet, its rarity, and XP gained" data-title="Catch" data-desc="Same reward-card shape as a harvest — this system just feeds it a pet instead of a crop.">
+        </div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="shop">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">V.</span>
+      <div>
+        <h2>Shop &amp; Currencies</h2>
+        <p>
+          Every store shares one shell: a Shop/Sell toggle, a category list,
+          and an item detail screen with lore text and a Buy button. Two
+          currencies run underneath it all: Gold earned by playing, and
+          Diamonds bought with real money through a separate bundle shop.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow">
+      <div class="phone-tabs">
+        <button type="button" class="phone-tab is-active"
+          data-src-0="../assets/images/pets/store-gear-main.jpg" data-alt-0="Cozy Outfits shop with categories for chest armor, gloves, helmets, legs, shoulders, and armor sets"
+          data-src-1="../assets/images/pets/store-gear-chest-list.jpg" data-alt-1="Chest armor list with item names, set names, and gold prices"
+          data-src-2="../assets/images/pets/store-gear-chest-detail.jpg" data-alt-2="Chest armor item detail with lore text, cost, and Buy button">Gear</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/store-farm-main.jpg" data-alt-0="Farm Supplies shop with categories for seeds, fertilizer, and equipment"
+          data-src-1="../assets/images/pets/store-farm-seeds-list.jpg" data-alt-1="Seeds list with common seed prices and a locked legendary seed requiring level 15"
+          data-src-2="../assets/images/pets/store-farm-seeds-detail.jpg" data-alt-2="Frozen Seeds item detail with lore text, cost, and Buy button">Farm</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/store-fishing-main.jpg" data-alt-0="Fishing Supplies shop with categories for lures, rods, and lines"
+          data-src-1="../assets/images/pets/store-fishing-lures-list.jpg" data-alt-1="Lures list with common and uncommon lure prices"
+          data-src-2="../assets/images/pets/store-fishing-lures-detail.jpg" data-alt-2="Whisperhook lure item detail with lore text, cost, and Buy button">Fishing</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/pets/currencies-main.jpg" data-alt-0="Currencies screen listing Gold and Diamonds balances with a shop currencies entry point"
+          data-src-1="../assets/images/pets/currencies-shop-main.jpg" data-alt-1="Real-money shop with Gold bundles priced in dollars"
+          data-src-2="../assets/images/pets/currencies-shop-detail.jpg" data-alt-2="500 Gold bundle detail with flavor text, cost in dollars, and Buy button">Currencies</button>
+      </div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/pets/store-gear-main.jpg" alt="Cozy Outfits shop with categories for chest armor, gloves, helmets, legs, shoulders, and armor sets" data-title="Shop">
+          <img class="phone-slide" src="../assets/images/pets/store-gear-chest-list.jpg" alt="Chest armor list with item names, set names, and gold prices" data-title="Browse">
+          <img class="phone-slide" src="../assets/images/pets/store-gear-chest-detail.jpg" alt="Chest armor item detail with lore text, cost, and Buy button" data-title="Item detail">
+        </div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="in-engine">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>In-Engine UI Tests</h2>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot full">
+        <video src="../assets/video/pets-remote-test.mp4" poster="../assets/video/pets-remote-test-poster.jpg" controls playsinline></video>
+        <figcaption><strong>In-Engine UI tests</strong>A later build, running live on a physical device — further along than the Figma concepts above.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          The throughline is the same one as BigTime, applied to a much
+          gentler game: reuse a small set of shapes — a pick list, a detail
+          card, a time-gated commit panel, a reward card — across every
+          system instead of designing Farming, Fishing, Incubation, and the
+          Shop as four separate features. A player who's hatched one egg
+          already knows how to read a harvest; a player who's bought one
+          chestpiece already knows how to read a pet. These are still early
+          concept screens, but the pattern is the part I wanted to get right
+          first.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+    <p><a href="../index.html">← Back to all projects</a></p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close full-size image">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <img id="lightboxImg" src="" alt="">
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
