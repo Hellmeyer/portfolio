@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splashy Cats — UX/UI Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#character-select">Character Select</a>
+      <a href="#hud">HUD &amp; Icons</a>
+      <a href="#store">Store</a>
+      <a href="#marketing">Marketing</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/splashy-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/splashy-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Case Study 03 — Mobile Game UX/UI</p>
+      <h1>Pitching the look of<br><em>Splashy Cats</em></h1>
+      <p class="lede">
+        Early concepts based on their "programmer art" for a voxel art
+        style endless hopper about cats who, despite the title, really
+        don't want to get wet. Early concept art even called it "Cats
+        Don't Swim." Shipped on the App Store by Artik Games.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UI/UX Designer</span>
+        <span class="tag">Tool: Illustrator</span>
+        <span class="tag">Tool: Photoshop</span>
+        <span class="tag">Year: 2016</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          Before a single production asset got built, the visual direction
+          had to be sold internally. Rather than argue in the abstract, I
+          built side-by-side comparison decks — an intentionally rough
+          "before" next to the proposed "after" — for the three places a
+          player spends the most time staring at UI: picking a character,
+          reading the HUD, and buying something in the store.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="character-select">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>Character Selection</h2>
+        <p>
+          The pitch deck called it "Feo vs. Lindo" — ugly vs. cute. Same
+          layout, same silhouettes standing in for locked characters, same
+          "New Top" score banner. The only thing that changes is whether the
+          cats look like something worth unlocking.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid mobile-shots">
+      <figure class="shot">
+        <img src="../assets/images/splashy/character-select-final.jpg" alt="Final character-select screen with Tough Cat, Ninja Cat, and Frankencat, each with a TRY button and current score of 24" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Shipped screen</strong>Three try-before-you-commit characters front and center, with the run's score and currency always visible above.</figcaption>
+      </figure>
+    </div>
+    <div class="compare compare-compact" id="characterCompare">
+      <img class="compare-img" src="../assets/images/splashy/compare-character-lindo.jpg" alt="Proposed character-select screen: colorful hand holding a phone showing Tough Cat, Ninja Cat, and Frankencat with TRY buttons">
+      <img class="compare-img compare-top" src="../assets/images/splashy/compare-character-feo.jpg" alt="Rough baseline character-select screen: grayscale hand holding a phone with locked character silhouettes and no personality">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Before</span>
+      <span class="compare-label compare-label-right">After</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal before vs after character-select screen">
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="hud">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>HUD &amp; Menu Icons</h2>
+        <p>
+          The baseline icon set was placeholder text in boxes — functional,
+          forgettable. The proposal swapped it for a single pixel-art icon
+          language (along with the optional non-pixelated version too)
+          shared across every button in the game: settings, delete, play,
+          share, record, and rate, all reading at a glance.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid mobile-shots">
+      <figure class="shot">
+        <img src="../assets/images/splashy/hud-icons-final.jpg" alt="Final pixel-art button sheet with settings, delete, play, share, record, and rate icons in large and small sizes" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Final icon sheet</strong>One shape language at two sizes covers every button in the game — large for primary actions, small for the HUD corner.</figcaption>
+      </figure>
+    </div>
+    <div class="compare compare-compact" id="iconsCompare">
+      <img class="compare-img" src="../assets/images/splashy/compare-icons-lindo.jpg" alt="Proposed pixel-art icon set: magenta and purple buttons for settings, delete, play, and share">
+      <img class="compare-img compare-top" src="../assets/images/splashy/compare-icons-feo.jpg" alt="Rough baseline icon set: plain text buttons reading Options, Delete Data, and outline glyphs for play and share">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Before</span>
+      <span class="compare-label compare-label-right">After</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal before vs after icon set">
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="store">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>Store</h2>
+        <p>
+          Same argument, applied to the item the store is actually trying to
+          sell. Silhouettes and flat swatches don't move a $0.99 purchase;
+          a character in mid-roar with a price tag and a legend row of
+          who's already unlocked might.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid mobile-shots">
+      <figure class="shot">
+        <img src="../assets/images/splashy/store-final.jpg" alt="Final store screen for Cat Vader Epic, priced at $0.99 or 200 gold, with a grid of legendary characters below" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Shipped screen</strong>The character being sold is the hero of the screen — everyone already unlocked sits below as proof of what you're building toward.</figcaption>
+      </figure>
+    </div>
+    <div class="compare compare-compact" id="storeCompare">
+      <img class="compare-img" src="../assets/images/splashy/compare-store-lindo.jpg" alt="Proposed store screen: Cat Vader Epic item card priced at $0.99 or 200 diamonds, with a legend row of unlocked characters below">
+      <img class="compare-img compare-top" src="../assets/images/splashy/compare-store-feo.jpg" alt="Rough baseline store screen: grayscale hand holding a phone with color swatches and locked character silhouettes">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Before</span>
+      <span class="compare-label compare-label-right">After</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to reveal before vs after store screen">
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="marketing">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">IV.</span>
+      <div>
+        <h2>Marketing</h2>
+        <p>
+          A few of the screenshots built for the App Store page, each one
+          leading with a single clear promise: swim, collect, or spend.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="../assets/images/splashy/marketing-crop-02.jpg" alt="App Store screenshot: cat riding a log down a river with the Splashy Cats logo overhead and a Tap prompt" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>"Who said cats can't swim?"</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/splashy/marketing-crop-04.jpg" alt="App Store screenshot: Action Cat Epic reveal card glowing with sparkles above the text Win Epic Prizes" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>"Win epic prizes"</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/splashy/marketing-crop-05.jpg" alt="App Store screenshot: grid of over thirty playable characters including Darth Vader and Guy Fawkes parody cats" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>"More than 30 playable characters"</strong></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          Not every design argument needs a mood board. Framing the pitch as
+          three concrete before/after screens — the exact screens the team
+          would ship — made the direction easy to approve and easy to hold
+          everyone to later.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+    <p class="rights">All rights reserved to Artik Games.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

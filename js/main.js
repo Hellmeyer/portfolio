@@ -28,6 +28,7 @@
     }
 
     function onDown(e) {
+      if (e.target.closest && e.target.closest('.compare-arrow')) return;
       dragging = true;
       setValue(pctFromClientX(clientXFrom(e)));
       if (e.cancelable) e.preventDefault();
@@ -52,6 +53,37 @@
     range.addEventListener('input', function () { setValue(range.value); });
 
     setValue(range.value || 50);
+
+    // Prev/next arrow controls, so the slider doesn't rely on dragging alone.
+    // Compact sliders get room to sit fully outside the frame; the full-bleed
+    // slider has no outside room, so its arrows overlay the edges on hover.
+    var isCompact = root.classList.contains('compare-compact');
+    var prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'compare-arrow compare-arrow-prev';
+    prevBtn.setAttribute('aria-label', 'Show before');
+    prevBtn.innerHTML = '&#8249;';
+    var nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'compare-arrow compare-arrow-next';
+    nextBtn.setAttribute('aria-label', 'Show after');
+    nextBtn.innerHTML = '&#8250;';
+    prevBtn.addEventListener('click', function () { setValue(0); });
+    nextBtn.addEventListener('click', function () { setValue(100); });
+
+    if (isCompact) {
+      var stage = document.createElement('div');
+      stage.className = 'compare-stage';
+      root.parentNode.insertBefore(stage, root);
+      stage.appendChild(prevBtn);
+      stage.appendChild(root);
+      stage.appendChild(nextBtn);
+    } else {
+      prevBtn.classList.add('compare-arrow-overlay');
+      nextBtn.classList.add('compare-arrow-overlay');
+      root.appendChild(prevBtn);
+      root.appendChild(nextBtn);
+    }
   });
 })();
 
@@ -248,6 +280,29 @@
       });
       g.root.addEventListener('mouseenter', stopAuto);
       g.root.addEventListener('mouseleave', startAuto);
+
+      var frame = g.root.querySelector('.phone-frame, .slate-frame');
+      if (frame && g.slides.length > 1) {
+        var prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'phone-slideshow-arrow phone-slideshow-prev';
+        prevBtn.setAttribute('aria-label', 'Previous slide');
+        prevBtn.innerHTML = '&#8249;';
+        var nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'phone-slideshow-arrow phone-slideshow-next';
+        nextBtn.setAttribute('aria-label', 'Next slide');
+        nextBtn.innerHTML = '&#8250;';
+        prevBtn.addEventListener('click', function () { goTo(current - 1); startAuto(); });
+        nextBtn.addEventListener('click', function () { goTo(current + 1); startAuto(); });
+
+        var stage = document.createElement('div');
+        stage.className = 'phone-slideshow-stage';
+        frame.parentNode.insertBefore(stage, frame);
+        stage.appendChild(prevBtn);
+        stage.appendChild(frame);
+        stage.appendChild(nextBtn);
+      }
     });
 
     render();
