@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>deAutos.com — UI/UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#comparador">Comparador</a>
+      <a href="#vip">VIP</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/deautos-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/deautos-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Case Study 05 — Automotive UX/UI</p>
+      <h1>Concepts for <em>deAutos.com</em></h1>
+      <p class="lede">
+        A sample of UI work for deAutos.com, Grupo Clarín's car marketplace:
+        a touchscreen catalog built for a trade-show totem, a car comparison
+        tool, and a redesign of the listing pages, internally called VIP.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UI/UX Designer</span>
+        <span class="tag">Tool: Photoshop</span>
+        <span class="tag">Tool: After Effects</span>
+        <span class="tag">Year: 2015</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          deAutos.com is a transactional marketplace for buying and selling
+          cars, part of Grupo Clarín. This case study samples three separate
+          pieces of work built there: a touchscreen catalog concept for a
+          trade-show kiosk, a car comparison tool, and a redesign of the
+          individual listing pages.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="catalogo">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>Catálogo — Totem Concept</h2>
+        <p>
+          Built for a touchscreen totem at deAutos' stand for Feria del
+          Automóvil, a major car convention at La Rural in Buenos Aires. The
+          video walks through the intended interactions: browse by brand,
+          drill into a model, slide between trims, and pull up the full spec
+          sheet — all designed for a big-screen, finger-driven kiosk instead
+          of a phone or desktop.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot full">
+        <video src="../assets/video/deautos-demo.mp4" poster="../assets/video/deautos-demo-poster.jpg" controls playsinline></video>
+        <figcaption><strong>Totem walkthrough</strong>Browse by brand, compare trims, and read the full spec sheet, all on one touchscreen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="comparador">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>Comparador</h2>
+        <p>
+          A feature concept for comparing cars side by side, up to three at
+          once, with specs grouped into categories like motor and comfort.
+          Adding a car walks through a short brand → model → version wizard
+          instead of one long list.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid mobile-shots">
+      <figure class="shot">
+        <img src="../assets/images/deautos/comparador-base.jpg" alt="Comparador screen comparing a Nissan March, Mercedes Benz Clase C, and Peugeot 308 side by side, with specs grouped by category" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Comparing three cars</strong>Specs are grouped by category, with a quote button under each column.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/deautos/comparador-add-1-brand.jpg" alt="Step 1 of the add-a-car wizard: a grid of car brand logos with Volkswagen selected" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Step 1 — Brand</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/deautos/comparador-add-2-model.jpg" alt="Step 2 of the add-a-car wizard: a list of Volkswagen models" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Step 2 — Model</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/deautos/comparador-add-3-version.jpg" alt="Step 3 of the add-a-car wizard: a list of trim versions with 1.6 Highline Cuero selected" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Step 3 — Version</strong></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="vip">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>VIP — Listing Pages</h2>
+        <p>
+          A redesign experimental proposal for deAutos' individual car
+          listing pages — "VIP" internally. A clearer hierarchy for photos,
+          price, and seller contact, with the full spec sheet and similar
+          listings surfaced below the fold.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid mobile-shots">
+      <figure class="shot">
+        <img src="../assets/images/deautos/vip-1.jpg" alt="Redesigned VIP listing page for a Volkswagen Cross Fox, with hero photo, price, and seller contact panel" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Listing example 1</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/deautos/vip-2.jpg" alt="Redesigned VIP listing page for a black car, with hero photo, price, and seller contact panel" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Listing example 2</strong></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/deautos/vip-3.jpg" alt="Redesigned VIP listing page for a red car, with hero photo, price, and seller contact panel" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Listing example 3</strong></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          This is a small sample of a much larger body of work at
+          deAutos.com — three different problems (a kiosk experience, a
+          comparison tool, and a listing page) tied together by the same
+          visual system and the same close read of what a car buyer actually
+          needs to see first.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+    <p class="rights">All rights reserved to deAutos.com (Grupo Clarín).</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -281,7 +281,7 @@
       g.root.addEventListener('mouseenter', stopAuto);
       g.root.addEventListener('mouseleave', startAuto);
 
-      var frame = g.root.querySelector('.phone-frame, .slate-frame');
+      var frame = g.root.querySelector('.phone-frame, .slate-frame, .auto-frame');
       if (frame && g.slides.length > 1) {
         var prevBtn = document.createElement('button');
         prevBtn.type = 'button';

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assorted Early Work — UI/UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#mobile">Mobile Apps</a>
+      <a href="#ipad">iPad App</a>
+      <a href="#web">Web App</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/assorted-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/assorted-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Case Study 08 — Assorted UX/UI</p>
+      <h1>Five early products, five different problems</h1>
+      <p class="lede">
+        A grab bag of early concept and prototype work: three mobile app
+        ideas, a route-accounting app built for a warehouse tablet, and a
+        time-tracking web app.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UI/UX Designer</span>
+        <span class="tag">Tool: Photoshop</span>
+        <span class="tag">Year: 2014–2015</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          Before settling into any one product, I spent a few years moving
+          between small concepts and client prototypes. This case study
+          samples five of them: three mobile app ideas, a route-accounting
+          tool built for delivery drivers on an iPad, and a time-tracking
+          web app.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="mobile">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>Mobile Apps</h2>
+        <p>
+          Three early mobile concepts, each solving a different problem:
+          T3 blends two photos into one, Snapminder turns a snapshot into a
+          reminder, and Studigy organizes video lessons by subject. Switch
+          between them below.
+        </p>
+      </div>
+    </div>
+
+    <div class="phone-slideshow phone-slideshow-tabs">
+      <div class="phone-tabs">
+        <button type="button" class="phone-tab is-active"
+          data-src-0="../assets/images/assorted/t3-1-welcome.jpg" data-alt-0="T3 welcome screen with a split photo of two people, Gallery and Start options"
+          data-src-1="../assets/images/assorted/t3-2-onboarding.jpg" data-alt-1="T3 tutorial screen reading Contour the shape you want to mount, over a landscape photo"
+          data-src-2="../assets/images/assorted/t3-3-core.jpg" data-alt-2="T3 blend screen reading Tweak it, showing a cat and dog photo blended together with a slider control"
+          data-src-3="../assets/images/assorted/t3-4-detail.jpg" data-alt-3="T3 result screen reading add Feather, showing the finished blended photo">T3</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/assorted/snapminder-1-welcome.jpg" data-alt-0="Snapminder splash screen"
+          data-src-1="../assets/images/assorted/snapminder-2-onboarding.jpg" data-alt-1="Snapminder Create your first note screen with Regular, Photo, and Audio note options"
+          data-src-2="../assets/images/assorted/snapminder-3-core.jpg" data-alt-2="Snapminder photo note of a refrigerator's contents, with title, alarm, kind, and repeat fields"
+          data-src-3="../assets/images/assorted/snapminder-4-detail.jpg" data-alt-3="Snapminder reminders list grouped by Personal, Business, and All">Snapminder</button>
+        <button type="button" class="phone-tab"
+          data-src-0="../assets/images/assorted/studigy-1-welcome.jpg" data-alt-0="Studigy splash screen"
+          data-src-1="../assets/images/assorted/studigy-2-onboarding.jpg" data-alt-1="Studigy sign up screen with name, password, birthday, and email fields"
+          data-src-2="../assets/images/assorted/studigy-3-core.jpg" data-alt-2="Studigy home screen with a featured video class and a list of more lectures"
+          data-src-3="../assets/images/assorted/studigy-4-detail.jpg" data-alt-3="Studigy lesson library grouped alphabetically by subject, including Art History, Biology, and Chemistry">Studigy</button>
+      </div>
+      <div class="phone-frame classic">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <img class="phone-slide is-active" src="../assets/images/assorted/t3-1-welcome.jpg" alt="T3 welcome screen with a split photo of two people, Gallery and Start options" data-title="Welcome">
+          <img class="phone-slide" src="../assets/images/assorted/t3-2-onboarding.jpg" alt="T3 tutorial screen reading Contour the shape you want to mount, over a landscape photo" data-title="Onboarding">
+          <img class="phone-slide" src="../assets/images/assorted/t3-3-core.jpg" alt="T3 blend screen reading Tweak it, showing a cat and dog photo blended together with a slider control" data-title="Core interaction">
+          <img class="phone-slide" src="../assets/images/assorted/t3-4-detail.jpg" alt="T3 result screen reading add Feather, showing the finished blended photo" data-title="Result">
+        </div>
+        <div class="phone-home-button"></div>
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="ipad">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>jLan — Route Accounting</h2>
+        <p>
+          jLan is a route-accounting app for delivery drivers working
+          directly with retail accounts: routes, order guides, billing with
+          signature capture, customer surveys, and stock counts, all built
+          for a large-format tablet used in the field.
+        </p>
+      </div>
+    </div>
+    <div class="phone-slideshow wide">
+      <div class="slate-frame">
+        <img class="phone-slide is-active" src="../assets/images/assorted/jlan-1-dashboard.jpg" alt="jLan dashboard showing a sales rep's weekly overview, customer visits, and completed stops" data-title="Dashboard">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-2-clients.jpg" alt="jLan client list with a map, contact details, and recent order history for the selected account" data-title="Clients">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-3-order-guides.jpg" alt="jLan order guide listing soft drink products with quantity and price fields" data-title="Order guides">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-4-order-detail.jpg" alt="jLan order line detail for Diet Coke, with product photo, pricing tiers, and order history" data-title="Order detail">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-5-billing.jpg" alt="jLan billing screen with an on-screen keyboard for entering payment and invoice details" data-title="Billing">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-6-survey.jpg" alt="jLan customer satisfaction survey with rating questions" data-title="Customer survey">
+        <img class="phone-slide" src="../assets/images/assorted/jlan-7-stock-count.jpg" alt="jLan stock count screen with an on-screen number pad for entering inventory counts" data-title="Stock count">
+      </div>
+      <div class="phone-slideshow-dots"></div>
+      <p class="phone-slideshow-caption"></p>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="web">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>Admin My Time — Web App</h2>
+        <p>
+          Admin My Time is a time-tracking and attendance web app aimed at
+          small teams and agencies. This is the marketing landing page
+          pitching the product ahead of sign-up: plans, an FAQ, and
+          testimonials.
+        </p>
+      </div>
+    </div>
+    <figure class="shot">
+      <div class="scroll-frame">
+        <img src="../assets/images/assorted/admin-my-time-landing.jpg" alt="Admin My Time marketing landing page, with a hero section, pricing comparison, sign-up form, FAQ, and testimonials" loading="lazy" tabindex="0" role="button">
+      </div>
+      <figcaption><strong>Landing page</strong>Click to zoom.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          Different products, different constraints — a phone screen, a
+          warehouse tablet, a browser tab — but the same questions every
+          time: what does this screen need to do right now, and what can
+          wait until the next one?
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
