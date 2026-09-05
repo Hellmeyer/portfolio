@@ -1,3 +1,7 @@
+// Shared i18n strings for aria-labels generated dynamically below,
+// since js/main.js is loaded by both the English and Spanish pages.
+var IS_ES = document.documentElement.lang === 'es';
+
 // Drag-to-compare slider (Simple vs Full HUD, etc.)
 (function () {
   var sliders = document.querySelectorAll('.compare');
@@ -61,12 +65,12 @@
     var prevBtn = document.createElement('button');
     prevBtn.type = 'button';
     prevBtn.className = 'compare-arrow compare-arrow-prev';
-    prevBtn.setAttribute('aria-label', 'Show before');
+    prevBtn.setAttribute('aria-label', IS_ES ? 'Mostrar antes' : 'Show before');
     prevBtn.innerHTML = '&#8249;';
     var nextBtn = document.createElement('button');
     nextBtn.type = 'button';
     nextBtn.className = 'compare-arrow compare-arrow-next';
-    nextBtn.setAttribute('aria-label', 'Show after');
+    nextBtn.setAttribute('aria-label', IS_ES ? 'Mostrar después' : 'Show after');
     nextBtn.innerHTML = '&#8250;';
     prevBtn.addEventListener('click', function () { setValue(0); });
     nextBtn.addEventListener('click', function () { setValue(100); });
@@ -100,7 +104,9 @@
   function setPlayingState(isPlaying) {
     icon.innerHTML = isPlaying ? PAUSE_ICON : PLAY_ICON;
     toggle.setAttribute('aria-pressed', String(!isPlaying));
-    toggle.setAttribute('aria-label', isPlaying ? 'Pause background footage' : 'Play background footage');
+    toggle.setAttribute('aria-label', isPlaying
+      ? (IS_ES ? 'Pausar el video de fondo' : 'Pause background footage')
+      : (IS_ES ? 'Reproducir el video de fondo' : 'Play background footage'));
   }
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -229,7 +235,9 @@
         var dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'dot' + (i === 0 ? ' is-active' : '');
-        dot.setAttribute('aria-label', 'Show slide ' + (i + 1) + ' of ' + slides.length);
+        dot.setAttribute('aria-label', IS_ES
+          ? 'Mostrar diapositiva ' + (i + 1) + ' de ' + slides.length
+          : 'Show slide ' + (i + 1) + ' of ' + slides.length);
         dotsWrap.appendChild(dot);
         return dot;
       }) : [];
@@ -286,12 +294,12 @@
         var prevBtn = document.createElement('button');
         prevBtn.type = 'button';
         prevBtn.className = 'phone-slideshow-arrow phone-slideshow-prev';
-        prevBtn.setAttribute('aria-label', 'Previous slide');
+        prevBtn.setAttribute('aria-label', IS_ES ? 'Diapositiva anterior' : 'Previous slide');
         prevBtn.innerHTML = '&#8249;';
         var nextBtn = document.createElement('button');
         nextBtn.type = 'button';
         nextBtn.className = 'phone-slideshow-arrow phone-slideshow-next';
-        nextBtn.setAttribute('aria-label', 'Next slide');
+        nextBtn.setAttribute('aria-label', IS_ES ? 'Siguiente diapositiva' : 'Next slide');
         nextBtn.innerHTML = '&#8250;';
         prevBtn.addEventListener('click', function () { goTo(current - 1); startAuto(); });
         nextBtn.addEventListener('click', function () { goTo(current + 1); startAuto(); });
