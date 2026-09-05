@@ -2,3 +2,8 @@ haldmeyer/
 .claude/settings.local.json
 assets/video/pets-remote-test.mov
 Proyectos/
+
+# Local-only working files, not site content
+UI ArtExerciseGlobant/
+portfolio-site.zip
+portfolio/
