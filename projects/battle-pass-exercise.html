@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battle Pass UI — UI/UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#research">Research</a>
+      <a href="#layout">Layout</a>
+      <a href="#screens">Screens</a>
+      <a href="#icons">Icons</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/battlepass-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/battlepass-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Concept Work — Tactical Shooter UI/UX</p>
+      <h1>Designing a Battle Pass<br>for a fictional AAA shooter</h1>
+      <p class="lede">
+        Starting from a rough grey-box wireframe, a shippable-feeling
+        battle pass for an original AAA RPG built in Unreal Engine 5 — two
+        finished layout directions, presented to a small panel of UX/UI
+        reviewers along the way.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: UI/UX Designer</span>
+        <span class="tag">Format: Take-home exercise</span>
+        <span class="tag">Tool: Figma</span>
+        <span class="tag">Year: 2026</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="overview">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Overview</h2>
+        <p>
+          The brief: propose a battle pass for a new AAA RPG on PS5, built
+          in Unreal Engine 5, starting from a rough grey-box wireframe with
+          a six-tier free/premium track and a handful of locked slots. The
+          art direction was left open on purpose — "tactical, authentic,
+          and gritty," a grounded military look balanced against sleek
+          high-tech HUD elements — with full freedom to rebuild the layout
+          rather than just skin what was handed over.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot full shot-native-frame" style="--native-w:1258px">
+        <img class="shot-native-fixed" src="../assets/images/battlepass/context-wireframe.jpg" alt="Provided grey-box wireframe for a Season 2 battle pass, six tiers with free and premium rows and several locked slots" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Starting point</strong>The wireframe as handed over — six tiers, a free/premium row each, a handful of slots already locked, and one item description panel with nothing in it yet.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="research">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">I.</span>
+      <div>
+        <h2>Research</h2>
+        <p>
+          Before opening Figma, I audited battle pass UIs across a dozen
+          live-service and AAA titles — Fortnite, Genshin Impact, Apex
+          Legends, Call of Duty: Warzone, Dauntless, Destiny 2, Rocket Pass,
+          and Fall Guys among them — to map the shared architecture behind
+          these screens and see where genre changes the approach. Three
+          patterns held up across almost all of them: two dominant
+          free/premium structures (a parallel dual-rail track vs. a single
+          rail with lock overlays), two dominant compositions (menu-left/
+          hero-right vs. hero-top/rail-bottom), and "breathing room" that
+          comes from contrast — a dense reward rail set against an open
+          hero-preview zone — rather than uniform whitespace. Those three
+          findings shaped every layout and interaction decision that
+          followed.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot shot-bare full shot-native-frame" style="--native-w:1221px">
+        <img src="../assets/images/battlepass/context-research.png" alt="Grid of reference screenshots from a dozen live-service and AAA battle pass UIs audited before starting" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>The audit</strong>A sample of the battle pass and event pass screens pulled apart for this — Rocket Pass, Fortnite, Genshin Impact, Warzone, Destiny 2, and others.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="layout">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">II.</span>
+      <div>
+        <h2>Layout Exploration</h2>
+        <p>
+          Rather than commit to one reward-track structure early, I carried
+          both finalist directions from the research all the way through to
+          finished screens. <strong>Dual-row</strong> stacks free and
+          premium rewards in parallel per tier — the strongest "here's what
+          you're missing" signal, at the cost of vertical space and some
+          repeated reward art. <strong>Single-row</strong> collapses that
+          into one rail with individual "FREE" tags called out on their own,
+          which reads calmer and frees up room for a larger hero preview,
+          but leans harder on that preview to sell the value gap. Drag below
+          to compare them side by side on the same state.
+        </p>
+      </div>
+    </div>
+    <div class="compare" id="layoutCompare">
+      <img class="compare-img" src="../assets/images/battlepass/single-active-ready.jpg" alt="Single-row battle pass layout with one combined reward rail and individual FREE tags">
+      <img class="compare-img compare-top" src="../assets/images/battlepass/dual-active-ready.jpg" alt="Dual-row battle pass layout with parallel free and premium reward tracks">
+      <div class="compare-handle" aria-hidden="true"></div>
+      <span class="compare-label compare-label-left">Dual-row</span>
+      <span class="compare-label compare-label-right">Single-row</span>
+      <input type="range" class="compare-range" min="0" max="100" value="50" aria-label="Drag to compare dual-row and single-row layouts">
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="direction">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">III.</span>
+      <div>
+        <h2>Art Direction System</h2>
+        <p>
+          A grounded, tactical direction built from three pillars rather
+          than picked screen-by-screen. <strong>Type:</strong> Iosevka
+          Charon carries headlines, item names, navigation, and body copy —
+          its slab-technical character reads as engineered rather than
+          decorative, and stays legible at small UI sizes. JetBrains Mono
+          handles anything numeric — the season timer, currency counts,
+          tier numbers, costs — so digits don't jitter as they update and
+          read like a system readout rather than typography for its own
+          sake. <strong>Color:</strong> a desaturated gunmetal/concrete base
+          with a single warm amber accent carrying every interactive or
+          "hot" state, so the eye never has to guess what's clickable.
+          <strong>Texture:</strong> a gritty concrete surface plus a
+          scorched, map-like silhouette used as a recurring graphic device
+          behind key art — the same shape doing double duty as brand mark
+          and background noise. One small world-building touch went into
+          the reward art itself: an invented in-universe insignia, Ashfall
+          Company, stamped onto one of the premium unlocks, just to sell the
+          fiction a little further.
+        </p>
+      </div>
+    </div>
+    <div class="direction-pillars">
+      <div class="direction-pillar">
+        <span class="direction-pillar-label">Type</span>
+        <img class="direction-wordmark" src="../assets/images/battlepass/iosevka-wordmark.svg" alt="Iosevka Charon, the primary typeface" loading="lazy">
+        <img class="direction-wordmark" src="../assets/images/battlepass/jetbrains-wordmark.svg" alt="JetBrains Mono, the numeric and accent typeface" loading="lazy">
+      </div>
+      <div class="direction-pillar">
+        <span class="direction-pillar-label">Color</span>
+        <div class="direction-swatches">
+          <span class="swatch" style="background:#bdcdd2" title="Parchment / label gray"></span>
+          <span class="swatch" style="background:#1c1f2a" title="Gunmetal / concrete base"></span>
+          <span class="swatch" style="background:#fbaf3a" title="Amber / interactive accent"></span>
+        </div>
+      </div>
+      <div class="direction-pillar">
+        <span class="direction-pillar-label">Texture</span>
+        <div class="direction-textures">
+          <img src="../assets/images/battlepass/context-texture-noise.jpg" alt="Gritty concrete surface texture" loading="lazy">
+          <img src="../assets/images/battlepass/context-texture-shape.png" alt="Scorched, map-like silhouette used as a recurring graphic device" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="screens">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">IV.</span>
+      <div>
+        <h2>Final Screens</h2>
+        <p>
+          Both layout directions were carried through the same four-state
+          logic, since a battle pass screen has to answer two independent
+          questions at once: has the player bought the pass, and is the
+          item they're looking at one they can claim right now, or one
+          still locked ahead of their level? That gives four combinations
+          — pass owned or not, crossed with item ready or not — each with
+          its own CTA: <strong>Hold to Claim</strong> when it's theirs,
+          <strong>Hold to Skip to Tier</strong> when it's a locked future
+          reward they can buy their way to, <strong>Activate Battle
+          Pass</strong> when they haven't bought in yet but the item is
+          within reach, and a plain <strong>Requires Battle Pass
+          Active</strong> notice when neither condition is met.
+        </p>
+      </div>
+    </div>
+
+    <div class="gear-divider">
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Dual-row set</span>
+      <span class="line"></span>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/battlepass/dual-active-ready.jpg" alt="Dual-row battle pass, pass active, current claimable VX-9 Rifle selected with a Hold to Claim button" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Active · Ready</strong>Pass owned, current tier selected — straight to Hold to Claim.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/dual-active-nonready.jpg" alt="Dual-row battle pass, pass active, a locked future Field Strip emote selected with Hold to Skip to Tier and its cost" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Active · Locked ahead</strong>Same pass, a future tier selected — the CTA becomes Hold to Skip to Tier, cost shown up front.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/dual-inactive-ready.jpg" alt="Dual-row battle pass, pass not yet purchased, current-tier item selected with an Activate Battle Pass prompt" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Inactive · Ready</strong>Pass not bought yet — the left panel switches to an Activate Battle Pass sell, priced and ready.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/dual-inactive-nonready.jpg" alt="Dual-row battle pass, pass not purchased, locked future emote selected with a Requires Battle Pass Active notice" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Inactive · Locked ahead</strong>Neither condition met — no skip offer, just a plain requirement notice instead of a dead-end button.</figcaption>
+      </figure>
+    </div>
+
+    <div class="gear-divider">
+      <span class="line"></span>
+      <span style="font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;">Single-row set</span>
+      <span class="line"></span>
+    </div>
+    <div class="shot-grid cols-2">
+      <figure class="shot">
+        <img src="../assets/images/battlepass/single-active-ready.jpg" alt="Single-row battle pass, pass active, current claimable item selected with a Hold to Claim button" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Active · Ready</strong>Same logic, one combined rail — FREE tags called out individually instead of a second row.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/single-active-nonready.jpg" alt="Single-row battle pass, pass active, locked future item selected with Hold to Skip to Tier" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Active · Locked ahead</strong>The single rail keeps the same skip-ahead offer without a second track to reconcile.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/single-inactive-ready.jpg" alt="Single-row battle pass, pass not purchased, current-tier item selected with an Activate Battle Pass prompt" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Inactive · Ready</strong>Same left-panel sell as the dual-row version, now with more room to breathe.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="../assets/images/battlepass/single-inactive-nonready.jpg" alt="Single-row battle pass, pass not purchased, locked future item selected with a Requires Battle Pass Active notice" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Inactive · Locked ahead</strong>The calmest of the four states, by design — nothing left to sell on this screen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="icons">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">V.</span>
+      <div>
+        <h2>Skill Icons</h2>
+        <p>
+          A late addition to the brief: a set of three player-ability
+          icons, flat and single-color, carrying the same identity as the
+          screens above. Each one needs to read clearly at a small hotbar
+          size before any color or animation gets layered on top.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot shot-icon">
+        <img src="../assets/images/battlepass/icon-sonic-blast.png" alt="Sonic Blast ability icon, a flat single-color concentric shockwave" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Sonic Blast</strong>Unleashes a powerful sonic blast that knocks back enemies and disrupts their movements.</figcaption>
+      </figure>
+      <figure class="shot shot-icon">
+        <img src="../assets/images/battlepass/icon-frost-nova.png" alt="Frost Nova ability icon, a flat single-color ice crystal burst" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Frost Nova</strong>Creates a chilling blast that freezes enemies in place, leaving them vulnerable to follow-up attacks.</figcaption>
+      </figure>
+      <figure class="shot shot-icon">
+        <img src="../assets/images/battlepass/icon-gravity-well.png" alt="Gravity Well ability icon, a flat single-color swirling vortex" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>Gravity Well</strong>Generates a gravitational field that pulls enemies towards a central point, immobilizing them temporarily.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="process">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>Process &amp; Tools</h2>
+        <p>
+          Built almost entirely in Figma — layout, components, prototyping,
+          icons, and the presentation deck itself — with Affinity for some
+          image touch-up. In line with the exercise's own guidelines on AI
+          use: the weapon model, background plate, and operator character
+          renders were AI-assisted (Nano Banana and ChatGPT), which the
+          brief explicitly allowed for background art, characters, and
+          visual effects. Every piece of the actual interface — layout,
+          typography, iconography, color, and composition — was designed
+          and built by hand.
+        </p>
+      </div>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot shot-bare full shot-native-frame" style="--native-w:1550px">
+        <img src="../assets/images/battlepass/context-ai-background.jpg" alt="AI-assisted background plate of a weathered workshop table with weapons and ammunition" loading="lazy" tabindex="0" role="button">
+        <figcaption><strong>AI-assisted: background plate</strong>The workshop backdrop behind every screen — generated, not built by hand, per the brief's own rules.</figcaption>
+      </figure>
+      <figure class="shot shot-bare shot-portrait full">
+        <img src="../assets/images/battlepass/context-ai-operator.png" alt="AI-assisted render of the operator character used in the battle pass screens" loading="lazy" tabindex="0" role="button">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="plate" id="reflection">
+  <div class="wrap">
+    <div class="plate-head">
+      <span class="plate-numeral">—</span>
+      <div>
+        <h2>What this demonstrates</h2>
+        <p>
+          The brief was deliberately open-ended — a rough wireframe and a
+          mood in a sentence, little else to go on.
+          Instead of guessing at a single "right" layout, I treated the
+          ambiguity as the actual exercise: research the genre's
+          conventions first, carry two real layout directions all the way
+          to finished screens instead of one, and build a small
+          type/color/texture system before touching final pixels — so every
+          screen, and the four-state CTA logic behind it, reads as one
+          coherent product rather than a set of mockups.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="next-project">
+  <div class="wrap">
+    <span class="next-project-eyebrow">Next projects</span>
+    <div class="cards-grid">
+      <a class="card live" href="avantrip.html">
+        <div class="card-thumb">
+          <video src="../assets/video/avantrip-hero-loop.mp4" poster="../assets/video/avantrip-hero-poster.jpg" autoplay muted loop playsinline></video>
+          <div class="card-thumb-grid" aria-hidden="true"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="tag">Travel</span>
+            <span class="card-year">2019</span>
+          </div>
+          <h3>Avantrip — component studies to landing</h3>
+          <p>Component-by-component studies of cards, headers, and search boxes that fed into a full homepage redesign.</p>
+          <span class="card-link">View case study →</span>
+        </div>
+      </a>
+
+      <a class="card live" href="splashy-cats.html">
+        <div class="card-thumb">
+          <video src="../assets/video/splashy-hero-loop.mp4" poster="../assets/video/splashy-hero-poster.jpg" autoplay muted loop playsinline></video>
+          <div class="card-thumb-grid" aria-hidden="true"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="tag epic">Mobile Game</span>
+            <span class="card-year">2016</span>
+          </div>
+          <h3>Splashy Cats — pitching the look</h3>
+          <p>Before/after comparison decks used to sell the visual direction for character select, HUD icons, and the store.</p>
+          <span class="card-link">View case study →</span>
+        </div>
+      </a>
+
+      <a class="card live" href="deautos.html">
+        <div class="card-thumb">
+          <video src="../assets/video/deautos-hero-loop.mp4" poster="../assets/video/deautos-hero-poster.jpg" autoplay muted loop playsinline></video>
+          <div class="card-thumb-grid" aria-hidden="true"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="tag">Automotive</span>
+            <span class="card-year">2015</span>
+          </div>
+          <h3>deAutos.com — catalog, comparator &amp; VIP</h3>
+          <p>A touchscreen catalog concept for a trade-show totem, a car comparison tool, and a redesign of the listing pages.</p>
+          <span class="card-link">View case study →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="mark">tato.</p>
+    <p><a href="../index.html">← Back to all projects</a></p>
+    <p class="rights">A personal design exercise made for a job application — not a shipped or commissioned product.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close full-size image">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">&#8249;</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">&#8250;</button>
+  <img id="lightboxImg" src="" alt="">
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
