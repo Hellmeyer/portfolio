@@ -2,6 +2,105 @@
 // since js/main.js is loaded by both the English and Spanish pages.
 var IS_ES = document.documentElement.lang === 'es';
 
+// Project card thumbnails (homepage grid + "Next projects" grids): the
+// videos sit paused on their poster frame and only play on hover/focus,
+// so a page full of cards isn't all playing motion at once.
+(function () {
+  var cards = document.querySelectorAll('.card-thumb video');
+  if (!cards.length) return;
+
+  cards.forEach(function (video) {
+    var card = video.closest('.card');
+    if (!card) return;
+
+    video.pause();
+
+    function start() {
+      video.currentTime = 0;
+      var playPromise = video.play();
+      if (playPromise && playPromise.catch) playPromise.catch(function () {});
+    }
+    function stop() {
+      video.pause();
+      video.currentTime = 0;
+    }
+
+    card.addEventListener('mouseenter', start);
+    card.addEventListener('mouseleave', stop);
+    card.addEventListener('focus', start, true);
+    card.addEventListener('blur', stop, true);
+    card.addEventListener('touchstart', start, { passive: true });
+  });
+})();
+
+// Homepage hero background: every project's hero video, shuffled into a
+// queue and played back-to-back, one at a time, reshuffling on each pass.
+(function () {
+  var video = document.getElementById('homeHeroVideo');
+  if (!video) return;
+
+  var reel = [
+    { src: 'assets/video/hero-loop.mp4', poster: 'assets/video/hero-poster.jpg' },
+    { src: 'assets/video/pets-hero-loop.mp4', poster: 'assets/video/pets-hero-poster.jpg' },
+    { src: 'assets/video/battlepass-hero-loop.mp4', poster: 'assets/video/battlepass-hero-poster.jpg' },
+    { src: 'assets/video/avantrip-hero-loop.mp4', poster: 'assets/video/avantrip-hero-poster.jpg' },
+    { src: 'assets/video/splashy-hero-loop.mp4', poster: 'assets/video/splashy-hero-poster.jpg' },
+    { src: 'assets/video/deautos-hero-loop.mp4', poster: 'assets/video/deautos-hero-poster.jpg' },
+    { src: 'assets/video/santiago-hero-loop.mp4', poster: 'assets/video/santiago-hero-poster.jpg' },
+    { src: 'assets/video/mostaza-hero-loop.mp4', poster: 'assets/video/mostaza-hero-poster.jpg' }
+  ];
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    video.poster = reel[Math.floor(Math.random() * reel.length)].poster;
+    return;
+  }
+
+  var queue = shuffle(reel);
+  var index = -1;
+
+  function playNext() {
+    index++;
+    if (index >= queue.length) {
+      queue = shuffle(reel);
+      index = 0;
+    }
+    var next = queue[index];
+    video.poster = next.poster;
+    video.src = next.src;
+    video.load();
+    attemptPlay();
+  }
+
+  // Autoplay can be blocked on the very first attempt depending on page-load
+  // timing even when muted; retry once metadata is ready and again on the
+  // visitor's first interaction, so it never just sits paused.
+  function attemptPlay() {
+    var playPromise = video.play();
+    if (playPromise && playPromise.catch) {
+      playPromise.catch(function () {
+        video.addEventListener('canplaythrough', attemptPlay, { once: true });
+        ['pointerdown', 'keydown', 'scroll'].forEach(function (evt) {
+          window.addEventListener(evt, attemptPlay, { once: true, passive: true });
+        });
+      });
+    }
+  }
+
+  video.loop = false;
+  video.addEventListener('ended', playNext);
+  playNext();
+})();
+
 // Drag-to-compare slider (Simple vs Full HUD, etc.)
 (function () {
   var sliders = document.querySelectorAll('.compare');
