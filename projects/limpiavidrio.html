@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limpiavidrio — Arcade Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+  /* ============================================
+     Limpiavidrio — nav and hero use the shared .topnav / .hero
+     components (same as every other project page). What's below
+     is only the page's own sections: liner notes, tracklist,
+     credits. Colors and fonts come from ../css/style.css.
+     ============================================ */
+  :root {
+    --edge-soft: 1px solid rgba(242, 232, 213, 0.12);
+  }
+
+  .lv-wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .lv-mark { font-family: var(--display); font-weight: 700; font-size: 1.1rem; color: var(--parchment); }
+  .lv-mark span { color: var(--frost); }
+
+  /* ---- section scaffolding ---- */
+  .lv-section { padding: 64px 0; border-top: var(--edge-soft); }
+  .lv-label {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 20px;
+  }
+
+  /* ---- liner notes ---- */
+  .lv-pullquote {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    line-height: 1.25;
+    color: var(--parchment);
+    max-width: 30ch;
+    text-wrap: balance;
+    margin: 0 0 26px;
+  }
+  .lv-notes p {
+    color: var(--parchment-dim);
+    max-width: 66ch;
+    margin: 0 0 16px;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  /* ---- long play (main playthrough) ---- */
+  .lv-player {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: var(--edge-soft);
+  }
+
+  /* ---- mechanics (looping tutorial clips) ---- */
+  .lv-mechanics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .lv-mech { margin: 0; }
+  .lv-mech video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--ink-3);
+    border: var(--edge-soft);
+  }
+  .lv-mech figcaption { padding: 14px 2px 0; font-size: 0.9rem; line-height: 1.5; color: var(--parchment-dim); }
+  .lv-mech figcaption strong {
+    display: block;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--parchment);
+    margin-bottom: 4px;
+  }
+  @media (max-width: 900px) { .lv-mechanics { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .lv-mechanics { grid-template-columns: 1fr; } }
+
+  /* ---- side A: worlds, one frame that cycles through tabs ---- */
+  .lv-side-intro { color: var(--parchment-dim); max-width: 62ch; margin: 0 0 40px; font-size: 1rem; text-wrap: pretty; }
+  .lv-worlds-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .lv-worlds-tab {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--parchment-dim);
+    background: var(--ink-3);
+    border: var(--edge-soft);
+    border-radius: 0;
+    padding: 11px 20px 13px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .lv-worlds-tab:hover { color: var(--parchment); }
+  .lv-worlds-tab.is-active { color: var(--parchment); background: var(--ink-2); }
+  /* the active tab's underline fills over the rotation delay, so the timing is visible */
+  .lv-worlds-tab.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 3px;
+    width: 100%;
+    background: var(--brass);
+    transform-origin: left;
+    animation: lv-tab-progress var(--lv-rotate, 2s) linear forwards;
+  }
+  .lv-worlds.is-paused .lv-worlds-tab.is-active::after { animation: none; }
+  @keyframes lv-tab-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .lv-worlds-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--ink-3);
+    border: var(--edge-soft);
+    overflow: hidden;
+  }
+  .lv-world {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .lv-world.is-active { opacity: 1; }
+
+  /* ---- credits ---- */
+  .lv-credits { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 40px; max-width: 640px; }
+  .lv-credit dt { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--parchment-dim); margin-bottom: 4px; }
+  .lv-credit dd { margin: 0; color: var(--parchment); font-size: 0.98rem; }
+  @media (max-width: 560px) { .lv-credits { grid-template-columns: 1fr; } }
+
+  /* "More from the shelf" reuses the shared .shelf-list component (see
+     ../css/style.css) so every project page's next-projects list stays
+     visually and structurally identical. */
+
+  /* ---- footer ---- */
+  .lv-footer { padding: 48px 0 64px; border-top: var(--edge-soft); }
+  .lv-footer .lv-mark { display: block; margin-bottom: 14px; }
+  .lv-footer a { color: var(--parchment-dim); }
+  .lv-footer a:hover { color: var(--brass); }
+  .lv-footer .lv-rights { color: var(--parchment-dim); opacity: 0.6; font-size: 0.85rem; margin-top: 6px; }
+</style>
+
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap">
+    <a class="mark" href="../index.html">tato<span>.</span></a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#long-play">Long Play</a>
+      <a href="#mechanics">Mechanics</a>
+      <a href="#side-a">Side A</a>
+      <a href="#credits">Credits</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-banner">
+    <video id="heroVideo" poster="../assets/video/limpiavidrio-hero-poster.jpg" autoplay muted loop playsinline>
+      <source src="../assets/video/limpiavidrio-hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-dim"></div>
+    <div class="hero-shade"></div>
+    <div class="hero-scrim"></div>
+    <button class="hero-toggle" id="heroToggle" aria-label="Pause background footage" aria-pressed="false">
+      <svg id="heroToggleIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+    </button>
+    <div class="wrap hero-text">
+      <p class="eyebrow">Tato-001 · Personal Project · Arcade Game · 2026</p>
+      <h1>Limpiavidrio —<br>an <em>arcade game</em></h1>
+      <p class="lede">
+        A one-button arcade game about a squeegee man crossing gridlocked
+        cities in search of his missing dog, Toti. I made the design and
+        art and everything else; Claude wrote the code.
+      </p>
+      <div class="meta-row">
+        <span class="tag brass">Role: Designer</span>
+        <span class="tag">Code: Claude</span>
+        <span class="tag">Tool: GameMaker</span>
+        <span class="tag">Platform: Windows · macOS</span>
+        <span class="tag">Year: 2026</span>
+      </div>
+      <a class="btn" href="#overview">↓ Begin the tour</a>
+    </div>
+  </div>
+</section>
+
+<section class="lv-section" id="overview">
+  <div class="lv-wrap">
+    <p class="lv-label">Liner Notes</p>
+    <p class="lv-pullquote">A fast-paced arcade game about a squeegee man and his lost dog.</p>
+    <div class="lv-notes">
+      <p>
+        Limpiavidrio is a love project, and we had a blast building it.
+        You play a squeegee man walking from city to city, cleaning cars
+        stuck in traffic while looking for his lost dog, Toti.
+      </p>
+      <p>
+        It's a one-button game — a proper button smasher. Hammer it to
+        clean, dodge whatever the road throws at you, and chain combos
+        while the traffic keeps rolling underneath you. It's meant to be
+        played on an arcade cabinet or with an arcade stick, where that
+        single button feels best.
+      </p>
+      <p>
+        Between runs there are a few minigames, kept sparse on purpose: a
+        calm, quiet space to rest before the next stretch of traffic.
+      </p>
+      <p>
+        It's a nod to the arcade cabinets and console games I grew up on.
+      </p>
+      <p>
+        It will be available on Steam Early Access soon. And if I raise
+        enough money, I'll build a proper cabinet for it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="lv-section" id="long-play">
+  <div class="lv-wrap">
+    <p class="lv-label">Long Play</p>
+    <p class="lv-side-intro">A full playthrough, just over ten minutes long.</p>
+    <video class="lv-player" controls preload="none" playsinline poster="../assets/video/limpiavidrio/longplay-poster.jpg">
+      <source src="../assets/video/limpiavidrio/longplay.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section class="lv-section" id="mechanics">
+  <div class="lv-wrap">
+    <p class="lv-label">Mechanics</p>
+    <p class="lv-side-intro">
+      The game's own tutorial cards, one clip per mechanic, looping. The
+      on-screen text is in Spanish, as in the game; the captions below
+      translate it.
+    </p>
+    <div class="lv-mechanics">
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/movement.jpg" aria-label="Movimiento tutorial: moving along the crosswalk">
+          <source src="../assets/video/limpiavidrio/movement.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Movimiento</strong>Move along the crosswalk by tapping up and down.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/cleaning.jpg" aria-label="Limpieza tutorial: cleaning cars">
+          <source src="../assets/video/limpiavidrio/cleaning.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Limpieza</strong>Clean cars by tapping the button repeatedly.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/water.jpg" aria-label="Agua tutorial: water and buckets">
+          <source src="../assets/video/limpiavidrio/water.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Agua</strong>Cleaning cars uses water. Head to the buckets to refill.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/skill.jpg" aria-label="Habilidad tutorial: the skill bar">
+          <source src="../assets/video/limpiavidrio/skill.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Habilidad</strong>Every car you clean slowly fills your skill bar.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/money.jpg" aria-label="Plata tutorial: money dropped by cleaned cars">
+          <source src="../assets/video/limpiavidrio/money.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Plata</strong>Cleaned cars sometimes leave money behind, from 100 up to 2,000.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/giladas.jpg" aria-label="Giladas tutorial: extras dropped by cleaned cars">
+          <source src="../assets/video/limpiavidrio/giladas.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Giladas</strong>Cleaned cars also drop assorted giladas.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/more-giladas.jpg" aria-label="Distintas Giladas tutorial: the five gilada cards">
+          <source src="../assets/video/limpiavidrio/more-giladas.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Distintas Giladas</strong>Lavafácil makes cleaning cost less, Porro slows time, Imán attracts money, Ráfaga cleans at breakneck speed, and Caridad has others leave money.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/tusan.jpg" aria-label="La Gran Tusan tutorial: the double-tap move on the sidewalk">
+          <source src="../assets/video/limpiavidrio/tusan.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>La Gran Tusan</strong>Standing on the sidewalk, tap up or down twice to pull off the gran tusan.</figcaption>
+      </figure>
+
+      <figure class="lv-mech">
+        <video data-autoloop muted loop playsinline preload="none" poster="../assets/video/limpiavidrio/boulevards.jpg" aria-label="Bulevares tutorial: moving freely on boulevards">
+          <source src="../assets/video/limpiavidrio/boulevards.mp4" type="video/mp4">
+        </video>
+        <figcaption><strong>Bulevares</strong>Unlike crosswalks, on boulevards you can move freely.</figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<section class="lv-section" id="side-a">
+  <div class="lv-wrap">
+    <p class="lv-label">Side A</p>
+    <p class="lv-side-intro">
+      Every world reshuffles the palette, the hazards, and the traffic
+      pattern, and each one has its own boss. The core loop stays the same:
+      keep the squeegee moving, keep the combo alive, and don't get run over.
+    </p>
+    <div class="lv-worlds" data-rotate="2000">
+      <div class="lv-worlds-tabs" role="tablist" aria-label="Worlds">
+        <button class="lv-worlds-tab" role="tab" type="button">City Day</button>
+        <button class="lv-worlds-tab" role="tab" type="button">Night Time</button>
+        <button class="lv-worlds-tab" role="tab" type="button">Summer</button>
+      </div>
+      <div class="lv-worlds-frame">
+        <img class="lv-world" data-slide src="../assets/images/limpiavidrio/shot-combo-jam.jpg" alt="City Day — a 2x combo and a PIMBA! callout while cleaning a jammed row of cars">
+        <img class="lv-world" data-slide src="../assets/images/limpiavidrio/shot-night-run.jpg" alt="Night Time — money and gems streaming down between two lanes of traffic">
+        <img class="lv-world" data-slide src="../assets/images/limpiavidrio/shot-boardwalk.jpg" alt="Summer — a boardwalk stage with a new color palette and a crowd of cars">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lv-section" id="credits">
+  <div class="lv-wrap">
+    <p class="lv-label">Credits</p>
+    <dl class="lv-credits">
+      <div class="lv-credit"><dt>Design, art &amp; everything else</dt><dd>Tato</dd></div>
+      <div class="lv-credit"><dt>Code</dt><dd>Claude, an AI assistant</dd></div>
+      <div class="lv-credit"><dt>Engine</dt><dd>GameMaker</dd></div>
+      <div class="lv-credit"><dt>Made in</dt><dd>Buenos Aires, Argentina</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="lv-section">
+  <div class="lv-wrap">
+    <p class="lv-label">More from the shelf</p>
+    <div class="shelf-list">
+      <a class="shelf-item" href="battle-pass-exercise.html">
+        <span class="shelf-title">Battle Pass UI — concept to final screens</span>
+        <span class="shelf-tag">Concept Work · 2026</span>
+        <span class="shelf-arrow">→</span>
+      </a>
+      <a class="shelf-item" href="pet-time.html">
+        <span class="shelf-title">Pet Time — systems layer</span>
+        <span class="shelf-tag">Mobile Game · 2025</span>
+        <span class="shelf-arrow">→</span>
+      </a>
+      <a class="shelf-item" href="splashy-cats.html">
+        <span class="shelf-title">Splashy Cats — pitching the look</span>
+        <span class="shelf-tag">Mobile Game · 2016</span>
+        <span class="shelf-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="lv-footer">
+  <div class="lv-wrap">
+    <span class="lv-mark">tato<span>.</span></span>
+    <p><a href="../index.html">← Back to all projects</a></p>
+    <p class="lv-rights">A personal project, made for fun — not commissioned work.</p>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
