@@ -33,72 +33,112 @@ var IS_ES = document.documentElement.lang === 'es';
   });
 })();
 
-// Homepage hero background: every project's hero video, shuffled into a
-// queue and played back-to-back, one at a time, reshuffling on each pass.
+// Auto-rotating tabbed frame ([data-rotate="ms"]): one frame cycles through
+// its slides on a timer, and the tabs jump to (and restart the timer from) a
+// given slide. Holds still while hovered/focused, off-screen, or for readers
+// who prefer reduced motion — content that changes on its own needs a way to
+// stop.
 (function () {
-  var video = document.getElementById('homeHeroVideo');
-  if (!video) return;
-
-  var reel = [
-    { src: 'assets/video/hero-loop.mp4', poster: 'assets/video/hero-poster.jpg' },
-    { src: 'assets/video/pets-hero-loop.mp4', poster: 'assets/video/pets-hero-poster.jpg' },
-    { src: 'assets/video/battlepass-hero-loop.mp4', poster: 'assets/video/battlepass-hero-poster.jpg' },
-    { src: 'assets/video/avantrip-hero-loop.mp4', poster: 'assets/video/avantrip-hero-poster.jpg' },
-    { src: 'assets/video/splashy-hero-loop.mp4', poster: 'assets/video/splashy-hero-poster.jpg' },
-    { src: 'assets/video/deautos-hero-loop.mp4', poster: 'assets/video/deautos-hero-poster.jpg' },
-    { src: 'assets/video/santiago-hero-loop.mp4', poster: 'assets/video/santiago-hero-poster.jpg' },
-    { src: 'assets/video/mostaza-hero-loop.mp4', poster: 'assets/video/mostaza-hero-poster.jpg' }
-  ];
-
-  function shuffle(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-    }
-    return a;
-  }
+  var roots = document.querySelectorAll('[data-rotate]');
+  if (!roots.length) return;
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) {
-    video.poster = reel[Math.floor(Math.random() * reel.length)].poster;
+
+  roots.forEach(function (root) {
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    var slides = Array.prototype.slice.call(root.querySelectorAll('[data-slide]'));
+    if (!tabs.length || tabs.length !== slides.length) return;
+
+    var delay = parseInt(root.getAttribute('data-rotate'), 10) || 2000;
+    var index = 0;
+    var timer = null;
+    var hovering = false;
+    var onScreen = true;
+    root.style.setProperty('--lv-rotate', delay + 'ms');
+
+    function paused() { return reduceMotion || hovering || !onScreen; }
+
+    function show(i) {
+      index = (i + tabs.length) % tabs.length;
+      tabs.forEach(function (tab, n) {
+        var on = n === index;
+        tab.classList.remove('is-active');
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.tabIndex = on ? 0 : -1;
+      });
+      slides.forEach(function (slide, n) {
+        var on = n === index;
+        slide.classList.toggle('is-active', on);
+        slide.setAttribute('aria-hidden', on ? 'false' : 'true');
+      });
+      void tabs[index].offsetWidth; // restart the progress underline
+      tabs[index].classList.add('is-active');
+    }
+
+    function schedule() {
+      clearTimeout(timer);
+      root.classList.toggle('is-paused', paused());
+      if (paused()) return;
+      timer = setTimeout(function () { show(index + 1); schedule(); }, delay);
+    }
+
+    tabs.forEach(function (tab, n) {
+      tab.addEventListener('click', function () { show(n); schedule(); });
+      tab.addEventListener('keydown', function (e) {
+        var next = e.key === 'ArrowRight' ? n + 1 : e.key === 'ArrowLeft' ? n - 1 : null;
+        if (next === null) return;
+        e.preventDefault();
+        show(next);
+        tabs[index].focus();
+        schedule();
+      });
+    });
+
+    function hold() { hovering = true; schedule(); }
+    function release() { hovering = false; show(index); schedule(); }
+    root.addEventListener('mouseenter', hold);
+    root.addEventListener('mouseleave', release);
+    root.addEventListener('focusin', hold);
+    root.addEventListener('focusout', release);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        schedule();
+      }).observe(root);
+    }
+
+    show(0);
+    schedule();
+  });
+})();
+
+// Looping demo clips (video[data-autoloop]): play continuously and loop, but
+// only while on screen — a page with nine of them shouldn't decode all nine
+// at once. Readers who prefer reduced motion get controls instead of autoplay.
+(function () {
+  var clips = document.querySelectorAll('video[data-autoloop]');
+  if (!clips.length) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    clips.forEach(function (v) { v.controls = true; });
     return;
   }
 
-  var queue = shuffle(reel);
-  var index = -1;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var v = entry.target;
+      if (entry.isIntersecting) {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { rootMargin: '150px 0px' });
 
-  function playNext() {
-    index++;
-    if (index >= queue.length) {
-      queue = shuffle(reel);
-      index = 0;
-    }
-    var next = queue[index];
-    video.poster = next.poster;
-    video.src = next.src;
-    video.load();
-    attemptPlay();
-  }
-
-  // Autoplay can be blocked on the very first attempt depending on page-load
-  // timing even when muted; retry once metadata is ready and again on the
-  // visitor's first interaction, so it never just sits paused.
-  function attemptPlay() {
-    var playPromise = video.play();
-    if (playPromise && playPromise.catch) {
-      playPromise.catch(function () {
-        video.addEventListener('canplaythrough', attemptPlay, { once: true });
-        ['pointerdown', 'keydown', 'scroll'].forEach(function (evt) {
-          window.addEventListener(evt, attemptPlay, { once: true, passive: true });
-        });
-      });
-    }
-  }
-
-  video.loop = false;
-  video.addEventListener('ended', playNext);
-  playNext();
+  clips.forEach(function (v) { observer.observe(v); });
 })();
 
 // Drag-to-compare slider (Simple vs Full HUD, etc.)

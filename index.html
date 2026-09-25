@@ -6,7 +6,7 @@
 <title>Tato - UI/UX Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,24 +21,28 @@
 </header>
 
 <section class="home-hero">
-  <video id="homeHeroVideo" class="home-hero-video" autoplay muted playsinline aria-hidden="true" poster="assets/video/hero-poster.jpg"></video>
-  <div class="home-hero-dim"></div>
   <div class="wrap">
-    <p class="eyebrow">UX/UI Designer</p>
-    <h1>Systems people can<br>learn <span>at a glance.</span></h1>
-    <p style="display:block; max-width:60ch; margin-bottom:30px; color: var(--parchment-dim); font-size:1.08rem;">
-      I'm a designer based in Buenos Aires, Argentina, with a pull
-      toward interface work over pure research, though I take methodology
-      seriously and let it guide my decisions. I care about building
-      accessible, user-first experiences — I've worked across a range of
-      digital products, but games are where I do my favorite work. Off the
-      clock, I'm playing guitar or working through my game backlog.
-    </p>
-    <div class="contact-row">
-      <a href="mailto:haldmeyer@gmail.com">haldmeyer@gmail.com</a>
-      <a href="https://www.linkedin.com/in/haldmeyer/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://www.instagram.com/haldmeyer/" target="_blank" rel="noopener">Instagram</a>
-      <a href="assets/resume/Matias_Haldmeyer_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    <div class="home-hero-grid">
+      <div class="home-hero-main">
+        <p class="eyebrow">UX/UI Designer</p>
+        <h1>Systems people can learn <span>at a glance.</span></h1>
+      </div>
+      <div class="home-hero-side">
+        <p class="home-hero-bio">
+          I'm a designer based in Buenos Aires, Argentina, with a pull
+          toward interface work over pure research, though I take methodology
+          seriously and let it guide my decisions. I care about building
+          accessible, user-first experiences — I've worked across a range of
+          digital products, but games are where I do my favorite work. Off the
+          clock, I'm playing guitar or working through my game backlog.
+        </p>
+        <div class="contact-row">
+          <a href="mailto:haldmeyer@gmail.com">haldmeyer@gmail.com</a>
+          <a href="https://www.linkedin.com/in/haldmeyer/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.instagram.com/haldmeyer/" target="_blank" rel="noopener">Instagram</a>
+          <a href="assets/resume/Matias_Haldmeyer_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -48,10 +52,28 @@
     <h2>Selected Work</h2>
     <div class="cards-grid">
 
+      <a class="card live card-feature" href="projects/limpiavidrio.html">
+        <div class="card-thumb">
+          <video src="assets/video/limpiavidrio-hero-loop.mp4" poster="assets/video/limpiavidrio-hero-poster.jpg" muted loop playsinline></video>
+          <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">001</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="tag brass">Personal Project</span>
+            <span class="card-year">2026</span>
+          </div>
+          <h3>Limpiavidrio — arcade game</h3>
+          <p>A one-button arcade game about a squeegee man searching for his lost dog, made with GameMaker.</p>
+          <span class="card-link">View case study →</span>
+        </div>
+      </a>
+
       <a class="card live" href="projects/bigtime.html">
         <div class="card-thumb">
           <video src="assets/video/hero-loop.mp4" poster="assets/video/hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">002</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -68,6 +90,7 @@
         <div class="card-thumb">
           <video src="assets/video/pets-hero-loop.mp4" poster="assets/video/pets-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">003</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -84,6 +107,7 @@
         <div class="card-thumb">
           <video src="assets/video/battlepass-hero-loop.mp4" poster="assets/video/battlepass-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">010</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -100,6 +124,7 @@
         <div class="card-thumb">
           <video src="assets/video/avantrip-hero-loop.mp4" poster="assets/video/avantrip-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">007</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -116,6 +141,7 @@
         <div class="card-thumb">
           <video src="assets/video/splashy-hero-loop.mp4" poster="assets/video/splashy-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">004</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -132,6 +158,7 @@
         <div class="card-thumb">
           <video src="assets/video/deautos-hero-loop.mp4" poster="assets/video/deautos-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">006</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -148,6 +175,7 @@
         <div class="card-thumb">
           <video src="assets/video/santiago-hero-loop.mp4" poster="assets/video/santiago-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">005</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -164,6 +192,7 @@
         <div class="card-thumb">
           <video src="assets/video/mostaza-hero-loop.mp4" poster="assets/video/mostaza-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">008</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">
@@ -180,6 +209,7 @@
         <div class="card-thumb">
           <video src="assets/video/assorted-hero-loop.mp4" poster="assets/video/assorted-hero-poster.jpg" muted loop playsinline></video>
           <div class="card-thumb-grid" aria-hidden="true"></div>
+          <span class="card-index" aria-hidden="true">009</span>
         </div>
         <div class="card-body">
           <div class="card-meta-row">

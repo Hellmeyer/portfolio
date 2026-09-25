@@ -2,21 +2,21 @@
    TOKENS
    ============================================ */
 :root {
-  --ink: #14161f;
-  --ink-2: #1c2030;
-  --ink-3: #262b40;
-  --brass: #c9a24e;
-  --brass-dim: #8a6f35;
-  --frost: #6fcbda;
-  --parchment: #ede6d8;
-  --parchment-dim: #a9a396;
-  --epic: #9b7fd4;
+  --ink: #14121c;
+  --ink-2: #1b1824;
+  --ink-3: #241f30;
+  --brass: #4fb3c4;
+  --brass-dim: #3d8b98;
+  --frost: #ff6b52;
+  --parchment: #f2e8d5;
+  --parchment-dim: #b6ad9c;
+  --epic: #e8b33d;
 
-  --display: "Fraunces", "Georgia", serif;
-  --body: "IBM Plex Sans", -apple-system, sans-serif;
-  --mono: "IBM Plex Mono", "Courier New", monospace;
+  --display: "Bricolage Grotesque", "Georgia", serif;
+  --body: "Inter", -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Courier New", monospace;
 
-  --edge: 1px solid rgba(201, 162, 78, 0.22);
+  --edge: 1px solid rgba(79, 179, 196, 0.22);
   --container: 1180px;
 }
 
@@ -102,12 +102,12 @@ a:hover { color: var(--frost); }
 .topnav nav a { color: var(--parchment-dim); }
 .topnav nav a:hover { color: var(--brass); }
 .topnav nav a.lang-toggle {
-  border: 1px solid rgba(201, 162, 78, 0.4);
+  border: 1px solid rgba(79, 179, 196, 0.4);
   border-radius: 999px;
   padding: 3px 10px;
   color: var(--brass);
 }
-.topnav nav a.lang-toggle:hover { background: rgba(201, 162, 78, 0.12); }
+.topnav nav a.lang-toggle:hover { background: rgba(79, 179, 196, 0.12); }
 
 /* ============================================
    BUTTONS / TAGS
@@ -120,8 +120,9 @@ a:hover { color: var(--frost); }
   border: 1px solid var(--brass);
   color: var(--brass);
   font-family: var(--mono);
+  font-weight: 500;
   font-size: 0.82rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   border-radius: 2px;
   transition: background 0.2s, color 0.2s;
@@ -131,23 +132,30 @@ a:hover { color: var(--frost); }
   color: var(--ink);
 }
 
+/* Chip tags — a tinted fill carries the category color, and a quiet
+   hairline (not a loud outline) keeps the plain/neutral variant legible
+   as a chip: --ink-3 on --ink-2 alone is only ~1.09:1 contrast, since
+   there's no hue to fall back on the way the teal/mustard fills have. */
 .tag {
   display: inline-block;
+  line-height: 1;
   font-family: var(--mono);
+  font-weight: 500;
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--frost);
-  border: 1px solid rgba(111, 203, 218, 0.35);
-  border-radius: 2px;
-  padding: 4px 10px;
+  color: var(--parchment-dim);
+  background: var(--ink-3);
+  border: 1px solid rgba(242, 232, 213, 0.12);
+  border-radius: 999px;
+  padding: 6px 13px;
 }
-.tag.epic { color: var(--epic); border-color: rgba(155,127,212,0.4); }
-.tag.brass { color: var(--brass); border-color: rgba(201,162,78,0.4); }
+.tag.epic { color: var(--epic); background: rgba(232, 179, 61, 0.14); }
+.tag.brass { color: var(--brass); background: rgba(79, 179, 196, 0.14); }
 
 .card-meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .card-meta-row .tag { margin-bottom: 0; }
-.card-year { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--parchment-dim); }
+.card-year { display: inline-block; line-height: 1; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--parchment-dim); }
 
 /* ============================================
    HERO
@@ -224,7 +232,7 @@ a:hover { color: var(--frost); }
   align-items: center;
   justify-content: center;
   background: rgba(20, 22, 31, 0.6);
-  border: 1px solid rgba(201, 162, 78, 0.45);
+  border: 1px solid rgba(79, 179, 196, 0.45);
   border-radius: 50%;
   color: var(--brass);
   cursor: pointer;
@@ -345,7 +353,7 @@ a:hover { color: var(--frost); }
   flex-direction: column;
   gap: 14px;
   padding-top: 28px;
-  border-top: 1px solid rgba(201, 162, 78, 0.15);
+  border-top: 1px solid rgba(79, 179, 196, 0.15);
 }
 .direction-pillar:first-child { padding-top: 0; border-top: none; }
 .direction-pillar-label {
@@ -388,7 +396,7 @@ a:hover { color: var(--frost); }
 .gear-divider .line {
   flex: 1;
   height: 1px;
-  background: rgba(201, 162, 78, 0.22);
+  background: rgba(79, 179, 196, 0.22);
 }
 
 /* image grid — breaks out of .wrap to span the viewport width, minus a small side margin */
@@ -423,7 +431,7 @@ a:hover { color: var(--frost); }
   padding: 14px 16px 16px;
   font-size: 0.86rem;
   color: var(--parchment-dim);
-  border-top: 1px solid rgba(201, 162, 78, 0.15);
+  border-top: 1px solid rgba(79, 179, 196, 0.15);
 }
 .shot figcaption strong {
   display: block;
@@ -516,7 +524,7 @@ a:hover { color: var(--frost); }
   max-width: 900px;
   margin: 0 auto;
   background: var(--ink-2);
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   border-radius: 8px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.45);
 }
@@ -539,7 +547,7 @@ a:hover { color: var(--frost); }
   height: 720px;
   max-height: 82vh;
   background: var(--ink-2);
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0,0,0,0.45);
@@ -592,7 +600,7 @@ a:hover { color: var(--frost); }
   width: 100%;
   aspect-ratio: 16 / 9;
   background: var(--ink-2);
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0,0,0,0.45);
@@ -606,7 +614,7 @@ a:hover { color: var(--frost); }
   width: 100%;
   height: min(520px, 65vh);
   background: var(--ink-2);
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0,0,0,0.45);
@@ -626,7 +634,7 @@ a:hover { color: var(--frost); }
   letter-spacing: 0.06em;
   color: var(--parchment-dim);
   background: transparent;
-  border: 1px solid rgba(201, 162, 78, 0.3);
+  border: 1px solid rgba(79, 179, 196, 0.3);
   border-radius: 999px;
   padding: 6px 16px;
   cursor: pointer;
@@ -651,7 +659,7 @@ a:hover { color: var(--frost); }
   width: 100%;
   aspect-ratio: 393 / 900;
   background: var(--ink-2);
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   border-radius: 40px;
   padding: 10px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.45);
@@ -710,7 +718,7 @@ a:hover { color: var(--frost); }
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid rgba(201, 162, 78, 0.4);
+  border: 2px solid rgba(79, 179, 196, 0.4);
   z-index: 2;
 }
 .phone-slide.is-active {
@@ -724,7 +732,7 @@ a:hover { color: var(--frost); }
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(201, 162, 78, 0.4);
+  border: 1px solid rgba(79, 179, 196, 0.4);
   border-radius: 50%;
   background: rgba(28, 32, 48, 0.6);
   color: var(--brass);
@@ -746,7 +754,7 @@ a:hover { color: var(--frost); }
   border-radius: 50%;
   padding: 0;
   border: none;
-  background: rgba(201, 162, 78, 0.3);
+  background: rgba(79, 179, 196, 0.3);
   cursor: pointer;
 }
 .phone-slideshow-dots .dot.is-active { background: var(--brass); }
@@ -851,7 +859,7 @@ a:hover { color: var(--frost); }
   text-transform: uppercase;
   color: var(--parchment);
   background: rgba(20, 22, 31, 0.65);
-  border: 1px solid rgba(201, 162, 78, 0.3);
+  border: 1px solid rgba(79, 179, 196, 0.3);
   padding: 4px 10px;
   border-radius: 2px;
   pointer-events: none;
@@ -892,7 +900,7 @@ a:hover { color: var(--frost); }
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(201, 162, 78, 0.4);
+  border: 1px solid rgba(79, 179, 196, 0.4);
   border-radius: 50%;
   background: rgba(28, 32, 48, 0.6);
   color: var(--brass);
@@ -950,44 +958,48 @@ a:hover { color: var(--frost); }
 /* ============================================
    HOME / PROJECT CARDS
    ============================================ */
+/* Plain masthead — no background video. Structure comes from a two-column
+   split (headline / bio+contact) with a vertical rule between them, rather
+   than from imagery; kept inside .wrap (unlike the full-bleed cards below)
+   since long-form bio text needs a sane line length to stay readable. */
 .home-hero {
-  position: relative;
-  overflow: hidden;
-  padding: 110px 0 70px;
+  padding: 120px 0 96px;
   border-bottom: var(--edge);
 }
-.home-hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.4);
-  z-index: 0;
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 64px;
 }
-.home-hero-dim {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 22, 31, 0.93);
-  z-index: 1;
+.home-hero-side {
+  padding-left: 60px;
+  border-left: var(--edge);
 }
-.home-hero > .wrap { position: relative; z-index: 2; }
-.home-hero .eyebrow { margin-bottom: 20px; }
+.home-hero .eyebrow { margin-bottom: 22px; }
 .home-hero h1 {
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(2.6rem, 5vw, 4rem);
-  line-height: 1.05;
-  margin: 0 0 22px;
+  font-size: clamp(2.2rem, 3.6vw, 3.6rem);
+  line-height: 1.1;
+  margin: 0;
+  /* no hardcoded <br> — this column got narrower once the hero became
+     two-up with the bio, so a fixed break point stopped fitting; balance
+     picks good break points itself instead of stranding a lone word. */
+  text-wrap: balance;
 }
 .home-hero h1 span { color: var(--brass); }
-.home-hero p {
+.home-hero-bio {
   color: var(--parchment-dim);
-  max-width: 60ch;
-  font-size: 1.08rem;
-  margin: 0 0 30px;
+  font-size: 1.04rem;
+  line-height: 1.7;
+  margin: 0 0 32px;
 }
-.contact-row { display: flex; gap: 22px; font-family: var(--mono); font-size: 0.85rem; }
+.contact-row { display: flex; flex-wrap: wrap; gap: 20px 26px; font-family: var(--mono); font-size: 0.85rem; }
+
+@media (max-width: 800px) {
+  .home-hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .home-hero-side { padding-left: 0; padding-top: 32px; border-left: none; border-top: var(--edge); }
+}
 
 .cards {
   padding: 70px 0 90px;
@@ -1000,38 +1012,50 @@ a:hover { color: var(--frost); }
   color: var(--parchment-dim);
   margin: 0 0 34px;
 }
+/* Full-bleed editorial cards — no separate thumb/body split; the image
+   IS the card, with title/tag/year overlaid on a bottom scrim and a large
+   index numeral bled toward the top-left corner. Content sits close to
+   the card's own edge on purpose rather than centered inside a panel.
+   The grid itself stays centered within the site's usual 1180px column
+   (same as nav/headings), rather than breaking out to the viewport edge. */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  gap: 14px;
 }
 .card {
+  position: relative;
+  aspect-ratio: 3 / 4;
   border: var(--edge);
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
   background: var(--ink-2);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .card.live:hover {
-  transform: translateY(-4px);
-  border-color: rgba(201, 162, 78, 0.6);
+  border-color: rgba(79, 179, 196, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
-.card-thumb {
-  aspect-ratio: 4 / 3;
-  background: var(--ink-3);
-  position: relative;
-  overflow: hidden;
+.card-thumb { position: absolute; inset: 0; background: var(--ink-3); }
+.card-thumb img, .card-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, filter 0.5s ease;
 }
-.card-thumb img, .card-thumb video { width: 100%; height: 100%; object-fit: cover; }
+.card.live:hover .card-thumb img,
+.card.live:hover .card-thumb video { transform: scale(1.045); }
 .card-thumb video, .card-thumb img.mono { filter: grayscale(1); }
+.card.live:hover .card-thumb video,
+.card.live:hover .card-thumb img.mono { filter: grayscale(0); }
 .card-thumb-grid {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: rgba(20, 22, 31, 0.3);
+  background: rgba(20, 22, 31, 0.32);
+  transition: background 0.25s ease;
 }
+.card.live:hover .card-thumb-grid { background: rgba(20, 22, 31, 0.1); }
 .card-thumb .soon-badge {
   position: absolute;
   inset: 0;
@@ -1045,21 +1069,61 @@ a:hover { color: var(--frost); }
   color: var(--parchment-dim);
   background: rgba(20, 22, 31, 0.55);
 }
-.card-body { padding: 22px 22px 26px; flex: 1; display: flex; flex-direction: column; }
-.card-body .tag { align-self: flex-start; margin-bottom: 12px; }
+.card-index {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  z-index: 2;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4.8vw, 3rem);
+  line-height: 1;
+  color: var(--parchment);
+  /* fully opaque now, so the shadow is what keeps it legible on bright
+     thumbnails (e.g. a white screenshot) rather than a translucent fill. */
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+.card-body {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 18px;
+  background: linear-gradient(0deg, rgba(20,22,31,0.95) 0%, rgba(20,22,31,0.55) 48%, rgba(20,22,31,0.05) 75%);
+  transition: background 0.3s ease;
+}
+/* Hover brightens the thumbnail itself (grayscale lifts, the dim overlay
+   fades, the image zooms) and reveals the description text — so the same
+   rgba(20,22,31,…) scrim family used on every project's own hero banner
+   gets reinforced here too, taller and darker, to keep text readable
+   against a suddenly brighter/full-color image instead of just hoping
+   the resting-state gradient still holds up. */
+.card.live:hover .card-body {
+  background: linear-gradient(0deg, rgba(20,22,31,0.97) 0%, rgba(20,22,31,0.8) 55%, rgba(20,22,31,0.15) 85%);
+}
+.card-meta-row { margin-bottom: 10px; }
 .card-body h3 {
   font-family: var(--display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  margin: 0 0 8px;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  line-height: 1.18;
+  margin: 0 0 6px;
   color: var(--parchment);
 }
 .card-body p {
   color: var(--parchment-dim);
-  font-size: 0.92rem;
-  margin: 0 0 16px;
-  flex: 1;
+  font-size: 0.86rem;
+  margin: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.35s ease;
 }
+.card.live:hover .card-body p,
+.card.live:focus-within .card-body p { max-height: 6em; opacity: 1; margin: 0 0 10px; }
 .card-link {
   font-family: var(--mono);
   font-size: 0.8rem;
@@ -1069,8 +1133,22 @@ a:hover { color: var(--frost); }
 .card.disabled { opacity: 0.55; }
 .card.disabled .card-link { color: var(--parchment-dim); }
 
+/* Feature card — the same card in every respect (type scale, padding,
+   numeral size, hover-reveal description), just wider: spans two columns
+   instead of one, so it simply takes up more room rather than becoming a
+   different-looking component. No aspect-ratio here on purpose — the
+   normal 3:4 cards it shares a row with set that row's height, and this
+   one stretches to match, so both land on the same bottom edge instead of
+   two different ratios racing to define the row. */
+.card.card-feature {
+  grid-column: span 2;
+  aspect-ratio: auto;
+}
+
 @media (max-width: 900px) {
   .cards-grid { grid-template-columns: 1fr; }
+  .card { aspect-ratio: 4 / 5; }
+  .card.card-feature { grid-column: 1 / -1; aspect-ratio: 4 / 3; }
 }
 
 /* ============================================
@@ -1110,7 +1188,7 @@ a:hover { color: var(--frost); }
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(201, 162, 78, 0.22);
+  background: rgba(79, 179, 196, 0.22);
 }
 .tools-grid {
   display: flex;
@@ -1195,8 +1273,9 @@ a:hover { color: var(--frost); }
 }
 
 /* ============================================
-   NEXT PROJECTS (end-of-case-study handoff — reuses .cards-grid/.card
-   from the homepage grid so the two stay visually identical)
+   NEXT PROJECTS (end-of-case-study handoff — a plain list rather than
+   another card grid, so a case study doesn't end by repeating its own
+   opening pattern)
    ============================================ */
 .next-project { padding: 70px 0 86px; }
 .next-project-eyebrow {
@@ -1205,8 +1284,26 @@ a:hover { color: var(--frost); }
   font-size: 0.8rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--parchment-dim);
+  color: var(--brass);
   margin: 0 0 22px;
+}
+.shelf-list { display: flex; flex-direction: column; }
+.shelf-item {
+  display: grid;
+  grid-template-columns: 1fr 200px 20px;
+  align-items: baseline;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: var(--edge);
+}
+.shelf-item:first-child { border-top: var(--edge); }
+.shelf-title { font-family: var(--display); font-weight: 600; font-size: 1.05rem; color: var(--parchment); }
+.shelf-item:hover .shelf-title { color: var(--brass); }
+.shelf-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--parchment-dim); white-space: nowrap; }
+.shelf-arrow { font-family: var(--mono); font-size: 0.8rem; color: var(--parchment-dim); text-align: right; }
+@media (max-width: 560px) {
+  .shelf-item { grid-template-columns: 1fr auto; row-gap: 6px; }
+  .shelf-arrow { display: none; }
 }
 
 /* ============================================
@@ -1249,7 +1346,7 @@ a:hover { color: var(--frost); }
 .lightbox img {
   max-width: 100%;
   max-height: 82vh;
-  border: 1px solid rgba(201, 162, 78, 0.3);
+  border: 1px solid rgba(79, 179, 196, 0.3);
   border-radius: 3px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
@@ -1270,7 +1367,7 @@ a:hover { color: var(--frost); }
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(201, 162, 78, 0.4);
+  border: 1px solid rgba(79, 179, 196, 0.4);
   border-radius: 50%;
   background: rgba(28, 32, 48, 0.6);
   color: var(--brass);
@@ -1288,7 +1385,7 @@ a:hover { color: var(--frost); }
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(201, 162, 78, 0.4);
+  border: 1px solid rgba(79, 179, 196, 0.4);
   border-radius: 50%;
   background: rgba(28, 32, 48, 0.6);
   color: var(--brass);
