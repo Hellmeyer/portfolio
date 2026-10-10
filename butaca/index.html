@@ -14,7 +14,7 @@
 <style>
 /* Butaca usa la paleta, las tipografías y los componentes compartidos del sitio
    (../css/style.css: .topnav, .btn, .eyebrow, .site-footer). Acá solo van los
-   componentes propios de la herramienta: marquesina, rollos, opciones, talón. */
+   componentes propios de la herramienta: progreso, opciones, talón. */
 :root{
   --bt-line:rgba(242,232,213,.16);    /* divisores y bordes decorativos */
   --bt-control:rgba(242,232,213,.4);  /* bordes de controles: ~3,3:1 contra --ink (WCAG 1.4.11) */
@@ -34,20 +34,17 @@ p{margin:0}
 .bt-main{padding:64px 0 88px}
 .bt-col{max-width:720px;display:flex;flex-direction:column;gap:28px}
 
-/* Marquesina */
-.bt-masthead{position:relative;padding-bottom:26px}
-.bt-masthead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
-  background:radial-gradient(circle,var(--epic) 2px,transparent 2.6px) 0 50%/14px 6px repeat-x;opacity:.9}
+/* Encabezado */
+.bt-masthead{padding-bottom:28px;border-bottom:1px solid var(--bt-line)}
 .bt-masthead h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
 .bt-masthead p{color:var(--parchment-dim);max-width:44ch;text-wrap:pretty}
 
-/* Rollos (progreso) */
-.reel{display:flex;flex-direction:column;gap:8px}
-.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.strip span{height:14px;background:rgba(242,232,213,.14);position:relative}
+/* Progreso: cinco tramos rectos; hecho en crema, actual en teal, pendiente apagado */
+.reel{display:flex;flex-direction:column;gap:10px}
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.strip span{height:4px;background:rgba(242,232,213,.14)}
 .strip span.on{background:var(--parchment-dim)}
 .strip span.cur{background:var(--brass)}
-.strip span::before{content:"";position:absolute;inset:4px 6px;background:radial-gradient(circle,var(--ink) 1.6px,transparent 2px) 0 0/9px 6px repeat-x;opacity:.6}
 
 /* Etapas */
 .stage{display:flex;flex-direction:column;gap:24px}
@@ -64,7 +61,7 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 
 /* Opciones: la selección se invierte (crema), la acción principal queda en teal */
 .opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{border:1px solid var(--bt-control);background:transparent;border-radius:2px;padding:10px 14px;cursor:pointer;font-weight:500;color:var(--parchment);text-align:left;display:flex;flex-direction:column;gap:2px;transition:border-color .15s,background .15s,color .15s}
+.opt{border:1px solid var(--bt-control);background:transparent;border-radius:2px;padding:10px 14px;cursor:pointer;font-weight:500;color:var(--parchment);text-align:left;display:flex;flex-direction:column;justify-content:center;gap:2px;transition:border-color .15s,background .15s,color .15s}
 .opt small{font-weight:400;color:var(--parchment-dim);font-size:.82rem}
 .opt:hover{border-color:var(--parchment)}
 .opt[aria-pressed="true"]{background:var(--parchment);color:var(--ink);border-color:var(--parchment)}
@@ -143,9 +140,6 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 <header class="topnav">
   <div class="wrap">
     <a class="mark" href="../index.html">tato<span>.</span></a>
-    <nav>
-      <a href="../index.html">← Portfolio</a>
-    </nav>
   </div>
 </header>
 
@@ -168,7 +162,6 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 <footer class="site-footer">
   <div class="wrap">
     <p class="mark">tato.</p>
-    <p><a href="../index.html">← Volver al portfolio</a></p>
     <p class="rights">Nada de lo que escribís sale de tu navegador.</p>
   </div>
 </footer>
@@ -186,7 +179,7 @@ const LEVELS = [{l:'Floja',v:0},{l:'Correcta',v:.4},{l:'Buena',v:.75},{l:'Sobres
 const GUT = [
   {l:'La odié',v:0,b:'1'},{l:'No me gustó',v:.2,b:'2'},{l:'Ni fu ni fa',v:.5,b:'3'},
   {l:'Me gustó',v:.75,b:'4'},{l:'Me voló la cabeza',v:1,b:'5'}];
-const FEELS = ['Me hizo reír','Me emocionó','Me tuvo en tensión','Me hizo pensar','Me dio miedo','Me quedé pensándola','Me aburrió','Me incomodó','Me enojó'];
+const FEELS = ['Me hizo reír','Me emocionó','Me tensionó','Me hizo pensar','Me dio miedo','Me quedé pensándola','Me aburrió','Me incomodó','Me enojó','Me costó seguirla','No sé si la entendí','Nada especial'];
 const FUL = [{l:'Se quedó corta',v:0},{l:'A medias',v:.4},{l:'Sí, cumple',v:.75},{l:'La superó',v:1}];
 const RW = [{l:'Nunca',v:0},{l:'Quizás',v:.4},{l:'Sí',v:.75},{l:'Ya mismo',v:1}];
 const DONE = [
