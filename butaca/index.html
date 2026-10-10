@@ -35,9 +35,11 @@ p{margin:0}
 .bt-col{max-width:720px;display:flex;flex-direction:column;gap:28px}
 
 /* Encabezado */
-.bt-masthead{padding-bottom:28px;border-bottom:1px solid var(--bt-line)}
-.bt-masthead h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
-.bt-masthead p{color:var(--parchment-dim);max-width:44ch;text-wrap:pretty}
+.bt-intro{display:flex;flex-direction:column;align-items:flex-start}
+.bt-intro h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
+.bt-intro p:not(.eyebrow){color:var(--parchment-dim);max-width:44ch;text-wrap:pretty;margin-bottom:28px}
+.bt-app{display:flex;flex-direction:column;gap:28px}
+.bt-intro[hidden],.bt-app[hidden]{display:none}
 
 /* Progreso: cinco tramos rectos; hecho en crema, actual en teal, pendiente apagado */
 .reel{display:flex;flex-direction:column;gap:10px}
@@ -146,15 +148,18 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 <main class="bt-main">
   <div class="wrap">
     <div class="bt-col">
-      <section class="bt-masthead">
+      <section class="bt-intro" id="intro">
         <p class="eyebrow">Herramienta · Reseñas de cine</p>
         <h1>Butaca</h1>
-        <p>Cinco preguntas, una nota de media en media estrella y la reseña escrita.</p>
+        <p>Reseñas de películas en cinco preguntas.</p>
+        <button type="button" class="btn primary" id="start">Comenzar</button>
       </section>
 
-      <div class="reel" id="reel"></div>
-      <section class="stage" id="stage" aria-live="polite"></section>
-      <div class="navbar" id="navbar"></div>
+      <div class="bt-app" id="app" hidden>
+        <div class="reel" id="reel"></div>
+        <section class="stage" id="stage" aria-live="polite"></section>
+        <div class="navbar" id="navbar"></div>
+      </div>
     </div>
   </div>
 </main>
@@ -162,7 +167,7 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 <footer class="site-footer">
   <div class="wrap">
     <p class="mark">tato.</p>
-    <p class="rights">Nada de lo que escribís sale de tu navegador.</p>
+    <p class="rights">Tranqui, nada de lo que escribís sale de tu navegador. Sé vos.</p>
   </div>
 </footer>
 
@@ -361,7 +366,7 @@ function stepMovie(f){
 
 function stepGut(f){
   return `
-  <div><h2>¿Cómo saliste?</h2><p class="lede">Tu primera impresión, sin pensarla mucho. Es lo que más pesa en la nota (55%).</p></div>
+  <div><h2>¿Qué sentiste?</h2><p class="lede">Tu primera impresión, sin pensarla mucho. Es lo que más pesa en la nota (55%).</p></div>
   <div class="gut" role="group" aria-label="Primera impresión">
     ${GUT.map((g, i) => `<button type="button" class="opt" data-act="set" data-key="gut" data-val="${i}" aria-pressed="${f.gut === i}"><b>${g.b}</b>${g.l}</button>`).join('')}
   </div>
@@ -468,7 +473,7 @@ const STEP_FNS = [stepMovie, stepGut, stepAreas, stepBestWorst, stepClose, stepR
 function canNext(){
   const f = S.f;
   if (S.step === 0) return tidy(f.title) ? '' : 'Escribí el título para seguir.';
-  if (S.step === 1) return f.gut != null ? '' : 'Elegí cómo saliste.';
+  if (S.step === 1) return f.gut != null ? '' : 'Elegí qué sentiste.';
   if (S.step === 4) return (f.fulfilled != null && f.rewatch != null) ? '' : 'Respondé las dos primeras.';
   return '';
 }
@@ -536,6 +541,14 @@ document.addEventListener('keydown', ev => {
 });
 
 render();
+
+/* ---------- Portada ---------- */
+$('#start').addEventListener('click', () => {
+  $('#intro').hidden = true;
+  $('#app').hidden = false;
+  window.scrollTo({top:0});
+  const t = $('#f-title'); t && t.focus({preventScroll:true});
+});
 </script>
 </body>
 </html>
