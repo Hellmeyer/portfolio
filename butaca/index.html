@@ -35,9 +35,11 @@ p{margin:0}
 .bt-col{max-width:720px;display:flex;flex-direction:column;gap:28px}
 
 /* Encabezado */
-.bt-intro{display:flex;flex-direction:column;align-items:flex-start}
+.bt-intro{display:flex;flex-direction:column;align-items:center;text-align:center}
+.bt-main.is-intro .bt-col{margin-left:auto;margin-right:auto}
 .bt-intro h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
-.bt-intro p:not(.eyebrow){color:var(--parchment-dim);max-width:44ch;text-wrap:pretty;margin-bottom:28px}
+.bt-intro p{color:var(--parchment-dim);max-width:44ch;text-wrap:pretty;margin:0 auto 28px}
+
 .bt-app{display:flex;flex-direction:column;gap:28px}
 .bt-intro[hidden],.bt-app[hidden]{display:none}
 
@@ -95,8 +97,23 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .link{border:0;background:none;color:var(--brass);font-weight:600;cursor:pointer;padding:4px 0;align-self:flex-start}
 .link:hover{color:var(--frost)}
 
-.navbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--bt-line);padding-top:20px}
+.navbar{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--bt-line);padding-top:20px}
+.navbar .hint{flex:1;min-width:0}
+.navbar[data-req] .hint{min-height:1.4em}
+.hint:empty{display:none}
+.navbar[data-req] .hint:empty{display:block}
+.nav-btns{display:flex;gap:10px}
 .hint{color:var(--parchment-dim);font-size:.88rem}
+.req{color:var(--frost);font-weight:700;margin-left:.15em}
+/* Mobile: aviso arriba, botones juntos y anclados abajo, siempre visibles */
+@media (max-width:600px){
+  .navbar{position:sticky;bottom:0;z-index:5;flex-direction:column;align-items:stretch;gap:8px;
+    background:var(--ink);padding:12px 0 calc(14px + env(safe-area-inset-bottom,0px));
+    clip-path:inset(0 -100vmax);box-shadow:0 0 0 100vmax var(--ink)}
+  .navbar .hint{flex:none;text-align:center}
+  .nav-btns{gap:10px}
+  .nav-btns .btn{flex:1;justify-content:center;text-align:center}
+}
 
 /* Botones: base compartida (.btn de style.css, contorno teal); acá el relleno de la acción principal y el estado deshabilitado */
 .btn{background:transparent;cursor:pointer}
@@ -145,11 +162,10 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
   </div>
 </header>
 
-<main class="bt-main">
+<main class="bt-main is-intro" id="main">
   <div class="wrap">
     <div class="bt-col">
       <section class="bt-intro" id="intro">
-        <p class="eyebrow">Herramienta · Reseñas de cine</p>
         <h1>Butaca</h1>
         <p>Reseñas de películas en cinco pasos.</p>
         <button type="button" class="btn primary" id="start">Comenzar</button>
@@ -350,11 +366,13 @@ function optBtn({act, key, val, label, sub, pressed, cls=''}){
   return `<button type="button" class="opt ${cls}" data-act="${act}" data-key="${key}" data-val="${esc(val)}" aria-pressed="${pressed}">${label}${sub ? `<small>${sub}</small>` : ''}</button>`;
 }
 
+const REQ = '<span class="req" aria-hidden="true">*</span>';
+
 function stepMovie(f){
   return `
   <div><h2>¿Qué viste?</h2><p class="lede">Empecemos por lo básico. El año es opcional, sirve para distinguir remakes.</p></div>
   <div class="fields">
-    <label class="field">Título<input id="f-title" data-bind="title" value="${esc(f.title)}" placeholder="Ej. Relatos salvajes" autocomplete="off"></label>
+    <label class="field"><span>Título ${REQ}</span><input id="f-title" data-bind="title" aria-required="true" value="${esc(f.title)}" placeholder="Ej. Relatos salvajes" autocomplete="off"></label>
     <label class="field">Año<input id="f-year" data-bind="year" value="${esc(f.year)}" inputmode="numeric" maxlength="4" placeholder="2014" autocomplete="off"></label>
   </div>
   <fieldset><legend>¿La terminaste de ver?</legend>
@@ -366,8 +384,8 @@ function stepMovie(f){
 
 function stepGut(f){
   return `
-  <div><h2>¿Qué sentiste?</h2><p class="lede">Tu primera impresión, sin pensarla mucho. Es lo que más pesa en la nota (55%).</p></div>
-  <div class="gut" role="group" aria-label="Primera impresión">
+  <div><h2>¿Qué sentiste? ${REQ}</h2><p class="lede">Tu primera impresión, sin pensarla mucho. Es lo que más pesa en la nota (55%).</p></div>
+  <div class="gut" role="group" aria-label="Primera impresión (obligatoria)">
     ${GUT.map((g, i) => `<button type="button" class="opt" data-act="set" data-key="gut" data-val="${i}" aria-pressed="${f.gut === i}"><b>${g.b}</b>${g.l}</button>`).join('')}
   </div>
   <fieldset><legend>¿Qué te provocó? <small>Opcional, marcá todas las que quieras</small></legend>
@@ -418,10 +436,10 @@ function stepBestWorst(f){
 function stepClose(f){
   return `
   <div><h2>Cierre</h2><p class="lede">Dos preguntas para ajustar la nota (15%) y una opcional para la reseña.</p></div>
-  <fieldset><legend>¿Logra lo que quería ser? <small>Una comedia que hace reír cumple, aunque no sea arte.</small></legend>
+  <fieldset><legend>¿Logra lo que quería ser? ${REQ} <small>Una comedia que hace reír cumple, aunque no sea arte.</small></legend>
     <div class="opts">${FUL.map((x, i) => optBtn({act:'set', key:'fulfilled', val:i, label:x.l, pressed:f.fulfilled === i})).join('')}</div>
   </fieldset>
-  <fieldset><legend>¿La volverías a ver?</legend>
+  <fieldset><legend>¿La volverías a ver? ${REQ}</legend>
     <div class="opts">${RW.map((x, i) => optBtn({act:'set', key:'rewatch', val:i, label:x.l, pressed:f.rewatch === i})).join('')}</div>
   </fieldset>
   <label class="field">¿A quién se la recomendarías? <span class="opt-note">Opcional</span>
@@ -484,11 +502,14 @@ function render(){
     <div class="strip" aria-hidden="true">${STEPS.map((_, i) => `<span class="${i < cur ? 'on' : i === cur ? 'cur' : ''}"></span>`).join('')}</div>`;
   $('#stage').innerHTML = STEP_FNS[cur](S.f);
   const block = canNext();
+  $('#navbar').toggleAttribute('data-req', cur === 0 || cur === 1 || cur === 4);
   $('#navbar').innerHTML = cur < 5
-    ? `<button type="button" class="btn" data-act="back" ${cur === 0 ? 'disabled' : ''}>Atrás</button>
-       <span class="hint" id="nav-hint">${block}</span>
-       <button type="button" class="btn primary" data-act="next" id="next" ${block ? 'disabled' : ''}>${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>`
-    : `<button type="button" class="btn" data-act="back">Volver a las preguntas</button>`;
+    ? `<span class="hint" id="nav-hint">${block}</span>
+       <div class="nav-btns">
+         <button type="button" class="btn" data-act="back" ${cur === 0 ? 'disabled' : ''}>Atrás</button>
+         <button type="button" class="btn primary" data-act="next" id="next" ${block ? 'disabled' : ''}>${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>
+       </div>`
+    : `<div class="nav-btns"><button type="button" class="btn" data-act="back">Volver a las preguntas</button></div>`;
 }
 
 function refreshNav(){
@@ -544,6 +565,7 @@ render();
 
 /* ---------- Portada ---------- */
 $('#start').addEventListener('click', () => {
+  $('#main').classList.remove('is-intro');
   $('#intro').hidden = true;
   $('#app').hidden = false;
   window.scrollTo({top:0});
