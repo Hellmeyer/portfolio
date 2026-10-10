@@ -30,13 +30,17 @@ h3{font-size:1.2rem;font-weight:700}
 p{margin:0}
 .label{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--parchment-dim)}
 
-/* Layout: columna angosta y alineada a la izquierda dentro del mismo .wrap que usan el nav y el footer */
+/* Layout: columna angosta y centrada dentro del mismo .wrap que usan el nav y el footer */
 .bt-main{padding:64px 0 88px}
-.bt-col{max-width:720px;display:flex;flex-direction:column;gap:28px}
+.bt-col{max-width:720px;margin-left:auto;margin-right:auto;display:flex;flex-direction:column;gap:28px}
 
 /* Encabezado */
 .bt-intro{display:flex;flex-direction:column;align-items:center;text-align:center}
-.bt-main.is-intro .bt-col{margin-left:auto;margin-right:auto}
+/* Footer siempre pegado al piso; en la portada el bloque queda centrado en el espacio que sobra */
+body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.bt-main{flex:1 0 auto}
+.bt-main.is-intro{display:flex;flex-direction:column;justify-content:center;padding-top:32px;padding-bottom:32px}
+.site-footer{margin-top:auto}
 .bt-intro h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
 .bt-intro p{color:var(--parchment-dim);max-width:44ch;text-wrap:pretty;margin:0 auto 28px}
 
@@ -74,10 +78,12 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .opt.skip[aria-pressed="true"]{background:var(--ink-3);color:var(--parchment);border-color:var(--parchment-dim)}
 .chip{border-radius:999px;padding:7px 14px;font-weight:500}
 
+.opts-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opts-3 .opt{justify-content:center;text-align:center;padding:12px 8px}
 .gut{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.gut .opt{align-items:center;text-align:center;padding:14px 8px;gap:6px}
-.gut .opt b{font-family:var(--display);font-size:1.7rem;font-weight:800;line-height:1}
-@media (max-width:520px){.gut{grid-template-columns:1fr}.gut .opt{flex-direction:row;justify-content:flex-start;gap:12px;text-align:left}.gut .opt b{width:1.4em;text-align:center}}
+.gut .opt{align-items:center;justify-content:center;text-align:center;padding:14px 8px;gap:6px}
+.gut .em{font-size:1.7rem;line-height:1}
+@media (max-width:520px){.gut{grid-template-columns:repeat(2,1fr)}.gut .opt{flex-direction:row;gap:8px;padding:14px 6px}.gut .em{font-size:1.25rem}.gut .opt:last-child{grid-column:1/-1}}
 
 .range-row{display:flex;align-items:center;gap:12px}
 .range-row input{flex:1;accent-color:var(--brass)}
@@ -97,20 +103,19 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .link{border:0;background:none;color:var(--brass);font-weight:600;cursor:pointer;padding:4px 0;align-self:flex-start}
 .link:hover{color:var(--frost)}
 
-.navbar{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--bt-line);padding-top:20px}
-.navbar .hint{flex:1;min-width:0}
-.navbar[data-req] .hint{min-height:1.4em}
-.hint:empty{display:none}
-.navbar[data-req] .hint:empty{display:block}
+.navbar{display:flex;justify-content:flex-end;align-items:center;gap:12px;border-top:1px solid var(--bt-line);padding-top:20px}
 .nav-btns{display:flex;gap:10px}
 .hint{color:var(--parchment-dim);font-size:.88rem}
+.field-err{color:var(--frost);font-size:.92rem;font-weight:500;margin:-10px 0 0;scroll-margin-bottom:120px}
+.field input[aria-invalid=true]{border-color:var(--frost)}
 .req{color:var(--frost);font-weight:700;margin-left:.15em}
 /* Mobile: aviso arriba, botones juntos y anclados abajo, siempre visibles */
 @media (max-width:600px){
   .navbar{position:sticky;bottom:0;z-index:5;flex-direction:column;align-items:stretch;gap:8px;
-    background:var(--ink);padding:12px 0 calc(14px + env(safe-area-inset-bottom,0px));
-    clip-path:inset(0 -100vmax);box-shadow:0 0 0 100vmax var(--ink)}
-  .navbar .hint{flex:none;text-align:center}
+    border-top:0;padding:12px 0 calc(14px + env(safe-area-inset-bottom,0px))}
+  /* Mismo fondo que .topnav: translúcido con blur, a todo el ancho (el .wrap tiene 20px de margen a cada lado en mobile) */
+  .navbar::before{content:"";position:absolute;inset:0 -20px;z-index:-1;pointer-events:none;
+    background:rgba(20,22,31,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:var(--edge)}
   .nav-btns{gap:10px}
   .nav-btns .btn{flex:1;justify-content:center;text-align:center}
 }
@@ -198,15 +203,15 @@ const AREAS = [
 ];
 const LEVELS = [{l:'Floja',v:0},{l:'Correcta',v:.4},{l:'Buena',v:.75},{l:'Sobresaliente',v:1}];
 const GUT = [
-  {l:'La odié',v:0,b:'1'},{l:'No me gustó',v:.2,b:'2'},{l:'Ni fu ni fa',v:.5,b:'3'},
-  {l:'Me gustó',v:.75,b:'4'},{l:'Me voló la cabeza',v:1,b:'5'}];
+  {l:'La odié',v:0,e:'🤬'},{l:'No me gustó',v:.2,e:'🙁'},{l:'Ni fu ni fa',v:.5,e:'😐'},
+  {l:'Me gustó',v:.75,e:'🙂'},{l:'Me voló la cabeza',v:1,e:'🤯'}];
 const FEELS = ['Me hizo reír','Me emocionó','Me tensionó','Me hizo pensar','Me dio miedo','Me quedé pensándola','Me aburrió','Me incomodó','Me enojó','Me costó seguirla','No sé si la entendí','Nada especial'];
 const FUL = [{l:'Se quedó corta',v:0},{l:'A medias',v:.4},{l:'Sí, cumple',v:.75},{l:'La superó',v:1}];
 const RW = [{l:'Nunca',v:0},{l:'Quizás',v:.4},{l:'Sí',v:.75},{l:'Ya mismo',v:1}];
 const DONE = [
-  {k:'yes',l:'Sí, entera'},
-  {k:'partial',l:'La vi a medias',s:'En partes o con distracciones'},
-  {k:'quit',l:'La abandoné'}];
+  {k:'yes',l:'Sep'},
+  {k:'partial',l:'A medias',s:'En partes o con distracciones'},
+  {k:'quit',l:'Abandoné'}];
 const W = {gut:.55, areas:.30, tail:.15};
 const STAR_LABEL = {0.5:'Horrible',1:'Muy mala',1.5:'Mala',2:'Floja',2.5:'Regular',3:'Buena',3.5:'Muy buena',4:'Excelente',4.5:'Casi perfecta',5:'Obra maestra'};
 const STEPS = ['La película','Primera impresión','Por áreas','Lo mejor y lo peor','Cierre'];
@@ -217,7 +222,7 @@ function fresh(){
   return {title:'', year:'', done:'yes', quitAt:50, gut:null, feels:[], areas,
           actors:[], best:'', worst:'', fulfilled:null, rewatch:null, recommend:''};
 }
-const S = {step:0, f:fresh(), adjust:0, seed:0, review:'', reviewEdited:false};
+const S = {showErr:false, step:0, f:fresh(), adjust:0, seed:0, review:'', reviewEdited:false};
 
 /* ---------- Utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -376,7 +381,7 @@ function stepMovie(f){
     <label class="field">Año<input id="f-year" data-bind="year" value="${esc(f.year)}" inputmode="numeric" maxlength="4" placeholder="2014" autocomplete="off"></label>
   </div>
   <fieldset><legend>¿La terminaste de ver?</legend>
-    <div class="opts">${DONE.map(d => optBtn({act:'set', key:'done', val:d.k, label:d.l, sub:d.s, pressed:f.done === d.k})).join('')}</div>
+    <div class="opts opts-3">${DONE.map(d => optBtn({act:'set', key:'done', val:d.k, label:d.l, sub:d.s, pressed:f.done === d.k})).join('')}</div>
     ${f.done === 'quit' ? `<label class="field" for="f-quit"><span class="opt-note">¿Hasta dónde llegaste, más o menos?</span>
       <span class="range-row"><input id="f-quit" type="range" min="5" max="95" step="5" value="${f.quitAt}" data-bind="quitAt" data-num="1"><output id="quit-out">${f.quitAt}%</output></span></label>` : ''}
   </fieldset>`;
@@ -386,7 +391,7 @@ function stepGut(f){
   return `
   <div><h2>¿Qué sentiste? ${REQ}</h2><p class="lede">Tu primera impresión, sin pensarla mucho. Es lo que más pesa en la nota (55%).</p></div>
   <div class="gut" role="group" aria-label="Primera impresión (obligatoria)">
-    ${GUT.map((g, i) => `<button type="button" class="opt" data-act="set" data-key="gut" data-val="${i}" aria-pressed="${f.gut === i}"><b>${g.b}</b>${g.l}</button>`).join('')}
+    ${GUT.map((g, i) => `<button type="button" class="opt" data-act="set" data-key="gut" data-val="${i}" aria-pressed="${f.gut === i}"><span class="em" aria-hidden="true">${g.e}</span>${g.l}</button>`).join('')}
   </div>
   <fieldset><legend>¿Qué te provocó? <small>Opcional, marcá todas las que quieras</small></legend>
     <div class="opts">${FEELS.map(x => `<button type="button" class="opt chip" data-act="feel" data-val="${esc(x)}" aria-pressed="${f.feels.includes(x)}">${x}</button>`).join('')}</div>
@@ -436,10 +441,10 @@ function stepBestWorst(f){
 function stepClose(f){
   return `
   <div><h2>Cierre</h2><p class="lede">Dos preguntas para ajustar la nota (15%) y una opcional para la reseña.</p></div>
-  <fieldset><legend>¿Logra lo que quería ser? ${REQ} <small>Una comedia que hace reír cumple, aunque no sea arte.</small></legend>
+  <fieldset id="q-ful"><legend>¿Logra lo que quería ser? ${REQ} <small>Una comedia que hace reír cumple, aunque no sea arte.</small></legend>
     <div class="opts">${FUL.map((x, i) => optBtn({act:'set', key:'fulfilled', val:i, label:x.l, pressed:f.fulfilled === i})).join('')}</div>
   </fieldset>
-  <fieldset><legend>¿La volverías a ver? ${REQ}</legend>
+  <fieldset id="q-rw"><legend>¿La volverías a ver? ${REQ}</legend>
     <div class="opts">${RW.map((x, i) => optBtn({act:'set', key:'rewatch', val:i, label:x.l, pressed:f.rewatch === i})).join('')}</div>
   </fieldset>
   <label class="field">¿A quién se la recomendarías? <span class="opt-note">Opcional</span>
@@ -488,12 +493,30 @@ function stepResult(f){
 
 const STEP_FNS = [stepMovie, stepGut, stepAreas, stepBestWorst, stepClose, stepResult];
 
-function canNext(){
-  const f = S.f;
-  if (S.step === 0) return tidy(f.title) ? '' : 'Escribí el título para seguir.';
-  if (S.step === 1) return f.gut != null ? '' : 'Elegí qué sentiste.';
-  if (S.step === 4) return (f.fulfilled != null && f.rewatch != null) ? '' : 'Respondé las dos primeras.';
-  return '';
+/* Campos obligatorios que faltan en el paso actual: dónde va el aviso y a dónde llevar al usuario */
+function errors(){
+  const f = S.f, e = [];
+  if (S.step === 0 && !tidy(f.title)) e.push({after:'.fields', focus:'#f-title', msg:'Escribí el título para seguir.'});
+  if (S.step === 1 && f.gut == null) e.push({after:'.gut', focus:'.gut .opt', msg:'Elegí qué sentiste para seguir.'});
+  if (S.step === 4) {
+    if (f.fulfilled == null) e.push({after:'#q-ful .opts', focus:'#q-ful .opt', msg:'Elegí si logra lo que quería ser.'});
+    if (f.rewatch == null) e.push({after:'#q-rw .opts', focus:'#q-rw .opt', msg:'Elegí si la volverías a ver.'});
+  }
+  return e;
+}
+function canNext(){ return errors().length === 0; }
+
+/* Los avisos solo aparecen después de apretar Siguiente sin poder, y desaparecen solos al corregir */
+function paintErrors(){
+  document.querySelectorAll('.field-err').forEach(n => n.remove());
+  const t = $('#f-title'); if (t) t.removeAttribute('aria-invalid');
+  if (!S.showErr) return;
+  errors().forEach(er => {
+    const p = document.createElement('p');
+    p.className = 'field-err'; p.setAttribute('role', 'alert'); p.textContent = er.msg;
+    $(er.after).insertAdjacentElement('afterend', p);
+  });
+  if (S.step === 0 && $('#f-title') && !tidy(S.f.title)) $('#f-title').setAttribute('aria-invalid', 'true');
 }
 
 function render(){
@@ -501,21 +524,13 @@ function render(){
   $('#reel').innerHTML = `<span class="label">${cur < 5 ? `Paso ${cur + 1} de 5 · ${STEPS[cur]}` : 'Resultado'}</span>
     <div class="strip" aria-hidden="true">${STEPS.map((_, i) => `<span class="${i < cur ? 'on' : i === cur ? 'cur' : ''}"></span>`).join('')}</div>`;
   $('#stage').innerHTML = STEP_FNS[cur](S.f);
-  const block = canNext();
-  $('#navbar').toggleAttribute('data-req', cur === 0 || cur === 1 || cur === 4);
   $('#navbar').innerHTML = cur < 5
-    ? `<span class="hint" id="nav-hint">${block}</span>
-       <div class="nav-btns">
+    ? `<div class="nav-btns">
          <button type="button" class="btn" data-act="back" ${cur === 0 ? 'disabled' : ''}>Atrás</button>
-         <button type="button" class="btn primary" data-act="next" id="next" ${block ? 'disabled' : ''}>${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>
+         <button type="button" class="btn primary" data-act="next" id="next">${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>
        </div>`
     : `<div class="nav-btns"><button type="button" class="btn" data-act="back">Volver a las preguntas</button></div>`;
-}
-
-function refreshNav(){
-  const block = canNext(), n = $('#next'), h = $('#nav-hint');
-  if (n) n.disabled = !!block;
-  if (h) h.textContent = block;
+  paintErrors();
 }
 
 /* ---------- Acciones ---------- */
@@ -536,12 +551,20 @@ document.addEventListener('click', ev => {
     case 'add-actor': f.actors.push({name:'', verdict:'good', why:''}); render(); { const n = $('#actor-name-' + (f.actors.length - 1)); n && n.focus(); } break;
     case 'rm-actor': f.actors.splice(Number(val), 1); render(); break;
     case 'verdict': f.actors[Number(key)].verdict = val; render(); break;
-    case 'next': if (!canNext()) { S.step++; render(); window.scrollTo({top:0}); } break;
-    case 'back': if (S.step > 0) { S.step--; render(); } break;
+    case 'next':
+      if (canNext()) { S.showErr = false; S.step++; render(); window.scrollTo({top:0}); }
+      else {
+        S.showErr = true; paintErrors();
+        const first = errors()[0], tgt = $(first.focus);
+        const note = $('.field-err'); (note || tgt).scrollIntoView({block:'center'});
+        tgt && tgt.focus({preventScroll:true});
+      }
+      break;
+    case 'back': if (S.step > 0) { S.showErr = false; S.step--; render(); } break;
     case 'adj': S.adjust = clamp(S.adjust + Number(val), -2, 2); S.adjust = finalStars() - score(f).stars; render(); break;
     case 'reroll': S.seed++; S.reviewEdited = false; render(); break;
     case 'copy': copyText($('#f-review').value, el); break;
-    case 'new': S.f = fresh(); S.step = 0; S.adjust = 0; S.seed = 0; S.reviewEdited = false; render(); window.scrollTo({top:0}); break;
+    case 'new': S.f = fresh(); S.step = 0; S.adjust = 0; S.seed = 0; S.reviewEdited = false; S.showErr = false; render(); window.scrollTo({top:0}); break;
   }
 });
 
@@ -550,14 +573,14 @@ document.addEventListener('input', ev => {
   if (t.dataset.bind) {
     setPath(S.f, t.dataset.bind, t.dataset.num ? Number(t.value) : t.value);
     if (t.id === 'f-quit') $('#quit-out').textContent = t.value + '%';
-    refreshNav();
+    paintErrors();
   } else if (t.dataset.bindReview) {
     S.review = t.value; S.reviewEdited = true;
   }
 });
 document.addEventListener('keydown', ev => {
   if (ev.key === 'Enter' && ev.target.tagName === 'INPUT' && S.step < 5) {
-    const n = $('#next'); if (n && !n.disabled) { ev.preventDefault(); n.click(); }
+    const n = $('#next'); if (n) { ev.preventDefault(); n.click(); }
   }
 });
 
