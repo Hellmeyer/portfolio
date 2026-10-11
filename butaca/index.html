@@ -38,11 +38,25 @@ p{margin:0}
 .bt-intro{display:flex;flex-direction:column;align-items:center;text-align:center}
 /* Footer siempre pegado al piso; en la portada el bloque queda centrado en el espacio que sobra */
 body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
-.bt-main{flex:1 0 auto}
+.bt-main{flex:1 0 auto;position:relative}
+.bt-main > .wrap{position:relative;z-index:2}
+/* Pared de pósters de la portada: columnas que suben y bajan sin parar, con un velo oscuro para que el texto se lea */
+.bt-wall{--cols:6;position:absolute;inset:0;z-index:0;display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:12px;padding:0 12px;overflow:hidden;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.bt-wall.on{opacity:1}
+.wall-col{overflow:hidden}
+.wall-track{display:flex;flex-direction:column;animation:wall-up var(--dur,70s) linear infinite;animation-direction:var(--dir,normal);animation-delay:var(--delay,0s);will-change:transform}
+.wall-track img{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;margin-bottom:12px;border-radius:2px;background:var(--ink-3)}
+@keyframes wall-up{to{transform:translateY(-50%)}}
+.bt-veil{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,var(--ink) 0,rgba(20,18,28,.84) 26%,rgba(20,18,28,.84) 56%,var(--ink) 100%)}
+.bt-main:not(.is-intro) .bt-wall,.bt-main:not(.is-intro) .bt-veil{display:none}
+@media (max-width:900px){.bt-wall{--cols:4}.wall-col:nth-child(n+5){display:none}}
+@media (max-width:600px){.bt-wall{--cols:3}.wall-col:nth-child(n+4){display:none}}
+@media (prefers-reduced-motion:reduce){.wall-track{animation:none}}
 .bt-main.is-intro{display:flex;flex-direction:column;justify-content:center;padding-top:32px;padding-bottom:32px}
 .site-footer{margin-top:auto}
 .bt-intro h1{font-size:clamp(3.2rem,11vw,5.2rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
-.bt-intro p{color:var(--parchment-dim);max-width:44ch;text-wrap:pretty;margin:0 auto 28px}
+.bt-intro p{color:var(--parchment);max-width:44ch;text-wrap:pretty;margin:0 auto 28px}
 
 .bt-app{display:flex;flex-direction:column;gap:28px}
 .bt-intro[hidden],.bt-app[hidden]{display:none}
@@ -60,12 +74,26 @@ body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
 legend{font-weight:600;color:var(--parchment);margin-bottom:10px;padding:0}
 legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88rem}
+.ac{position:relative;min-width:0}
+.ac-list{position:absolute;z-index:20;left:0;right:0;top:100%;margin:4px 0 0;padding:4px;list-style:none;background:var(--ink-2);border:1px solid var(--bt-control);border-radius:2px;max-height:min(60vh,26rem);overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.ac-list[hidden]{display:none}
+.ac-item{display:flex;gap:12px;align-items:center;padding:8px;min-height:64px;cursor:pointer;border-radius:2px}
+.ac-item.on,.ac-item:hover{background:var(--ink-3)}
+.ac-item img,.ac-ph{width:32px;height:48px;flex:none;border-radius:1px;object-fit:cover;background:var(--ink-3)}
+.ac-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ac-txt b{font-weight:600;color:var(--parchment)}
+.ac-txt small{color:var(--parchment-dim);font-size:.82rem}
+.ac-note{padding:12px;color:var(--parchment-dim);font-size:.9rem}
+.site-footer .tmdb-logo{display:inline-block;line-height:0}
+.site-footer .tmdb-logo img{display:block;width:96px;height:auto}
+.site-footer .tmdb{font-size:.78rem;margin-top:8px;margin-bottom:14px}
 .fields{display:grid;grid-template-columns:1fr 110px;gap:12px}
 .field{display:flex;flex-direction:column;gap:6px;font-weight:600;color:var(--parchment);min-width:0}
 .field input,.field textarea,.why,.actor input{width:100%;background:var(--ink-2);border:1px solid var(--bt-control);border-radius:2px;padding:12px 14px;font-weight:400;color:var(--parchment)}
 .field textarea{min-height:84px;resize:vertical}
 .field input::placeholder,.field textarea::placeholder,.why::placeholder,.actor input::placeholder{color:var(--parchment-dim);opacity:.75}
-.field input:focus,.field textarea:focus,.why:focus,.actor input:focus{border-color:var(--brass)}
+/* Foco de las celdas de texto: mismo trazo que en reposo pero en teal y más grueso (2px, sin mover el layout); el coral queda solo para errores */
+.field input:not([type=range]):focus,.field textarea:focus,.why:focus,.actor input:focus{outline:none;border-color:var(--brass);box-shadow:inset 0 0 0 1px var(--brass)}
 
 /* Opciones: la selección se invierte (crema), la acción principal queda en teal */
 .opts{display:flex;flex-wrap:wrap;gap:8px}
@@ -106,7 +134,7 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .nav-btns{display:flex;gap:10px}
 .hint{color:var(--parchment-dim);font-size:.88rem}
 .field-err{color:var(--frost);font-size:.92rem;font-weight:500;margin:-10px 0 0;scroll-margin-bottom:120px}
-.field input[aria-invalid=true]{border-color:var(--frost)}
+.field input[aria-invalid=true],.field input[aria-invalid=true]:focus{border-color:var(--frost);box-shadow:inset 0 0 0 1px var(--frost)}
 .req{color:var(--frost);font-weight:700;margin-left:.15em}
 /* Mobile: aviso arriba, botones juntos y anclados abajo, siempre visibles */
 @media (max-width:600px){
@@ -116,13 +144,18 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
   .navbar::before{content:"";position:absolute;inset:0 -20px;z-index:-1;pointer-events:none;
     background:rgba(20,22,31,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:var(--edge)}
   .nav-btns{gap:10px}
+  /* Al enfocar el título en mobile: el campo sube al tope, se libera lugar (sin botonera) y la lista tiene alto para scrollear */
+  .ac{scroll-margin-top:76px}
+  .ac-list{max-height:42vh}
+  body.ac-focus .navbar{display:none}
+  body.ac-focus .bt-main{padding-bottom:75vh}
   .nav-btns .btn{flex:1;justify-content:center;text-align:center}
 }
 
 /* Botones: base compartida (.btn de style.css, contorno teal); acá el relleno de la acción principal y el estado deshabilitado */
 .btn{background:transparent;cursor:pointer}
 .btn.primary{background:var(--brass);border-color:var(--brass);color:var(--ink)}
-.btn.primary:hover{background:var(--frost);border-color:var(--frost);color:var(--ink)}
+.btn.primary:hover{background:#72c2d0;border-color:#72c2d0;color:var(--ink)} /* el mismo teal, 20% más claro */
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:disabled:hover{background:transparent;color:var(--brass)}
 .btn.primary:disabled:hover{background:var(--brass);border-color:var(--brass);color:var(--ink)}
@@ -132,7 +165,10 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
   box-shadow:inset 0 0 0 1px rgba(242,232,213,.22);
   -webkit-mask:radial-gradient(circle at calc(100% - 190px) 0,transparent 11px,#000 11.5px) top/100% 51% no-repeat,radial-gradient(circle at calc(100% - 190px) 100%,transparent 11px,#000 11.5px) bottom/100% 51% no-repeat;
   mask:radial-gradient(circle at calc(100% - 190px) 0,transparent 11px,#000 11.5px) top/100% 51% no-repeat,radial-gradient(circle at calc(100% - 190px) 100%,transparent 11px,#000 11.5px) bottom/100% 51% no-repeat}
-.ticket .main{padding:24px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ticket .main{padding:24px 26px;display:flex;flex-direction:row;align-items:center;gap:20px;min-width:0}
+.ticket .main-txt{display:flex;flex-direction:column;gap:12px;min-width:0;flex:1}
+.ticket .poster{width:92px;height:auto;aspect-ratio:2/3;object-fit:cover;flex:none;border-radius:2px;background:var(--ink-3)}
+@media (max-width:560px){.ticket .poster{width:72px}}
 .ticket .stub{padding:24px 18px;border-left:2px dashed var(--bt-control);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
 .ticket .title{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,5vw,2.5rem);line-height:1.02;overflow-wrap:anywhere;color:var(--parchment)}
 .big-num{font-family:var(--display);font-weight:800;font-size:3.6rem;line-height:.9;color:var(--epic)}
@@ -167,6 +203,8 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 </header>
 
 <main class="bt-main is-intro" id="main">
+  <div class="bt-wall" id="wall" aria-hidden="true"></div>
+  <div class="bt-veil" aria-hidden="true"></div>
   <div class="wrap">
     <div class="bt-col">
       <section class="bt-intro" id="intro">
@@ -186,8 +224,9 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 
 <footer class="site-footer">
   <div class="wrap">
-    <p class="mark">tato.</p>
-    <p class="rights">Tranqui, nada de lo que escribís sale de tu navegador. Sé vos.</p>
+    <a class="tmdb-logo" href="https://www.themoviedb.org/" target="_blank" rel="noopener" aria-label="The Movie Database (TMDB)"><img src="tmdb-logo.svg" alt="TMDB" width="96" height="12"></a>
+    <p class="rights tmdb">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+    <p class="rights">Tranqui, tu reseña no sale de tu navegador: solo el título se busca en TMDB. Sé vos.</p>
   </div>
 </footer>
 
@@ -218,7 +257,7 @@ const STEPS = ['La película','Primera impresión','Por áreas','Lo mejor y lo p
 /* ---------- Estado ---------- */
 function fresh(){
   const areas = {}; AREAS.forEach(a => areas[a.k] = {lv:null, why:''});
-  return {title:'', year:'', done:'yes', quitAt:50, gut:null, feels:[], areas,
+  return {title:'', year:'', poster:'', posterFor:'', done:'yes', quitAt:50, gut:null, feels:[], areas,
           actors:[], best:'', worst:'', fulfilled:null, rewatch:null, recommend:''};
 }
 const S = {showErr:false, step:0, f:fresh(), adjust:0, seed:0, review:'', reviewEdited:false};
@@ -378,7 +417,10 @@ function stepMovie(f){
   return `
   <div><h2>¿Qué viste?</h2><p class="lede">Empecemos por lo básico. El año es opcional, sirve para distinguir remakes.</p></div>
   <div class="fields">
-    <label class="field"><span>Título ${REQ}</span><input id="f-title" data-bind="title" aria-required="true" value="${esc(f.title)}" placeholder="Ej. Relatos salvajes" autocomplete="off"></label>
+    <div class="ac">
+      <label class="field"><span>Título ${REQ}</span><input id="f-title" data-bind="title" aria-required="true" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="title-list" value="${esc(f.title)}" placeholder="Ej. Relatos salvajes" autocomplete="off"></label>
+      <ul class="ac-list" id="title-list" role="listbox" aria-label="Películas sugeridas" hidden></ul>
+    </div>
     <label class="field">Año<input id="f-year" data-bind="year" value="${esc(f.year)}" inputmode="numeric" maxlength="4" placeholder="2014" autocomplete="off"></label>
   </div>
   <fieldset><legend>¿La terminaste de ver?</legend>
@@ -459,9 +501,12 @@ function stepResult(f){
   return `
   <div class="ticket">
     <div class="main">
+      ${f.poster ? `<img class="poster" src="https://image.tmdb.org/t/p/w185${esc(f.poster)}" alt="Póster de ${esc(tidy(f.title))}" width="92" height="138">` : ''}
+      <div class="main-txt">
       <span class="label">${f.done === 'yes' ? 'Función completa' : f.done === 'partial' ? 'Vista a medias' : `Abandonada al ${f.quitAt}%`}${f.year ? ' · ' + esc(f.year) : ''}</span>
       <div class="title">${esc(tidy(f.title))}</div>
       ${starsHTML(st, 'lg')}
+      </div>
     </div>
     <div class="stub">
       <span class="label">Tu nota</span>
@@ -522,17 +567,132 @@ function paintErrors(){
 
 function render(){
   const cur = S.step;
+  AC.open = false; AC.items = []; AC.active = -1;
+  document.body.classList.remove('ac-focus');
   $('#reel').innerHTML = `<span class="label">${cur < 5 ? `Paso ${cur + 1} de 5 · ${STEPS[cur]}` : 'Resultado'}</span>
     <div class="strip" aria-hidden="true">${STEPS.map((_, i) => `<span class="${i < cur ? 'on' : i === cur ? 'cur' : ''}"></span>`).join('')}</div>`;
   $('#stage').innerHTML = STEP_FNS[cur](S.f);
   $('#navbar').innerHTML = cur < 5
     ? `<div class="nav-btns">
-         <button type="button" class="btn" data-act="back" ${cur === 0 ? 'disabled' : ''}>Atrás</button>
+         <button type="button" class="btn" data-act="back">Atrás</button>
          <button type="button" class="btn primary" data-act="next" id="next">${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>
        </div>`
     : `<div class="nav-btns"><button type="button" class="btn" data-act="back">Volver a las preguntas</button></div>`;
   paintErrors();
 }
+
+/* ---------- Autocompletar de títulos (TMDB) ---------- */
+/* Credencial de TMDB de solo lectura: sirve la API key v3 (32 caracteres) o el "API Read Access Token" (empieza con eyJ).
+   Con la constante vacía el autocompletar queda desactivado y el campo funciona como siempre. */
+const TMDB_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZTAxNDU4MGI2ZDdmY2RkZTEwNGM0ZDEyZmMwZTMwMiIsIm5iZiI6MTc5MTY3ODQ3NS44MTQwMDAxLCJzdWIiOiI2YWNhZDgwYjUzZGJlNTI1MDdiYzg4MjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.6jqNvHTA31fPK_7ZrpzpHW1KN82DRp2-lymcHSB3i1Q';
+const AC = {timer:0, ctl:null, items:[], active:-1, open:false};
+
+function tmdb(path, params = {}, signal){
+  const bearer = TMDB_KEY.startsWith('eyJ');
+  const qs = new URLSearchParams({...(bearer ? {} : {api_key: TMDB_KEY}), language: 'es-AR', ...params});
+  return fetch(`https://api.themoviedb.org/3/${path}?${qs}`, {signal, headers: bearer ? {Authorization: 'Bearer ' + TMDB_KEY} : {}});
+}
+
+function acClose(){
+  AC.open = false; AC.active = -1;
+  const l = $('#title-list'), i = $('#f-title');
+  if (l) { l.hidden = true; l.innerHTML = ''; }
+  if (i) { i.setAttribute('aria-expanded', 'false'); i.removeAttribute('aria-activedescendant'); }
+}
+function acRender(note){
+  const l = $('#title-list'), i = $('#f-title'); if (!l || !i) return;
+  l.innerHTML = AC.items.length
+    ? AC.items.map((m, k) => `<li role="option" id="ac-${k}" class="ac-item" data-i="${k}" aria-selected="false">
+        ${m.poster ? `<img src="${esc(m.poster)}" alt="" width="32" height="48" loading="lazy">` : '<span class="ac-ph"></span>'}
+        <span class="ac-txt"><b>${esc(m.title)}</b><small>${[esc(m.year), m.orig && m.orig !== m.title ? esc(m.orig) : ''].filter(Boolean).join(' · ')}</small></span></li>`).join('')
+    : `<li class="ac-note">${note}</li>`;
+  l.hidden = false; AC.open = true; AC.active = -1;
+  i.setAttribute('aria-expanded', 'true');
+}
+function acMark(){
+  document.querySelectorAll('.ac-item').forEach((el, k) => { el.classList.toggle('on', k === AC.active); el.setAttribute('aria-selected', k === AC.active); });
+  const i = $('#f-title');
+  if (AC.active >= 0) { i.setAttribute('aria-activedescendant', 'ac-' + AC.active); $('#ac-' + AC.active).scrollIntoView({block:'nearest'}); }
+  else i.removeAttribute('aria-activedescendant');
+}
+function acSearch(q){
+  clearTimeout(AC.timer); if (AC.ctl) AC.ctl.abort();
+  q = q.trim();
+  if (!TMDB_KEY || q.length < 2) { AC.items = []; acClose(); return; }
+  AC.timer = setTimeout(async () => {
+    AC.ctl = new AbortController();
+    try {
+      const r = await tmdb('search/movie', {include_adult: 'false', query: q}, AC.ctl.signal);
+      if (!r.ok) throw new Error('tmdb ' + r.status);
+      const d = await r.json();
+      if (document.activeElement !== $('#f-title')) return;
+      AC.items = (d.results || []).slice(0, 6).map(m => ({title: m.title || m.original_title, orig: m.original_title, year: (m.release_date || '').slice(0, 4), poster: m.poster_path ? 'https://image.tmdb.org/t/p/w92' + m.poster_path : '', path: m.poster_path || ''}));
+      acRender('No la encuentro. Podés escribir el título igual.');
+    } catch (e) { if (e.name !== 'AbortError') acClose(); }
+  }, 300);
+}
+function acPick(k){
+  const m = AC.items[k]; if (!m) return;
+  S.f.title = m.title; $('#f-title').value = m.title;
+  S.f.poster = m.path; S.f.posterFor = tidy(m.title).toLowerCase(); // póster para el resultado; se descarta si después cambian el título
+  if (m.year) { S.f.year = m.year; $('#f-year').value = m.year; }
+  acClose(); paintErrors();
+  if (MOBILE.matches) $('#f-title').blur(); else $('#f-title').focus(); // en mobile se cierra el teclado para ver el resultado
+}
+function acKey(ev){
+  if (ev.target.id !== 'f-title' || !AC.open) return false;
+  const n = AC.items.length;
+  if (ev.key === 'Escape') { acClose(); return true; }
+  if (ev.key === 'Tab') { acClose(); return false; }
+  if (!n) return false;
+  if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+    ev.preventDefault();
+    AC.active = ev.key === 'ArrowDown' ? (AC.active + 1) % n : (AC.active - 1 + n) % n;
+    acMark(); return true;
+  }
+  if (ev.key === 'Enter' && AC.active >= 0) { ev.preventDefault(); acPick(AC.active); return true; }
+  return false;
+}
+const MOBILE = matchMedia('(max-width:600px)');
+document.addEventListener('focusin', ev => {
+  if (ev.target.id !== 'f-title' || !MOBILE.matches) return;
+  document.body.classList.add('ac-focus');
+  const go = () => { const a = $('.ac'); a && a.scrollIntoView({block:'start'}); };
+  go(); setTimeout(go, 300); // otra vez cuando termina de abrirse el teclado
+});
+document.addEventListener('focusout', ev => { if (ev.target.id === 'f-title') document.body.classList.remove('ac-focus'); });
+document.addEventListener('mousedown', ev => {
+  const it = ev.target.closest('.ac-item');
+  if (it) { ev.preventDefault(); acPick(Number(it.dataset.i)); }
+  else if (!ev.target.closest('.ac')) acClose();
+});
+
+/* ---------- Pared de pósters (portada) ---------- */
+/* 2 consultas a TMDB (tendencias de la semana), guardadas 24 h en el navegador: cada visitante consulta como mucho una vez por día.
+   Las imágenes salen del CDN de TMDB y no cuentan contra el límite de la API. Si todo falla, la portada queda con fondo liso. */
+const WALL_KEY = 'butaca.wall.v1', WALL_TTL = 24 * 3600 * 1000;
+async function wallPosters(){
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(WALL_KEY) || 'null'); } catch {}
+  if (cached && cached.p && cached.p.length && Date.now() - cached.t < WALL_TTL) return cached.p;
+  try {
+    const pages = await Promise.all([1, 2].map(n => tmdb('trending/movie/week', {page: n}).then(r => r.ok ? r.json() : Promise.reject())));
+    const p = pages.flatMap(d => d.results || []).map(m => m.poster_path).filter(Boolean);
+    if (p.length) { try { localStorage.setItem(WALL_KEY, JSON.stringify({t: Date.now(), p})); } catch {} return p; }
+  } catch {}
+  return (cached && cached.p) || [];
+}
+function buildWall(p){
+  const wall = $('#wall'); if (!wall || !p.length) return;
+  const COLS = 6, cols = Array.from({length: COLS}, () => []);
+  p.forEach((x, i) => cols[i % COLS].push(x));
+  wall.innerHTML = cols.map((c, i) => {
+    const imgs = c.concat(c).map(x => `<img src="https://image.tmdb.org/t/p/w185${x}" alt="" loading="lazy" decoding="async">`).join('');
+    return `<div class="wall-col"><div class="wall-track" style="--dur:${230 + (i % 3) * 50}s;--dir:${i % 2 ? 'reverse' : 'normal'};--delay:-${i * 37}s">${imgs}</div></div>`;
+  }).join('');
+  wall.classList.add('on');
+}
+if (TMDB_KEY) wallPosters().then(buildWall);
 
 /* ---------- Acciones ---------- */
 async function copyText(txt, btn){
@@ -561,7 +721,7 @@ document.addEventListener('click', ev => {
         tgt && tgt.focus({preventScroll:true});
       }
       break;
-    case 'back': if (S.step > 0) { S.showErr = false; S.step--; render(); } break;
+    case 'back': S.showErr = false; if (S.step > 0) { S.step--; render(); } else showIntro(); break;
     case 'adj': S.adjust = clamp(S.adjust + Number(val), -2, 2); S.adjust = finalStars() - score(f).stars; render(); break;
     case 'reroll': S.seed++; S.reviewEdited = false; render(); break;
     case 'copy': copyText($('#f-review').value, el); break;
@@ -575,11 +735,16 @@ document.addEventListener('input', ev => {
     setPath(S.f, t.dataset.bind, t.dataset.num ? Number(t.value) : t.value);
     if (t.id === 'f-quit') $('#quit-out').textContent = t.value + '%';
     paintErrors();
+    if (t.id === 'f-title') {
+      if (S.f.poster && tidy(t.value).toLowerCase() !== S.f.posterFor) { S.f.poster = ''; S.f.posterFor = ''; }
+      acSearch(t.value);
+    }
   } else if (t.dataset.bindReview) {
     S.review = t.value; S.reviewEdited = true;
   }
 });
 document.addEventListener('keydown', ev => {
+  if (acKey(ev)) return;
   if (ev.key === 'Enter' && ev.target.tagName === 'INPUT' && S.step < 5) {
     const n = $('#next'); if (n) { ev.preventDefault(); n.click(); }
   }
@@ -588,13 +753,20 @@ document.addEventListener('keydown', ev => {
 render();
 
 /* ---------- Portada ---------- */
-$('#start').addEventListener('click', () => {
+function showApp(){
   $('#main').classList.remove('is-intro');
   $('#intro').hidden = true;
   $('#app').hidden = false;
   window.scrollTo({top:0});
-  const t = $('#f-title'); t && t.focus({preventScroll:true});
-});
+}
+function showIntro(){
+  $('#main').classList.add('is-intro');
+  $('#app').hidden = true;
+  $('#intro').hidden = false;
+  window.scrollTo({top:0});
+  $('#start').focus({preventScroll:true});
+}
+$('#start').addEventListener('click', showApp);
 </script>
 </body>
 </html>
