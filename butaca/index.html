@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Butaca</title>
-<meta name="description" content="Calificá una película en cinco pasos y obtené una nota de 0,5 a 5 estrellas con la reseña escrita.">
+<meta name="description" content="Calificá una película en cuatro pasos y obtené una nota de 0,5 a 5 estrellas con la reseña escrita.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23E8B33D' d='M16 2l4.1 8.9 9.7 1.1-7.2 6.6 2 9.6L16 23.3 7.4 28.2l2-9.6L2.2 12l9.7-1.1z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,7 @@ body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 
 /* Progreso: cinco tramos rectos; hecho en crema, actual en teal, pendiente apagado */
 .reel{display:flex;flex-direction:column;gap:10px}
-.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .strip span{height:4px;background:rgba(242,232,213,.14)}
 .strip span.on{background:var(--parchment-dim)}
 .strip span.cur{background:var(--brass)}
@@ -87,13 +87,13 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .site-footer .tmdb-logo{display:inline-block;line-height:0}
 .site-footer .tmdb-logo img{display:block;width:96px;height:auto}
 .site-footer .tmdb{font-size:.78rem;margin-top:8px;margin-bottom:14px}
-.fields{display:grid;grid-template-columns:1fr 110px;gap:12px}
+.fields{display:grid;gap:12px}
 .field{display:flex;flex-direction:column;gap:6px;font-weight:600;color:var(--parchment);min-width:0}
-.field input,.field textarea,.why,.actor input{width:100%;background:var(--ink-2);border:1px solid var(--bt-control);border-radius:2px;padding:12px 14px;font-weight:400;color:var(--parchment)}
+.field input,.field textarea{width:100%;background:var(--ink-2);border:1px solid var(--bt-control);border-radius:2px;padding:12px 14px;font-weight:400;color:var(--parchment)}
 .field textarea{min-height:84px;resize:vertical}
-.field input::placeholder,.field textarea::placeholder,.why::placeholder,.actor input::placeholder{color:var(--parchment-dim);opacity:.75}
+.field input::placeholder,.field textarea::placeholder{color:var(--parchment-dim);opacity:.75}
 /* Foco de las celdas de texto: mismo trazo que en reposo pero en teal y más grueso (2px, sin mover el layout); el coral queda solo para errores */
-.field input:not([type=range]):focus,.field textarea:focus,.why:focus,.actor input:focus{outline:none;border-color:var(--brass);box-shadow:inset 0 0 0 1px var(--brass)}
+.field input:not([type=range]):focus,.field textarea:focus{outline:none;border-color:var(--brass);box-shadow:inset 0 0 0 1px var(--brass)}
 
 /* Opciones: la selección se invierte (crema), la acción principal queda en teal */
 .opts{display:flex;flex-wrap:wrap;gap:8px}
@@ -120,15 +120,6 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .area:first-of-type{border-top:0;padding-top:0}
 .area-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .area-head span{color:var(--parchment-dim);font-size:.9rem}
-.actors{display:flex;flex-direction:column;gap:10px;background:var(--ink-2);border:1px solid var(--bt-line);border-radius:2px;padding:14px}
-.actor{display:grid;grid-template-columns:minmax(0,1.1fr) auto minmax(0,1.4fr) auto;gap:8px;align-items:center}
-.actor .opts{flex-wrap:nowrap;gap:4px}
-.actor .opt{padding:8px 10px;font-size:.88rem}
-.x{border:0;background:none;color:var(--parchment-dim);cursor:pointer;font-size:1.3rem;padding:4px 8px;border-radius:2px}
-.x:hover{color:var(--frost)}
-@media (max-width:600px){.actor{grid-template-columns:1fr auto}.actor .why-a{grid-column:1/-1}.actor .opts{grid-column:1;grid-row:2}.actor .x{grid-column:2;grid-row:1}}
-.link{border:0;background:none;color:var(--brass);font-weight:600;cursor:pointer;padding:4px 0;align-self:flex-start}
-.link:hover{color:var(--frost)}
 
 .navbar{display:flex;justify-content:flex-end;align-items:center;gap:12px;border-top:1px solid var(--bt-line);padding-top:20px}
 .nav-btns{display:flex;gap:10px}
@@ -203,7 +194,7 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
     <div class="bt-col">
       <section class="bt-intro" id="intro">
         <h1>Butaca</h1>
-        <p>Reseñas de películas en cinco pasos.</p>
+        <p>Reseñas de películas en cuatro pasos.</p>
         <button type="button" class="btn primary" id="start">Comenzar</button>
       </section>
 
@@ -237,7 +228,7 @@ const LEVELS = [{l:'Floja',v:0},{l:'Correcta',v:.4},{l:'Buena',v:.75},{l:'Sobres
 const GUT = [
   {l:'La odié',v:0,e:'🤬'},{l:'No me gustó',v:.2,e:'🙁'},{l:'Ni fu ni fa',v:.5,e:'😐'},
   {l:'Me gustó',v:.75,e:'🙂'},{l:'Me gustó mucho',v:.88,e:'😄'},{l:'Me voló la cabeza',v:1,e:'🤯'}];
-const FEELS = ['Me hizo reír','Me emocionó','Me tensionó','Me hizo pensar','Me dio miedo','Me quedé pensándola','Me aburrió','Me incomodó','Me enojó','Me costó seguirla','No sé si la entendí','Nada especial'];
+const FEELS = ['Me hizo reír','Me emocionó','Me tensionó','Me hizo pensar','Me dio miedo','Me dejó reflexionando','Me aburrió','Me incomodó','Me enojó','Me costó seguirla','No sé si la entendí','Nada wow'];
 const FUL = [{l:'Se quedó corta',v:0},{l:'A medias',v:.4},{l:'Sí, cumple',v:.75},{l:'La superó',v:1}];
 const RW = [{l:'Nunca',v:0},{l:'Quizás',v:.4},{l:'Sí',v:.75},{l:'Ya mismo',v:1}];
 const DONE = [
@@ -246,15 +237,15 @@ const DONE = [
   {k:'quit',l:'Abandoné'}];
 const W = {gut:.55, areas:.30, tail:.15};
 const STAR_LABEL = {0.5:'Horrible',1:'Muy mala',1.5:'Mala',2:'Floja',2.5:'Regular',3:'Buena',3.5:'Muy buena',4:'Excelente',4.5:'Casi perfecta',5:'Obra maestra'};
-const STEPS = ['La película','Primera impresión','Por áreas','Lo mejor y lo peor','Cierre'];
+const STEPS = ['La película','Primera impresión','Por áreas','Cierre'];
 
 /* ---------- Estado ---------- */
 function fresh(){
-  const areas = {}; AREAS.forEach(a => areas[a.k] = {lv:null, why:''});
+  const areas = {}; AREAS.forEach(a => areas[a.k] = {lv:null});
   return {title:'', year:'', poster:'', posterFor:'', done:'yes', quitAt:50, gut:null, feels:[], areas,
-          actors:[], best:'', worst:'', fulfilled:null, rewatch:null, recommend:''};
+          fulfilled:null, rewatch:null};
 }
-const S = {showErr:false, step:0, f:fresh(), adjust:0, seed:0, review:'', reviewEdited:false};
+const S = {showErr:false, step:0, f:fresh(), adjust:0, seed:0, review:''};
 
 /* ---------- Utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -305,97 +296,105 @@ function makeReview(f, seed, stars){
 
   // 1. Impresión + emociones + si la terminó
   const open = [
-    [`${T1} no me gustó para nada.`, `Con ${T1} no hubo caso: la sufrí.`, `${T1} me resultó insoportable.`],
-    [`${T1} no me terminó de convencer.`, `Esperaba bastante más de ${T1}.`, `${T1} no me llegó.`],
-    [`${T1} está bien, pero no mucho más.`, `${T1} se deja ver, aunque no me marcó.`, `Con ${T1} me quedé en el medio: ni fu ni fa.`],
+    [`${T1} no me gustó para nada.`, `${T1}: alto embole, la re sufrí.`, `${T1} me resultó infumable.`, `${T1} me emboló.`],
+    [`${T1} no me terminó de convencer.`, `Esperaba bastante más de ${T1}.`, `${T1} no me llegó.`, `${T1} me emboló un poco.`],
+    [`${T1} está bien, pero hasta ahí.`, `${T1} se deja ver, aunque no me marcó.`, `${T1} ni fu ni fa.`],
     [`${T1} me gustó.`, `${T1} está buena, me dejó conforme.`, `Disfruté ${T1}.`],
-    [`${T1} me gustó mucho.`, `La pasé muy bien con ${T1}.`, `${T1} me ganó.`],
-    [`${T1} me voló la cabeza.`, `${T1} es de esas películas que te quedan dando vueltas.`, `Salí de ${T1} con ganas de contárselo a todo el mundo.`],
+    [`${T1} me gustó mucho.`, `La pasé muy bien con ${T1}.`, `${T1} me copó.`],
+    [`${T1} me voló la cabeza.`, `Gran peli ${T1} muy recomendable.`, `${T1} es de esas películas que te quedan dando vueltas.`],
   ];
-  let p1 = [pick(open[f.gut ?? 2])];
+  const gut = f.gut ?? 2;
+  let p1 = [pick(open[gut])];
   if (f.feels.length) {
-    const fs = f.feels.map((x, i) => i ? lc(x) : x);
-    p1.push(joinY(fs) + '.');
+    const RE = ['Me emocionó', 'Me tensionó', 'Me aburrió', 'Me incomodó', 'Me enojó']; // verbos sueltos que admiten "re"
+    const NEG = ['Me aburrió', 'Me incomodó', 'Me enojó', 'Me costó seguirla', 'No sé si la entendí', 'Nada wow'];
+    const fs = f.feels.map((x, i) => {
+      if (i === 0 && RE.includes(x) && r() < .5) x = x.replace('Me ', 'Me re ');
+      if (x === 'Me hizo reír' && r() < .4) x = 'Me hizo reír mucho';
+      if (x === 'Me dio miedo' && r() < .4) x = 'Me dio mucho miedo';
+      if (x === 'Me dejó reflexionando' && r() < .5) x = 'Me dejó recalculando';
+      return i ? lc(x) : x;
+    });
+    const feelTxt = fs.length === 1 ? fs[0] : fs.slice(0, -1).join(', ') + (r() < .5 ? ' y también ' : ' y ') + fs[fs.length - 1];
+    // Si le gustó pero lo primero que sintió es negativo, se engancha con "pero"
+    if (gut >= 3 && NEG.includes(f.feels[0])) p1[0] = p1[0].replace(/\.$/, '') + ', pero ' + lc(feelTxt) + '.';
+    else p1.push(feelTxt + '.');
   }
-  if (f.done === 'partial') p1.push(pick(['La vi a medias, en partes o con distracciones, así que algo se me pudo escapar.', 'Aclaro que no la vi con toda la atención, así que tomen esto con pinzas.']));
-  if (f.done === 'quit') p1.push(`La abandoné más o menos al ${f.quitAt}%, así que esta opinión es parcial.`);
+  if (f.done === 'partial') p1.push(pick(['La vi medio por partes, así que quizás algo se me pase.', 'No la vi con toda la atención, quizás me olvidé de algo.']));
+  if (f.done === 'quit') {
+    const q = f.quitAt;
+    const donde = q <= 30 ? 'al principio' : q >= 70 ? 'pasando la mitad de la peli' : 'a la mitad';
+    const cierre = q <= 30 ? 'así que prácticamente no la vi.' : q >= 70 ? 'así que no sé si soy quien para bardearla.' : 'así que tómenlo como de quien viene.';
+    p1.push(pick([
+      `Me dormí ${donde}.`,
+      `Me re dormí ${donde}.`,
+      `La re quedé ${donde}.`,
+      'No llegué al final, así que mucho no puedo hablar.',
+      `La abandoné ${q <= 30 ? 'al principio' : q >= 70 ? 'antes del final' : 'a la mitad'}, ${cierre}`,
+    ]));
+  }
   paras.push(p1.join(' '));
 
   // 2. Áreas
   const groups = [[], [], [], []];
-  AREAS.forEach(a => { const v = f.areas[a.k]; if (typeof v.lv === 'number') groups[v.lv].push({...a, why: lc(v.why)}); });
+  AREAS.forEach(a => { const v = f.areas[a.k]; if (typeof v.lv === 'number') groups[v.lv].push(a); });
   const p2 = [];
+  const adj = (base, pl, fem) => base + (fem ? 'a' : 'o') + (pl ? 's' : ''); // concordancia: choto/chota/chotos/chotas
   const verb = {
-    3: [pl => pl ? 'sobresalen' : 'sobresale', pl => pl ? 'son lo mejor' : 'es lo mejor'],
-    2: [pl => pl ? 'están muy bien' : 'está muy bien', pl => pl ? 'funcionan muy bien' : 'funciona muy bien'],
-    1: [pl => pl ? 'cumplen sin destacar' : 'cumple sin destacar', pl => pl ? 'están correctas, sin más' : 'está correcto, sin más'],
-    0: [pl => pl ? 'fallan' : 'falla', pl => pl ? 'son lo más flojo' : 'es lo más flojo'],
+    3: [pl => pl ? 'están muy bien' : 'está muy bien', pl => pl ? 'son lo más' : 'es lo más'],
+    2: [pl => pl ? 'garpan' : 'garpa', pl => pl ? 'van bien' : 'va bien', pl => pl ? 're van' : 're va'],
+    1: [pl => pl ? 'zafan' : 'zafa'],
+    0: [pl => pl ? 'no garpan' : 'no garpa', pl => pl ? 'no juegan' : 'no juega',
+        (pl, fem) => (pl ? 'son bastante ' : 'es bastante ') + adj('chot', pl, fem)],
   };
   const hasPositive = groups[3].length || groups[2].length;
   [3, 2, 1, 0].forEach(lv => {
     const g = groups[lv]; if (!g.length) return;
-    const withWhy = g.filter(x => x.why), noWhy = g.filter(x => !x.why);
-    // Si hay ambos tipos en el mismo nivel, uso un verbo distinto para cada uno y no se repite
-    const flip = r() < .5;
-    const vNo = verb[lv][flip ? 1 : 0], vWhy = noWhy.length ? verb[lv][flip ? 0 : 1] : pick(verb[lv]);
-    let first = true;
-    const pre = () => { const s = (lv === 0 && hasPositive && first) ? pick(['En cambio, ', 'Del otro lado, ']) : ''; first = false; return s; };
-    if (noWhy.length) {
-      const pl = noWhy.length > 1 || noWhy[0].pl;
-      // Al enumerar varias áreas, las que ya llevan una "y" adentro se separan para que quede una sola "y" al final
-      const subj = joinY(noWhy.flatMap(x => x.parts || [x.art]));
-      const p = pre();
-      p2.push((p ? p + subj : cap(subj)) + ' ' + vNo(pl) + '.');
+    const has = k => g.some(x => x.k === k);
+    // Nivel más alto: a veces se dice con frases propias ("está bien escrita y dirigida, tiene buen ritmo…") en vez de "son lo más"
+    if (lv === 3 && (has('guion') || has('direccion') || has('ritmo')) && r() < .5) {
+      const words = [has('guion') && 'escrita', has('direccion') && 'dirigida'].filter(Boolean);
+      const film = [];
+      if (words.length) film.push('está bien ' + joinY(words));
+      if (has('ritmo')) film.push('tiene buen ritmo');
+      const out = [cap(film.join(', ')) + '.'];
+      if (has('direccion')) out.push('La fotografía me copó.');
+      g.filter(x => x.k === 'sonido' || x.k === 'actuaciones').forEach(x => out.push(cap(x.art) + ' ' + (x.pl ? 'son lo más' : 'es lo más') + '.'));
+      p2.push(out.join(' '));
+      return;
     }
-    withWhy.forEach(x => {
-      const p = pre();
-      p2.push((p ? p + x.art : cap(x.art)) + ' ' + vWhy(x.pl) + ': ' + x.why + '.');
-    });
-  });
-  // Actores
-  const actors = f.actors.filter(a => tidy(a.name));
-  ['good', 'bad'].forEach(kind => {
-    const g = actors.filter(a => a.verdict === kind); if (!g.length) return;
-    const noWhy = g.filter(a => !tidy(a.why)), withWhy = g.filter(a => tidy(a.why));
-    if (noWhy.length) {
-      const names = joinY(noWhy.map(a => tidy(a.name)));
-      const many = noWhy.length > 1;
-      p2.push(kind === 'good'
-        ? pick([`En el elenco ${many ? 'brillan' : 'brilla'} ${names}.`, `Muy bien ${names}.`])
-        : pick([`${names} ${many ? 'desentonan' : 'desentona'}.`, `No me convenció lo de ${names}.`]));
-    }
-    withWhy.forEach(a => {
-      p2.push(kind === 'good'
-        ? pick([`${tidy(a.name)} se luce: ${lc(a.why)}.`, `Aparte, ${tidy(a.name)}: ${lc(a.why)}.`])
-        : pick([`${tidy(a.name)} desentona: ${lc(a.why)}.`, `Lo de ${tidy(a.name)} no me cerró: ${lc(a.why)}.`]));
-    });
+    // Al enumerar varias áreas, las que ya llevan una "y" adentro se separan para que quede una sola "y" al final
+    const parts = g.flatMap(x => x.parts || [x.art]);
+    const pl = parts.length > 1 || /^(las|los)\s/.test(parts[0]);
+    const fem = parts.every(x => /^las?\s/.test(x));
+    const subj = joinY(parts);
+    const pre = (lv === 0 && hasPositive) ? pick(['En cambio, ', 'Por otra parte, ']) : '';
+    p2.push((pre ? pre + subj : cap(subj)) + ' ' + pick(verb[lv])(pl, fem) + '.');
   });
   if (p2.length) paras.push(p2.join(' '));
 
-  // 3. Lo mejor / lo peor
-  const p3 = [];
-  if (tidy(f.best)) p3.push(pick([`Lo mejor: ${lc(f.best)}.`, `Me quedo con ${lc(f.best)}.`, `Lo que más disfruté fue ${lc(f.best)}.`]));
-  if (tidy(f.worst)) p3.push(pick([`Lo peor: ${lc(f.worst)}.`, `Lo que no me cerró: ${lc(f.worst)}.`, `Le sobra ${lc(f.worst)}.`]));
-  if (p3.length) paras.push(p3.join(' '));
-
-  // 4. Cierre
+  // 3. Cierre
   const p4 = [];
   const fulTxt = [
-    ['No logra lo que se propone.', 'Siento que se queda muy lejos de lo que quería ser.'],
-    ['Cumple a medias con lo que quiere ser.', 'Llega a la mitad de lo que promete.'],
-    ['Logra lo que se propone.', 'Hace bien lo que quiere hacer.'],
-    ['Va más allá de lo que se propone.', 'Supera lo que prometía.'],
+    ['Creo que no logra lo que se propone.', 'Siento que se queda muy lejos de lo que quería ser.'],
+    ['Cumple a medias con lo que quiere ser.', 'Es bastante meh.'],
+    ['Es lo que dice que es.', 'Hace bien lo que quiere hacer.'],
+    ['Me sorprendió para bien.', 'Superó mis expectativas.'],
   ];
   const rwTxt = [
-    ['No la volvería a ver.', 'Una vez alcanzó.'],
+    ['No la volvería a ver.', 'No la vuelvo a ver ni a palos.'],
     ['Quizás le dé otra oportunidad algún día.', 'Tal vez la revise más adelante.'],
-    ['La volvería a ver.', 'Le daría otra vuelta con gusto.'],
-    ['Ya tengo ganas de volver a verla.', 'La vería de nuevo hoy mismo.'],
+    ['En una de esas la volvería a ver.', 'La volvería a ver.'],
+    ['Si alguien me dice de volver a verla, me sumo.', 'Fija que la vuelvo a ver algún día.'],
   ];
-  if (f.fulfilled != null) p4.push(pick(fulTxt[f.fulfilled]));
-  if (f.rewatch != null) p4.push(pick(rwTxt[f.rewatch]));
-  if (tidy(f.recommend)) p4.push(`Se la recomiendo a ${lc(f.recommend)}.`);
-  p4.push(`Mi nota: ${fmt(stars)}/5.`);
+  let ft = f.fulfilled != null ? pick(fulTxt[f.fulfilled]) : '';
+  let rt = f.rewatch != null ? pick(rwTxt[f.rewatch]) : '';
+  // Si en general no le gustó pero el cierre es positivo, se engancha con "Aunque"
+  if (ft && f.fulfilled >= 2 && stars < 3) ft = 'Aunque ' + ft[0].toLowerCase() + ft.slice(1);
+  // Si no cumple pero la volvería a ver, se engancha con "pero"
+  if (ft && rt && f.fulfilled <= 1 && f.rewatch >= 2) p4.push(ft.replace(/\.$/, '') + ', pero ' + rt[0].toLowerCase() + rt.slice(1));
+  else { if (ft) p4.push(ft); if (rt) p4.push(rt); }
+  p4.push(`Le doy ${fmt(stars)} de 5 estrellitas.`);
   paras.push(p4.join(' '));
   return paras.join('\n\n');
 }
@@ -409,13 +408,12 @@ const REQ = '<span class="req" aria-hidden="true">*</span>';
 
 function stepMovie(f){
   return `
-  <div><h2>¿Qué viste?</h2><p class="lede">Empecemos por lo básico. El año es opcional, sirve para distinguir remakes.</p></div>
+  <div><h2>¿Qué viste?</h2><p class="lede">Empecemos por lo básico.</p></div>
   <div class="fields">
     <div class="ac">
       <label class="field"><span>Título ${REQ}</span><input id="f-title" data-bind="title" aria-required="true" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="title-list" value="${esc(f.title)}" placeholder="Ej. Relatos salvajes" autocomplete="off"></label>
       <ul class="ac-list" id="title-list" role="listbox" aria-label="Películas sugeridas" hidden></ul>
     </div>
-    <label class="field">Año<input id="f-year" data-bind="year" value="${esc(f.year)}" inputmode="numeric" maxlength="4" placeholder="2014" autocomplete="off"></label>
   </div>
   <fieldset><legend>¿La terminaste de ver?</legend>
     <div class="opts opts-3">${DONE.map(d => optBtn({act:'set', key:'done', val:d.k, label:d.l, sub:d.s, pressed:f.done === d.k})).join('')}</div>
@@ -437,42 +435,17 @@ function stepGut(f){
 
 function stepAreas(f){
   return `
-  <div><h2>Por áreas</h2><p class="lede">Puntuá lo que te llamó la atención. Si algo no lo registraste, marcá “No me fijé” y no cuenta. El porqué es opcional, pero hace mejor la reseña.</p></div>
+  <div><h2>Por áreas</h2><p class="lede">Puntuá lo que te llamó la atención. Si algo no lo registraste, marcá “No le di bola” y no cuenta.</p></div>
   ${AREAS.map(a => {
     const st = f.areas[a.k];
     const isNum = typeof st.lv === 'number';
     return `<fieldset class="area"><div class="area-head"><h3>${a.name}</h3><span>${a.hint}</span></div>
       <div class="opts">
         ${LEVELS.map((lv, i) => optBtn({act:'area', key:a.k, val:i, label:lv.l, pressed:st.lv === i})).join('')}
-        ${optBtn({act:'area', key:a.k, val:'skip', label:'No me fijé', pressed:st.lv === 'skip', cls:'skip'})}
+        ${optBtn({act:'area', key:a.k, val:'skip', label:'No le di bola', pressed:st.lv === 'skip', cls:'skip'})}
       </div>
-      ${isNum ? `<input class="why" id="why-${a.k}" data-bind="areas.${a.k}.why" value="${esc(st.why)}" placeholder="${st.lv === 0 ? '¿Qué falló?' : st.lv === 1 ? '¿Qué le faltó?' : '¿Qué te gustó?'}" aria-label="Por qué, ${a.name}" autocomplete="off">` : ''}
-      ${a.k === 'actuaciones' ? actorsBlock(f) : ''}
     </fieldset>`;
   }).join('')}`;
-}
-
-function actorsBlock(f){
-  return `<div class="actors">
-    <span class="opt-note"><b>¿De quién?</b> Nombrá a quien se destacó para bien o para mal.</span>
-    ${f.actors.map((a, i) => `<div class="actor">
-      <input id="actor-name-${i}" data-bind="actors.${i}.name" value="${esc(a.name)}" placeholder="Nombre" aria-label="Nombre del actor o actriz" autocomplete="off">
-      <div class="opts">
-        ${optBtn({act:'verdict', key:i, val:'good', label:'Brilló', pressed:a.verdict === 'good'})}
-        ${optBtn({act:'verdict', key:i, val:'bad', label:'Desentonó', pressed:a.verdict === 'bad'})}
-      </div>
-      <input class="why-a" id="actor-why-${i}" data-bind="actors.${i}.why" value="${esc(a.why)}" placeholder="¿Por qué?" aria-label="Por qué" autocomplete="off">
-      <button type="button" class="x" data-act="rm-actor" data-val="${i}" aria-label="Quitar">×</button>
-    </div>`).join('')}
-    <button type="button" class="link" data-act="add-actor">+ Agregar actor o actriz</button>
-  </div>`;
-}
-
-function stepBestWorst(f){
-  return `
-  <div><h2>Lo mejor y lo peor</h2><p class="lede">Una escena, una idea, un detalle. Escribilo como se lo contarías a alguien. Las dos son opcionales.</p></div>
-  <label class="field">Lo que más te gustó<textarea id="f-best" data-bind="best" placeholder="Ej. la escena del casamiento, que es puro caos">${esc(f.best)}</textarea></label>
-  <label class="field">Lo que menos te gustó<textarea id="f-worst" data-bind="worst" placeholder="Ej. un final que se apura demasiado">${esc(f.worst)}</textarea></label>`;
 }
 
 function stepClose(f){
@@ -483,14 +456,12 @@ function stepClose(f){
   </fieldset>
   <fieldset id="q-rw"><legend>¿La volverías a ver? ${REQ}</legend>
     <div class="opts">${RW.map((x, i) => optBtn({act:'set', key:'rewatch', val:i, label:x.l, pressed:f.rewatch === i})).join('')}</div>
-  </fieldset>
-  <label class="field">¿A quién se la recomendarías? <span class="opt-note">Opcional</span>
-    <input id="f-rec" data-bind="recommend" value="${esc(f.recommend)}" placeholder="Ej. quien disfrute el humor negro" autocomplete="off"></label>`;
+  </fieldset>`;
 }
 
 function stepResult(f){
   const sc = score(f), st = finalStars();
-  if (!S.reviewEdited) S.review = makeReview(f, S.seed, st);
+  S.review = makeReview(f, S.seed, st);
   const pct = v => Math.round(v * 100);
   return `
   <div class="ticket">
@@ -521,8 +492,8 @@ function stepResult(f){
     <div class="bar-row"><span>Cumplió y volverías · 15%</span><div class="bar"><i style="width:${pct(sc.tail)}%"></i></div><span class="v">${pct(sc.tail)}</span></div>
   </section>
 
-  <label class="field review">Tu reseña <span class="opt-note">Editala como quieras antes de copiarla.</span>
-    <textarea id="f-review" data-bind-review="1">${esc(S.review)}</textarea></label>
+  <label class="field review">Tu reseña <span class="opt-note">Copiala o pedí otra versión.</span>
+    <textarea id="f-review" readonly>${esc(S.review)}</textarea></label>
 
   <div class="actions">
     <button type="button" class="btn primary" data-act="copy">Copiar reseña</button>
@@ -531,14 +502,14 @@ function stepResult(f){
   </div>`;
 }
 
-const STEP_FNS = [stepMovie, stepGut, stepAreas, stepBestWorst, stepClose, stepResult];
+const STEP_FNS = [stepMovie, stepGut, stepAreas, stepClose, stepResult];
 
 /* Campos obligatorios que faltan en el paso actual: dónde va el aviso y a dónde llevar al usuario */
 function errors(){
   const f = S.f, e = [];
   if (S.step === 0 && !tidy(f.title)) e.push({after:'.fields', focus:'#f-title', msg:'Escribí el título para seguir.'});
   if (S.step === 1 && f.gut == null) e.push({after:'.gut', focus:'.gut .opt', msg:'Elegí qué sentiste para seguir.'});
-  if (S.step === 4) {
+  if (S.step === 3) {
     if (f.fulfilled == null) e.push({after:'#q-ful .opts', focus:'#q-ful .opt', msg:'Elegí si logra lo que quería ser.'});
     if (f.rewatch == null) e.push({after:'#q-rw .opts', focus:'#q-rw .opt', msg:'Elegí si la volverías a ver.'});
   }
@@ -563,13 +534,13 @@ function render(){
   const cur = S.step;
   AC.open = false; AC.items = []; AC.active = -1;
   document.body.classList.remove('ac-focus');
-  $('#reel').innerHTML = `<span class="label">${cur < 5 ? `Paso ${cur + 1} de 5 · ${STEPS[cur]}` : 'Resultado'}</span>
+  $('#reel').innerHTML = `<span class="label">${cur < STEPS.length ? `Paso ${cur + 1} de ${STEPS.length} · ${STEPS[cur]}` : 'Resultado'}</span>
     <div class="strip" aria-hidden="true">${STEPS.map((_, i) => `<span class="${i < cur ? 'on' : i === cur ? 'cur' : ''}"></span>`).join('')}</div>`;
   $('#stage').innerHTML = STEP_FNS[cur](S.f);
-  $('#navbar').innerHTML = cur < 5
+  $('#navbar').innerHTML = cur < STEPS.length
     ? `<div class="nav-btns">
          <button type="button" class="btn" data-act="back">Atrás</button>
-         <button type="button" class="btn primary" data-act="next" id="next">${cur === 4 ? 'Ver resultado' : 'Siguiente'}</button>
+         <button type="button" class="btn primary" data-act="next" id="next">${cur === STEPS.length - 1 ? 'Ver resultado' : 'Siguiente'}</button>
        </div>`
     : `<div class="nav-btns"><button type="button" class="btn" data-act="back">Volver a las preguntas</button></div>`;
   paintErrors();
@@ -626,8 +597,8 @@ function acSearch(q){
 function acPick(k){
   const m = AC.items[k]; if (!m) return;
   S.f.title = m.title; $('#f-title').value = m.title;
-  S.f.poster = m.path; S.f.posterFor = tidy(m.title).toLowerCase(); // póster para el resultado; se descarta si después cambian el título
-  if (m.year) { S.f.year = m.year; $('#f-year').value = m.year; }
+  S.f.poster = m.path || ''; S.f.posterFor = tidy(m.title).toLowerCase(); // póster para el resultado; se descarta si después cambian el título
+  S.f.year = m.year || '';
   acClose(); paintErrors();
   if (MOBILE.matches) $('#f-title').blur(); else $('#f-title').focus(); // en mobile se cierra el teclado para ver el resultado
 }
@@ -701,9 +672,6 @@ document.addEventListener('click', ev => {
     case 'set': f[key] = /^\d+$/.test(val) ? Number(val) : val; render(); break;
     case 'feel': { const i = f.feels.indexOf(val); i >= 0 ? f.feels.splice(i, 1) : f.feels.push(val); render(); break; }
     case 'area': { const a = f.areas[key]; const v = val === 'skip' ? 'skip' : Number(val); a.lv = a.lv === v ? null : v; render(); break; }
-    case 'add-actor': f.actors.push({name:'', verdict:'good', why:''}); render(); { const n = $('#actor-name-' + (f.actors.length - 1)); n && n.focus(); } break;
-    case 'rm-actor': f.actors.splice(Number(val), 1); render(); break;
-    case 'verdict': f.actors[Number(key)].verdict = val; render(); break;
     case 'next':
       if (canNext()) { S.showErr = false; S.step++; render(); window.scrollTo({top:0}); }
       else {
@@ -715,9 +683,9 @@ document.addEventListener('click', ev => {
       break;
     case 'back': S.showErr = false; if (S.step > 0) { S.step--; render(); } else showIntro(); break;
     case 'adj': S.adjust = clamp(S.adjust + Number(val), -2, 2); S.adjust = finalStars() - score(f).stars; render(); break;
-    case 'reroll': S.seed++; S.reviewEdited = false; render(); break;
+    case 'reroll': S.seed++; render(); break;
     case 'copy': copyText($('#f-review').value, el); break;
-    case 'new': S.f = fresh(); S.step = 0; S.adjust = 0; S.seed = 0; S.reviewEdited = false; S.showErr = false; render(); window.scrollTo({top:0}); break;
+    case 'new': S.f = fresh(); S.step = 0; S.adjust = 0; S.seed = 0; S.showErr = false; render(); window.scrollTo({top:0}); break;
   }
 });
 
@@ -728,16 +696,14 @@ document.addEventListener('input', ev => {
     if (t.id === 'f-quit') $('#quit-out').textContent = t.value + '%';
     paintErrors();
     if (t.id === 'f-title') {
-      if (S.f.poster && tidy(t.value).toLowerCase() !== S.f.posterFor) { S.f.poster = ''; S.f.posterFor = ''; }
+      if (S.f.posterFor && tidy(t.value).toLowerCase() !== S.f.posterFor) { S.f.poster = ''; S.f.year = ''; S.f.posterFor = ''; }
       acSearch(t.value);
     }
-  } else if (t.dataset.bindReview) {
-    S.review = t.value; S.reviewEdited = true;
   }
 });
 document.addEventListener('keydown', ev => {
   if (acKey(ev)) return;
-  if (ev.key === 'Enter' && ev.target.tagName === 'INPUT' && S.step < 5) {
+  if (ev.key === 'Enter' && ev.target.tagName === 'INPUT' && S.step < STEPS.length) {
     const n = $('#next'); if (n) { ev.preventDefault(); n.click(); }
   }
 });
