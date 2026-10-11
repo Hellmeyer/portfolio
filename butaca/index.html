@@ -468,7 +468,7 @@ function stepResult(f){
     <div class="main">
       ${f.poster ? `<img class="poster" src="https://image.tmdb.org/t/p/w185${esc(f.poster)}" alt="Póster de ${esc(tidy(f.title))}" width="92" height="138">` : ''}
       <div class="main-txt">
-      <span class="label">${f.done === 'yes' ? 'Función completa' : f.done === 'partial' ? 'Vista a medias' : `Abandonada al ${f.quitAt}%`}${f.year ? ' · ' + esc(f.year) : ''}</span>
+      <span class="label">${f.done === 'yes' ? 'Función completa' : f.done === 'partial' ? 'Vista a medias' : 'Abandonada ' + (f.quitAt <= 30 ? 'al principio' : f.quitAt >= 70 ? 'antes del final' : 'a la mitad')}${f.year ? ' · ' + esc(f.year) : ''}</span>
       <div class="title">${esc(tidy(f.title))}</div>
       ${starsHTML(st, 'lg')}
       </div>
