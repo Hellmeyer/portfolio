@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="../css/style.css">
 <style>
 /* Butaca usa la paleta, las tipografías y los componentes compartidos del sitio
-   (../css/style.css: .topnav, .btn, .eyebrow, .site-footer). Acá solo van los
+   (../css/style.css: .btn, .eyebrow, .site-footer). Acá solo van los
    componentes propios de la herramienta: progreso, opciones, talón. */
 :root{
   --bt-line:rgba(242,232,213,.16);    /* divisores y bordes decorativos */
@@ -102,7 +102,7 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .opt:hover{border-color:var(--parchment)}
 .opt[aria-pressed="true"]{background:var(--parchment);color:var(--ink);border-color:var(--parchment)}
 .opt[aria-pressed="true"] small{color:inherit;opacity:.75}
-.opt.skip{font-weight:400;color:var(--parchment-dim);border-style:dashed}
+.opt.skip{font-weight:400;color:var(--parchment-dim);border-style:solid}
 .opt.skip[aria-pressed="true"]{background:var(--ink-3);color:var(--parchment);border-color:var(--parchment-dim)}
 .chip{border-radius:999px;padding:7px 14px;font-weight:500}
 
@@ -140,12 +140,12 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 @media (max-width:600px){
   .navbar{position:sticky;bottom:0;z-index:5;flex-direction:column;align-items:stretch;gap:8px;
     border-top:0;padding:12px 0 calc(14px + env(safe-area-inset-bottom,0px))}
-  /* Mismo fondo que .topnav: translúcido con blur, a todo el ancho (el .wrap tiene 20px de margen a cada lado en mobile) */
+  /* Fondo translúcido con blur (el mismo que usa .topnav en el resto del sitio), a todo el ancho (el .wrap tiene 20px de margen a cada lado en mobile) */
   .navbar::before{content:"";position:absolute;inset:0 -20px;z-index:-1;pointer-events:none;
     background:rgba(20,22,31,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:var(--edge)}
   .nav-btns{gap:10px}
   /* Al enfocar el título en mobile: el campo sube al tope, se libera lugar (sin botonera) y la lista tiene alto para scrollear */
-  .ac{scroll-margin-top:76px}
+  .ac{scroll-margin-top:24px}
   .ac-list{max-height:42vh}
   body.ac-focus .navbar{display:none}
   body.ac-focus .bt-main{padding-bottom:75vh}
@@ -169,14 +169,14 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 .ticket .main-txt{display:flex;flex-direction:column;gap:12px;min-width:0;flex:1}
 .ticket .poster{width:92px;height:auto;aspect-ratio:2/3;object-fit:cover;flex:none;border-radius:2px;background:var(--ink-3)}
 @media (max-width:560px){.ticket .poster{width:72px}}
-.ticket .stub{padding:24px 18px;border-left:2px dashed var(--bt-control);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+.ticket .stub{padding:24px 18px;border-left:2px solid var(--bt-control);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
 .ticket .title{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,5vw,2.5rem);line-height:1.02;overflow-wrap:anywhere;color:var(--parchment)}
 .big-num{font-family:var(--display);font-weight:800;font-size:3.6rem;line-height:.9;color:var(--epic)}
 .adj{display:flex;align-items:center;gap:6px}
 .adj button{width:36px;height:36px;border-radius:50%;border:1px solid var(--bt-control);background:transparent;font-weight:600;font-size:1.1rem;cursor:pointer;color:var(--parchment)}
 .adj button:hover:not(:disabled){border-color:var(--parchment)}
 .adj button:disabled{opacity:.35;cursor:not-allowed}
-@media (max-width:560px){.ticket{grid-template-columns:1fr;-webkit-mask:none;mask:none}.ticket .stub{border-left:0;border-top:2px dashed var(--bt-control)}}
+@media (max-width:560px){.ticket{grid-template-columns:1fr;-webkit-mask:none;mask:none}.ticket .stub{border-left:0;border-top:2px solid var(--bt-control)}}
 
 .stars{position:relative;display:inline-block;width:max-content;white-space:nowrap;line-height:1;font-size:1.6rem}
 .stars .bg{color:rgba(242,232,213,.2)}
@@ -195,12 +195,6 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 </style>
 </head>
 <body>
-
-<header class="topnav">
-  <div class="wrap">
-    <a class="mark" href="../index.html">tato<span>.</span></a>
-  </div>
-</header>
 
 <main class="bt-main is-intro" id="main">
   <div class="bt-wall" id="wall" aria-hidden="true"></div>
@@ -582,15 +576,13 @@ function render(){
 }
 
 /* ---------- Autocompletar de títulos (TMDB) ---------- */
-/* Credencial de TMDB de solo lectura: sirve la API key v3 (32 caracteres) o el "API Read Access Token" (empieza con eyJ).
-   Con la constante vacía el autocompletar queda desactivado y el campo funciona como siempre. */
-const TMDB_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZTAxNDU4MGI2ZDdmY2RkZTEwNGM0ZDEyZmMwZTMwMiIsIm5iZiI6MTc5MTY3ODQ3NS44MTQwMDAxLCJzdWIiOiI2YWNhZDgwYjUzZGJlNTI1MDdiYzg4MjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.6jqNvHTA31fPK_7ZrpzpHW1KN82DRp2-lymcHSB3i1Q';
+/* Las consultas a TMDB pasan por un Worker de Cloudflare (butaca-api) que guarda la clave del lado del servidor:
+   en esta página no hay ninguna credencial. Rutas: /search?q=… y /trending?page=… */
+const API = 'https://butaca-api.haldmeyer.workers.dev';
 const AC = {timer:0, ctl:null, items:[], active:-1, open:false};
 
-function tmdb(path, params = {}, signal){
-  const bearer = TMDB_KEY.startsWith('eyJ');
-  const qs = new URLSearchParams({...(bearer ? {} : {api_key: TMDB_KEY}), language: 'es-AR', ...params});
-  return fetch(`https://api.themoviedb.org/3/${path}?${qs}`, {signal, headers: bearer ? {Authorization: 'Bearer ' + TMDB_KEY} : {}});
+function api(route, params = {}, signal){
+  return fetch(`${API}${route}?${new URLSearchParams(params)}`, {signal});
 }
 
 function acClose(){
@@ -618,11 +610,11 @@ function acMark(){
 function acSearch(q){
   clearTimeout(AC.timer); if (AC.ctl) AC.ctl.abort();
   q = q.trim();
-  if (!TMDB_KEY || q.length < 2) { AC.items = []; acClose(); return; }
+  if (q.length < 2) { AC.items = []; acClose(); return; }
   AC.timer = setTimeout(async () => {
     AC.ctl = new AbortController();
     try {
-      const r = await tmdb('search/movie', {include_adult: 'false', query: q}, AC.ctl.signal);
+      const r = await api('/search', {q}, AC.ctl.signal);
       if (!r.ok) throw new Error('tmdb ' + r.status);
       const d = await r.json();
       if (document.activeElement !== $('#f-title')) return;
@@ -668,7 +660,7 @@ document.addEventListener('mousedown', ev => {
 });
 
 /* ---------- Pared de pósters (portada) ---------- */
-/* 2 consultas a TMDB (tendencias de la semana), guardadas 24 h en el navegador: cada visitante consulta como mucho una vez por día.
+/* 2 consultas (tendencias de la semana de TMDB, vía el Worker), guardadas 24 h en el navegador: cada visitante consulta como mucho una vez por día.
    Las imágenes salen del CDN de TMDB y no cuentan contra el límite de la API. Si todo falla, la portada queda con fondo liso. */
 const WALL_KEY = 'butaca.wall.v1', WALL_TTL = 24 * 3600 * 1000;
 async function wallPosters(){
@@ -676,7 +668,7 @@ async function wallPosters(){
   try { cached = JSON.parse(localStorage.getItem(WALL_KEY) || 'null'); } catch {}
   if (cached && cached.p && cached.p.length && Date.now() - cached.t < WALL_TTL) return cached.p;
   try {
-    const pages = await Promise.all([1, 2].map(n => tmdb('trending/movie/week', {page: n}).then(r => r.ok ? r.json() : Promise.reject())));
+    const pages = await Promise.all([1, 2].map(n => api('/trending', {page: n}).then(r => r.ok ? r.json() : Promise.reject())));
     const p = pages.flatMap(d => d.results || []).map(m => m.poster_path).filter(Boolean);
     if (p.length) { try { localStorage.setItem(WALL_KEY, JSON.stringify({t: Date.now(), p})); } catch {} return p; }
   } catch {}
@@ -692,7 +684,7 @@ function buildWall(p){
   }).join('');
   wall.classList.add('on');
 }
-if (TMDB_KEY) wallPosters().then(buildWall);
+wallPosters().then(buildWall);
 
 /* ---------- Acciones ---------- */
 async function copyText(txt, btn){
