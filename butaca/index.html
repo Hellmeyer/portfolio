@@ -80,10 +80,9 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 
 .opts-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .opts-3 .opt{justify-content:center;text-align:center;padding:12px 8px}
-.gut{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.gut{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .gut .opt{align-items:center;justify-content:center;text-align:center;padding:14px 8px;gap:6px}
 .gut .em{font-size:1.7rem;line-height:1}
-@media (max-width:520px){.gut{grid-template-columns:repeat(2,1fr)}.gut .opt{flex-direction:row;gap:8px;padding:14px 6px}.gut .em{font-size:1.25rem}.gut .opt:last-child{grid-column:1/-1}}
 
 .range-row{display:flex;align-items:center;gap:12px}
 .range-row input{flex:1;accent-color:var(--brass)}
@@ -197,14 +196,14 @@ legend small,.opt-note{font-weight:400;color:var(--parchment-dim);font-size:.88r
 const AREAS = [
   {k:'guion', name:'Guion', hint:'Historia, diálogos, cómo cierra', art:'el guion', pl:false},
   {k:'actuaciones', name:'Actuaciones', hint:'Todo el elenco, no solo los protagonistas', art:'las actuaciones', pl:true},
-  {k:'direccion', name:'Dirección y fotografía', hint:'Cómo está filmada, lo visual', art:'la dirección y la fotografía', pl:true},
-  {k:'sonido', name:'Música y sonido', hint:'Banda sonora y diseño de sonido', art:'la música y el sonido', pl:true},
+  {k:'direccion', name:'Dirección y fotografía', hint:'Cómo está filmada, lo visual', art:'la dirección y la fotografía', parts:['la dirección','la fotografía'], pl:true},
+  {k:'sonido', name:'Música y sonido', hint:'Banda sonora y diseño de sonido', art:'la música y el sonido', parts:['la música','el sonido'], pl:true},
   {k:'ritmo', name:'Ritmo y montaje', hint:'¿Fluye o se hizo larga?', art:'el ritmo', pl:false},
 ];
 const LEVELS = [{l:'Floja',v:0},{l:'Correcta',v:.4},{l:'Buena',v:.75},{l:'Sobresaliente',v:1}];
 const GUT = [
   {l:'La odié',v:0,e:'🤬'},{l:'No me gustó',v:.2,e:'🙁'},{l:'Ni fu ni fa',v:.5,e:'😐'},
-  {l:'Me gustó',v:.75,e:'🙂'},{l:'Me voló la cabeza',v:1,e:'🤯'}];
+  {l:'Me gustó',v:.75,e:'🙂'},{l:'Me gustó mucho',v:.88,e:'😄'},{l:'Me voló la cabeza',v:1,e:'🤯'}];
 const FEELS = ['Me hizo reír','Me emocionó','Me tensionó','Me hizo pensar','Me dio miedo','Me quedé pensándola','Me aburrió','Me incomodó','Me enojó','Me costó seguirla','No sé si la entendí','Nada especial'];
 const FUL = [{l:'Se quedó corta',v:0},{l:'A medias',v:.4},{l:'Sí, cumple',v:.75},{l:'La superó',v:1}];
 const RW = [{l:'Nunca',v:0},{l:'Quizás',v:.4},{l:'Sí',v:.75},{l:'Ya mismo',v:1}];
@@ -276,6 +275,7 @@ function makeReview(f, seed, stars){
     [`${T1} no me gustó para nada.`, `Con ${T1} no hubo caso: la sufrí.`, `${T1} me resultó insoportable.`],
     [`${T1} no me terminó de convencer.`, `Esperaba bastante más de ${T1}.`, `${T1} no me llegó.`],
     [`${T1} está bien, pero no mucho más.`, `${T1} se deja ver, aunque no me marcó.`, `Con ${T1} me quedé en el medio: ni fu ni fa.`],
+    [`${T1} me gustó.`, `${T1} está buena, me dejó conforme.`, `Disfruté ${T1}.`],
     [`${T1} me gustó mucho.`, `La pasé muy bien con ${T1}.`, `${T1} me ganó.`],
     [`${T1} me voló la cabeza.`, `${T1} es de esas películas que te quedan dando vueltas.`, `Salí de ${T1} con ganas de contárselo a todo el mundo.`],
   ];
@@ -309,7 +309,8 @@ function makeReview(f, seed, stars){
     const pre = () => { const s = (lv === 0 && hasPositive && first) ? pick(['En cambio, ', 'Del otro lado, ']) : ''; first = false; return s; };
     if (noWhy.length) {
       const pl = noWhy.length > 1 || noWhy[0].pl;
-      const subj = joinY(noWhy.map(x => x.art));
+      // Al enumerar varias áreas, las que ya llevan una "y" adentro se separan para que quede una sola "y" al final
+      const subj = joinY(noWhy.flatMap(x => x.parts || [x.art]));
       const p = pre();
       p2.push((p ? p + subj : cap(subj)) + ' ' + vNo(pl) + '.');
     }
