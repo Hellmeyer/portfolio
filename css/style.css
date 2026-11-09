@@ -1404,6 +1404,62 @@ a:hover { color: var(--frost); }
 }
 
 /* ============================================
+   RESUME LANGUAGE PICKER (native <dialog>)
+   ============================================ */
+.lang-modal {
+  width: min(92vw, 380px);
+  padding: 24px;
+  background: var(--ink-2);
+  color: var(--parchment);
+  border: var(--edge);
+  border-radius: 2px;
+}
+.lang-modal::backdrop {
+  background: rgba(20, 18, 28, 0.82);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.lang-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.lang-modal h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  margin: 0;
+}
+.lang-modal-close {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid rgba(242, 232, 213, 0.4);
+  border-radius: 2px;
+  color: var(--parchment);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.lang-modal-close:hover { border-color: var(--brass); color: var(--brass); }
+.lang-modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lang-modal-options .btn {
+  width: 100%;
+  justify-content: center;
+}
+body:has(dialog[open]) { overflow: hidden; }
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 900px) {

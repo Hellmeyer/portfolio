@@ -40,7 +40,7 @@
           <a href="mailto:haldmeyer@gmail.com">haldmeyer@gmail.com</a>
           <a href="https://www.linkedin.com/in/haldmeyer/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://www.instagram.com/haldmeyer/" target="_blank" rel="noopener">Instagram</a>
-          <a href="assets/resume/Matias_Haldmeyer_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+          <a href="assets/resume/Matias_Haldmeyer_Resume.pdf" target="_blank" rel="noopener" data-resume-modal aria-haspopup="dialog">Resume</a>
         </div>
       </div>
     </div>
@@ -319,6 +319,17 @@
     <p class="mark">tato.</p>
   </div>
 </footer>
+
+<dialog class="lang-modal" id="resume-lang" aria-labelledby="resume-lang-title">
+  <div class="lang-modal-head">
+    <h2 id="resume-lang-title">Select language</h2>
+    <button type="button" class="lang-modal-close" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="lang-modal-options">
+    <a class="btn" href="assets/resume/Matias_Haldmeyer_Resume_ES.pdf" target="_blank" rel="noopener" lang="es" hreflang="es">Español</a>
+    <a class="btn" href="assets/resume/Matias_Haldmeyer_Resume.pdf" target="_blank" rel="noopener" lang="en" hreflang="en">English</a>
+  </div>
+</dialog>
 
 <script src="js/main.js"></script>
 </body>

@@ -516,3 +516,25 @@ var IS_ES = document.documentElement.lang === 'es';
 
   items.forEach(function (el) { observer.observe(el); });
 })();
+
+// Resume: clicking the link opens a language picker (Español / English).
+// Without JS, or where <dialog> isn't supported, the link still opens the English PDF.
+(function () {
+  var dialog = document.getElementById('resume-lang');
+  var trigger = document.querySelector('[data-resume-modal]');
+  if (!dialog || !trigger || typeof dialog.showModal !== 'function') return;
+
+  trigger.addEventListener('click', function (e) {
+    e.preventDefault();
+    dialog.showModal();
+  });
+
+  dialog.addEventListener('click', function (e) {
+    // Close button, a language choice (the PDF opens in a new tab), or a click on the backdrop
+    var r = dialog.getBoundingClientRect();
+    var outside = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    if (outside || e.target.closest('[data-close]') || e.target.closest('.lang-modal-options a')) {
+      dialog.close();
+    }
+  });
+})();
