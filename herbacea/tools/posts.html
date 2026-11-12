@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herbácea · generador de posts</title>
+  <base href="../">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+  <style>
+    :root { --panel: #f7f8f3; --borde: #d3d8cb; }
+    body { margin: 0; background: #e4e7de; color: var(--tinta); font: 14px/1.45 var(--sans); }
+    .gp { display: grid; grid-template-columns: 280px minmax(0, 1fr) 360px; height: calc(100svh - var(--hub, 0px)); }
+    aside, .detalle { background: var(--panel); overflow-y: auto; }
+    aside { border-right: 1px solid var(--borde); padding: 1rem; }
+    .detalle { border-left: 1px solid var(--borde); padding: 1rem; display: grid; gap: 1.1rem; align-content: start; }
+    h1 { font: 400 1.2rem var(--serif); margin: 0 0 0.8rem; }
+    h2 { font: 600 12.5px var(--sans); color: var(--piedra); margin: 0 0 0.5rem; }
+    .filtros-tipo { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.8rem; }
+    .filtros-tipo button, .formatos button { font: 500 12.5px/1 var(--sans); padding: 0.45rem 0.7rem; border-radius: 999px; border: 1px solid var(--borde); background: #fff; cursor: pointer; color: inherit; }
+    .filtros-tipo button[aria-pressed=true], .formatos button[aria-pressed=true] { background: var(--tinta); color: #eef0e8; border-color: var(--tinta); }
+    .ideas { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+    .ideas button { width: 100%; text-align: left; font: inherit; padding: 0.55rem 0.65rem; border-radius: 8px; border: 1px solid transparent; background: none; cursor: pointer; color: inherit; display: grid; gap: 2px; }
+    .ideas button:hover { background: #fff; }
+    .ideas button[aria-current=true] { background: #fff; border-color: var(--tinta); }
+    .ideas small { color: var(--piedra); font-size: 11.5px; }
+    .centro { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+    .barra { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--borde); background: var(--panel); }
+    .barra .empuje { flex: 1; }
+    .formatos { display: flex; gap: 4px; }
+    .boton-chico { font: 500 13px/1 var(--sans); padding: 0.6rem 0.95rem; border-radius: 999px; border: 1px solid var(--tinta); background: transparent; color: var(--tinta); cursor: pointer; }
+    .boton-chico.principal { background: var(--tinta); color: #eef0e8; }
+    .boton-chico:disabled { opacity: 0.45; cursor: default; }
+    .tira { overflow: auto; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+    .slide { flex: none; display: grid; gap: 0.4rem; justify-items: center; }
+    .slide canvas, .slide .cargando { width: 300px; height: auto; border-radius: 6px; box-shadow: 0 1px 0 #0001; cursor: pointer; background: #fff; outline: 3px solid transparent; outline-offset: 3px; }
+    .slide .cargando { display: grid; place-items: center; color: var(--piedra); aspect-ratio: var(--ar); }
+    .slide.sel canvas { outline-color: #1a73e8; }
+    .slide span { font-size: 12px; color: var(--piedra); }
+    label.campo { display: grid; gap: 4px; font-size: 12.5px; color: var(--piedra); }
+    label.campo input, label.campo textarea, label.campo select { font: 14px/1.4 var(--sans); color: var(--tinta); padding: 0.5rem 0.6rem; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
+    textarea { resize: vertical; }
+    .fila { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .estado { font-size: 12.5px; color: var(--piedra); }
+    .tags { font-size: 13px; color: #1a4fa0; word-break: break-word; }
+  </style>
+</head>
+<body>
+  <div class="gp">
+    <aside>
+      <h1>Ideas de posts</h1>
+      <div class="filtros-tipo" id="tipos"></div>
+      <button class="boton-chico" id="azar" type="button" style="width:100%;margin-bottom:0.8rem">Idea al azar</button>
+      <ul class="ideas" id="ideas"></ul>
+    </aside>
+
+    <section class="centro">
+      <div class="barra">
+        <div class="formatos" id="formatos"></div>
+        <label class="fila" style="align-items:center;gap:0.4rem">Giro de frascos <input id="giro" type="range" min="-3.14" max="3.14" step="0.01" value="-0.25"></label>
+        <span class="empuje"></span>
+        <span class="estado" id="estado"></span>
+        <button class="boton-chico" id="bajarSlide" type="button">Descargar slide</button>
+        <button class="boton-chico principal" id="bajarTodo" type="button">Descargar todas</button>
+      </div>
+      <div class="tira" id="tira"></div>
+    </section>
+
+    <section class="detalle">
+      <div>
+        <h2>Slide seleccionada</h2>
+        <div id="campos"></div>
+      </div>
+      <div>
+        <h2>Texto del post</h2>
+        <label class="campo">Caption<textarea id="caption" rows="9"></textarea></label>
+        <label class="campo" style="margin-top:0.6rem">Hashtags (separados por espacio)<textarea id="hashtags" rows="3"></textarea></label>
+        <div class="fila" style="margin-top:0.6rem">
+          <button class="boton-chico principal" id="copiar" type="button">Copiar texto completo</button>
+          <button class="boton-chico" id="restaurar" type="button">Volver al original</button>
+        </div>
+        <p class="estado" id="contador"></p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { montarBarra } from './tools/herramientas.js';
+    montarBarra('posts');
+    import { IDEAS, TIPOS } from './tools/posts-ideas.js';
+    import { dibujarSlide, FORMATOS, NOMBRES_LAYOUT } from './tools/posts-render.js';
+    import { ILUSTRACIONES } from './js/assets.js';
+    import { PRODUCTOS } from './js/products.js';
+
+    const $ = (s) => document.querySelector(s);
+    const clon = (o) => JSON.parse(JSON.stringify(o));
+    const CLAVE = 'herbacea-posts-v1';
+    let guardado = {};
+    try { guardado = JSON.parse(localStorage.getItem(CLAVE) || '{}'); } catch {}
+    const persistir = () => { try { localStorage.setItem(CLAVE, JSON.stringify(guardado)); } catch {} };
+
+    let tipo = 'todos', idea = null, formato = 'feed', sel = 0, canvases = [], giro = -0.25, turno = 0;
+
+    // ── listas ──
+    $('#tipos').innerHTML = [['todos', 'Todos'], ...Object.entries(TIPOS)].map(([k, v]) => `<button type="button" data-t="${k}">${v}</button>`).join('');
+    $('#formatos').innerHTML = Object.entries(FORMATOS).map(([k, f]) => `<button type="button" data-f="${k}">${f.nombre}</button>`).join('');
+    function listar() {
+      document.querySelectorAll('#tipos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.t === tipo)));
+      document.querySelectorAll('#formatos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.f === formato)));
+      const lista = IDEAS.filter((i) => tipo === 'todos' || i.tipo === tipo);
+      $('#ideas').innerHTML = lista.map((i) => `<li><button type="button" data-id="${i.id}" aria-current="${idea?.id === i.id}">${i.titulo}<small>${TIPOS[i.tipo]} · ${i.slides.length} ${i.slides.length > 1 ? 'slides' : 'slide'}</small></button></li>`).join('');
+    }
+    $('#tipos').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { tipo = b.dataset.t; listar(); } });
+    $('#formatos').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { formato = b.dataset.f; listar(); dibujarTodo(); } });
+    $('#ideas').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) abrir(b.dataset.id); });
+    $('#azar').addEventListener('click', () => {
+      const lista = IDEAS.filter((i) => (tipo === 'todos' || i.tipo === tipo) && i.id !== idea?.id);
+      abrir(lista[Math.floor(Math.random() * lista.length)].id);
+    });
+
+    // ── idea abierta (con ediciones guardadas en este navegador) ──
+    function abrir(id) {
+      const base = IDEAS.find((i) => i.id === id);
+      idea = clon(base);
+      const ed = guardado[id];
+      if (ed) Object.assign(idea, ed);
+      sel = 0;
+      $('#caption').value = idea.caption;
+      $('#hashtags').value = idea.hashtags.map((h) => '#' + h).join(' ');
+      listar();
+      contar();
+      dibujarTodo();
+      campos();
+    }
+    function guardarEdicion() {
+      guardado[idea.id] = { slides: idea.slides, caption: idea.caption, hashtags: idea.hashtags };
+      persistir();
+    }
+
+    // ── dibujo ──
+    async function dibujarTodo() {
+      if (!idea) return;
+      const mio = ++turno;
+      const f = FORMATOS[formato];
+      $('#tira').innerHTML = idea.slides.map((s, i) => `<div class="slide ${i === sel ? 'sel' : ''}" data-i="${i}"><div class="cargando" style="--ar:${f.w}/${f.h}">Dibujando…</div><span>${i + 1}. ${NOMBRES_LAYOUT[s.layout] || s.layout}</span></div>`).join('');
+      canvases = [];
+      for (let i = 0; i < idea.slides.length; i++) {
+        const c = await dibujarSlide(idea, idea.slides[i], { formato, giro });
+        if (mio !== turno) return;
+        canvases[i] = c;
+        const cont = $(`#tira .slide[data-i="${i}"]`);
+        cont.querySelector('.cargando').replaceWith(c);
+      }
+    }
+    async function redibujar(i) {
+      const mio = ++turno;
+      const c = await dibujarSlide(idea, idea.slides[i], { formato, giro });
+      if (mio !== turno) return;
+      canvases[i] = c;
+      const cont = $(`#tira .slide[data-i="${i}"]`);
+      cont.querySelector('canvas, .cargando').replaceWith(c);
+    }
+    $('#tira').addEventListener('click', (e) => {
+      const s = e.target.closest('.slide');
+      if (!s) return;
+      sel = +s.dataset.i;
+      document.querySelectorAll('#tira .slide').forEach((x) => x.classList.toggle('sel', +x.dataset.i === sel));
+      campos();
+    });
+    let espera;
+    $('#giro').addEventListener('input', (e) => { giro = +e.target.value; clearTimeout(espera); espera = setTimeout(dibujarTodo, 250); });
+
+    // ── campos de la slide ──
+    const FONDOS = { suave: 'Suave (color del producto)', profundo: 'Profundo (color fuerte)', papel: 'Papel', tinta: 'Tinta (oscuro)' };
+    const CAMPOS = {
+      kicker: ['Antetítulo', 'input'], titulo: ['Título', 'input'], subtitulo: ['Bajada', 'textarea'],
+      nombre: ['Nombre', 'input'], latin: ['Nombre científico', 'input'], texto: ['Texto', 'textarea'],
+      items: ['Ítems (uno por línea)', 'textarea'], antes: ['Precio anterior', 'input'], precio: ['Precio', 'input'], ahorro: ['Ahorro', 'input'],
+    };
+    function campos() {
+      const s = idea.slides[sel];
+      let html = `<label class="campo">Fondo<select data-k="fondo">${Object.entries(FONDOS).map(([k, v]) => `<option value="${k}" ${s.fondo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>`;
+      for (const [k, [nombre, tipoCampo]] of Object.entries(CAMPOS)) {
+        if (!(k in s)) continue;
+        const val = k === 'items' ? (s.items || []).join('\n') : (s[k] ?? '');
+        html += tipoCampo === 'textarea'
+          ? `<label class="campo">${nombre}<textarea data-k="${k}" rows="${k === 'items' ? 5 : 3}">${val}</textarea></label>`
+          : `<label class="campo">${nombre}<input data-k="${k}" value="${String(val).replace(/"/g, '&quot;')}"></label>`;
+      }
+      if ('items' in s) html += `<label class="campo" style="grid-auto-flow:column;justify-content:start;align-items:center"><input type="checkbox" data-k="numerada" ${s.numerada ? 'checked' : ''}> Numerada</label>`;
+      if (['lista', 'frase', 'planta', 'texto', 'portada', 'cierre'].includes(s.layout)) {
+        html += `<label class="campo">Ilustración<select data-k="ilustracion"><option value="">Ninguna</option>${ILUSTRACIONES.map((n) => `<option ${s.ilustracion === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>`;
+      }
+      $('#campos').innerHTML = html.replace(/<label/g, '<label style="margin-bottom:0.55rem"');
+    }
+    let esperaCampo;
+    $('#campos').addEventListener('input', (e) => {
+      const k = e.target.dataset.k;
+      if (!k) return;
+      const s = idea.slides[sel];
+      if (k === 'items') s.items = e.target.value.split('\n');
+      else if (k === 'numerada') s.numerada = e.target.checked;
+      else s[k] = e.target.value;
+      guardarEdicion();
+      clearTimeout(esperaCampo);
+      esperaCampo = setTimeout(() => redibujar(sel), 300);
+    });
+
+    // ── caption ──
+    function contar() {
+      const total = textoCompleto();
+      const n = idea.hashtags.length;
+      $('#contador').textContent = `${total.length} / 2200 caracteres · ${n} hashtags${n > 30 ? ' (Instagram permite hasta 30)' : ''}`;
+    }
+    function textoCompleto() { return `${idea.caption}\n.\n.\n${idea.hashtags.map((h) => '#' + h).join(' ')}`; }
+    $('#caption').addEventListener('input', (e) => { idea.caption = e.target.value; guardarEdicion(); contar(); });
+    $('#hashtags').addEventListener('input', (e) => { idea.hashtags = e.target.value.split(/\s+/).map((h) => h.replace(/^#/, '')).filter(Boolean); guardarEdicion(); contar(); });
+    $('#copiar').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(textoCompleto()); $('#estado').textContent = 'Texto copiado.'; }
+      catch { $('#estado').textContent = 'No se pudo copiar: seleccioná el texto y copialo a mano.'; }
+    });
+    $('#restaurar').addEventListener('click', () => {
+      if (!confirm('¿Volver al texto y las slides originales de esta idea?')) return;
+      delete guardado[idea.id]; persistir(); abrir(idea.id);
+    });
+
+    // ── descargas ──
+    function descargar(c, n) {
+      const a = document.createElement('a');
+      a.download = `herbacea-${idea.id}-${formato}-${String(n + 1).padStart(2, '0')}.png`;
+      a.href = c.toDataURL('image/png');
+      a.click();
+    }
+    $('#bajarSlide').addEventListener('click', () => { if (canvases[sel]) descargar(canvases[sel], sel); });
+    $('#bajarTodo').addEventListener('click', async () => {
+      for (let i = 0; i < canvases.length; i++) { if (canvases[i]) { descargar(canvases[i], i); await new Promise((r) => setTimeout(r, 350)); } }
+      $('#estado').textContent = `${canvases.length} imágenes descargadas.`;
+    });
+
+    listar();
+    abrir(new URLSearchParams(location.search).get('idea') || IDEAS[0].id);
+    window.generadorListo = true;
+  </script>
+</body>
+</html>

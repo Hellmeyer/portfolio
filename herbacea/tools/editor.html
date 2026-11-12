@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herbácea · editor de composiciones</title>
+  <base href="../">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+  <style>
+    :root { --panel: #f7f8f3; --borde: #d3d8cb; --acento: #14211a; }
+    body { margin: 0; background: #e4e7de; color: var(--tinta); font: 14px/1.45 var(--sans); overflow: hidden; }
+    .ed { display: grid; grid-template-rows: auto 1fr; height: calc(100svh - var(--hub, 0px)); }
+    .barra { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; padding: 0.7rem 1rem; background: var(--panel); border-bottom: 1px solid var(--borde); }
+    .barra h1 { font: 400 1.15rem var(--serif); margin: 0 0.5rem 0 0; }
+    .barra label { display: flex; align-items: center; gap: 0.5rem; }
+    .barra .empuje { flex: 1; }
+    select, input[type=number] { font: inherit; padding: 0.4rem 0.5rem; border: 1px solid var(--borde); border-radius: 8px; background: #fff; color: inherit; }
+    input[type=number] { width: 4.6rem; }
+    button { font: 500 13px/1 var(--sans); padding: 0.6rem 0.9rem; border-radius: 999px; border: 1px solid var(--acento); background: transparent; color: var(--acento); cursor: pointer; }
+    button.principal { background: var(--acento); color: #eef0e8; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    .estado { font-size: 13px; color: var(--piedra); min-width: 12rem; }
+    .estado.sucio { color: #9e2b27; }
+    .cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 330px; min-height: 0; }
+    .lienzo { display: grid; place-items: center; padding: 1rem; min-height: 0; }
+    .escena { position: relative; aspect-ratio: 4 / 5; height: min(100%, calc((100vw - 380px) * 1.25)); border-radius: 1.25rem; overflow: hidden; background: var(--fondo, #eef0e8); box-shadow: inset 0 0 0 1px #0001; }
+    .escena canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    .escena .decor-img { pointer-events: auto; cursor: grab; user-select: none; }
+    .escena.arrastrando .decor-img { cursor: grabbing; }
+    .ayuda { position: absolute; left: 0.75rem; bottom: 0.6rem; z-index: 3; font-size: 11.5px; color: #0009; background: #fff9; padding: 0.3rem 0.55rem; border-radius: 6px; pointer-events: none; }
+    .panel { background: var(--panel); border-left: 1px solid var(--borde); overflow-y: auto; padding: 1rem; display: grid; gap: 1.25rem; align-content: start; }
+    .panel h2 { font: 600 12.5px var(--sans); margin: 0 0 0.6rem; color: var(--piedra); }
+    .lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+    .lista li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px; padding: 0.35rem 0.4rem 0.35rem 0.6rem; border-radius: 8px; border: 1px solid transparent; cursor: pointer; }
+    .lista li:hover { background: #fff; }
+    .lista li.sel { background: #fff; border-color: #1a73e8; }
+    .lista .capa { font-size: 11px; color: var(--piedra); }
+    .lista button { padding: 0.25rem 0.45rem; border: 0; font-size: 13px; border-radius: 6px; }
+    .lista button:hover { background: #e7eae1; }
+    .fila { display: flex; gap: 0.5rem; }
+    .fila select { flex: 1; min-width: 0; }
+    .control { display: grid; grid-template-columns: 6.2rem 1fr auto; align-items: center; gap: 0.5rem; margin-bottom: 0.45rem; }
+    .control input[type=range] { width: 100%; accent-color: var(--acento); }
+    .segmento { display: inline-flex; border: 1px solid var(--borde); border-radius: 999px; overflow: hidden; }
+    .segmento button { border: 0; border-radius: 0; padding: 0.45rem 0.8rem; }
+    .segmento button[aria-pressed=true] { background: var(--acento); color: #eef0e8; }
+    .vacio { color: var(--piedra); font-size: 13px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="ed">
+    <header class="barra">
+      <h1>Composiciones</h1>
+      <label>Producto <select id="clave"></select></label>
+      <label>Giro del frasco <input id="giro" type="range" min="-3.14" max="3.14" step="0.01" value="-0.3"></label>
+      <span class="empuje"></span>
+      <span id="estado" class="estado">Sin cambios</span>
+      <button id="auto" type="button" title="Vuelve a la composición automática">Restablecer</button>
+      <button id="guardar" type="button" class="principal">Guardar</button>
+    </header>
+    <div class="cuerpo">
+      <div class="lienzo">
+        <div class="escena" id="escena">
+          <canvas></canvas>
+          <p class="ayuda">Arrastrar: mover · Rueda: escala · Shift+rueda: rotar · Alt+rueda: profundidad · Flechas: ajuste fino · Supr: quitar</p>
+        </div>
+      </div>
+      <aside class="panel">
+        <section>
+          <h2>Elementos</h2>
+          <ul class="lista" id="lista"></ul>
+          <p class="vacio" id="sinElementos">Sin elementos. Agregá uno abajo.</p>
+          <div class="fila" style="margin-top:0.6rem">
+            <select id="nuevo"></select>
+            <button id="agregar" type="button">Agregar</button>
+          </div>
+        </section>
+        <section id="propiedades" hidden>
+          <h2 id="nombreSel">Elemento</h2>
+          <p class="vacio" id="ubicSel" style="margin:0 0 0.6rem"></p>
+          <div id="controles"></div>
+          <label style="display:flex;gap:0.5rem;align-items:center;margin-top:0.3rem"><input type="checkbox" id="espejo"> Espejar horizontalmente</label>
+        </section>
+        <section>
+          <h2>Escena</h2>
+          <label style="display:flex;gap:0.5rem;align-items:center"><input type="checkbox" id="blur" checked> Desenfoque por distancia</label>
+          <p class="vacio" style="margin:0.4rem 0 0">La profundidad define si un elemento queda detrás (negativa) o delante (positiva) del frasco. Lo lejano se ve más chico y desenfocado.</p>
+          <div id="frascos" hidden style="margin-top:0.8rem">
+            <div class="control"><span>Separación de frascos</span><input type="range" id="sepR" min="-1" max="6" step="0.05"><input type="number" id="sepN" step="0.1"></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module">
+    import { montarBarra } from './tools/herramientas.js';
+    montarBarra('composiciones');
+    import { PRODUCTOS, PROMOS, porId, resolver } from './js/products.js';
+    import { FONDOS } from './js/fondos.js';
+    import { Estudio } from './js/bottle3d.js';
+    import { Decor, ubicaciones, capaDe } from './js/decor.js';
+    import { crearFotografo, composicionesActuales } from './tools/fichas.js';
+
+    const $ = (s) => document.querySelector(s);
+    const escenaEl = $('#escena');
+    const canvas = escenaEl.querySelector('canvas');
+
+    // composiciones actuales (se leen frescas del servidor)
+    let comps = (await import('./js/composiciones.js?t=' + Date.now())).COMPOSICIONES;
+
+    // ── opciones ─────────────────────────────────────────────
+    const claves = [
+      ...PRODUCTOS.map((p) => ({ clave: p.id, nombre: p.nombre, productos: [resolver(p)], escena: p.escena, fondo: p.tema.suave, producto: p })),
+      ...PROMOS.map((pr, i) => ({ clave: `promo-${i}`, nombre: `Promo: ${pr.titulo}`, productos: pr.productos.map(([id, v]) => resolver(porId(id), v)), escena: pr.escena, fondo: pr.tema.profundo })),
+    ];
+    $('#clave').innerHTML = claves.map((c) => `<option value="${c.clave}">${c.nombre}</option>`).join('');
+    const etiqueta = (n) => n.replace(':', ' · ').replace(/^./, (c) => c.toUpperCase());
+    $('#nuevo').innerHTML = Object.keys(FONDOS).map((n) => `<option value="${n}">${etiqueta(n)}</option>`).join('');
+
+    // ── escena ───────────────────────────────────────────────
+    const estudio = new Estudio(canvas, { encuadre: 2 });
+    const decor = new Decor(estudio, escenaEl);
+    decor.adaptarMovil = false;
+    const ajustar = () => estudio.ajustar(canvas.clientWidth, canvas.clientHeight);
+    new ResizeObserver(ajustar).observe(canvas);
+    ajustar();
+    estudio.fijar({ giro: -0.3, y: 0.02 }, true);
+    const bucle = (t) => { estudio.cuadro(t); requestAnimationFrame(bucle); };
+    requestAnimationFrame(bucle);
+
+    let actual, items = [], sel = null, separacion = 0.9, blur = true, giro = -0.3, sucio = false;
+
+    const CONTROLES = [
+      { k: 'x', nombre: 'Posición X', min: -15, max: 15, paso: 0.05 },
+      { k: 'y', nombre: 'Altura', min: -6, max: 12, paso: 0.05 },
+      { k: 'z', nombre: 'Profundidad', min: -14, max: 8, paso: 0.05 },
+      { k: 'rot', nombre: 'Rotación', min: -180, max: 180, paso: 1 },
+      { k: 'escala', nombre: 'Escala', min: 0.2, max: 3, paso: 0.01 },
+    ];
+    $('#controles').innerHTML = CONTROLES.map((c) => `
+      <div class="control"><span>${c.nombre}</span>
+        <input type="range" data-k="${c.k}" min="${c.min}" max="${c.max}" step="${c.paso}">
+        <input type="number" data-k="${c.k}" step="${c.paso}">
+      </div>`).join('');
+
+    function marcar(v = true) {
+      sucio = v;
+      $('#estado').textContent = v ? 'Cambios sin guardar' : (comps[actual.clave] ? 'Composición guardada' : 'Composición automática');
+      $('#estado').classList.toggle('sucio', v);
+    }
+
+    async function cargar(clave) {
+      actual = claves.find((c) => c.clave === clave);
+      comps = await composicionesActuales(); // siempre lo último guardado
+      const guardada = comps[clave];
+      separacion = guardada?.separacion ?? 0.9;
+      blur = guardada?.desenfoque !== false;
+      // giro del frasco: el banner usa -0.15 por defecto y las fichas -0.3
+      giro = guardada?.giro ?? (clave.startsWith('promo-') ? -0.15 : -0.3);
+      $('#giro').value = giro;
+      estudio.fijar({ giro }, true);
+      decor.desenfoque = blur;
+      $('#blur').checked = blur;
+      estudio.separacion = separacion;
+      escenaEl.style.setProperty('--fondo', actual.fondo);
+      await estudio.mostrar(actual.productos);
+      const base = guardada ? guardada.elementos : ubicaciones(actual.escena || [], estudio.anchoEnvases);
+      items = base.map((e) => ({ y: 0, rot: 0, escala: 1, espejo: false, ...e }));
+      $('#frascos').hidden = actual.productos.length < 2;
+      $('#sepR').value = $('#sepN').value = separacion;
+      sel = null;
+      redibujar();
+      marcar(false);
+    }
+
+    function redibujar() {
+      decor.ponerItems(items);
+      items.forEach((it) => it.img?.classList.toggle('sel', it === sel));
+      decor.actualizar();
+      $('#lista').innerHTML = items.map((it, i) => `
+        <li data-i="${i}" class="${it === sel ? 'sel' : ''}">
+          <span>${etiqueta(it.nombre)} <span class="capa">${capaDe(it) === 'atras' ? 'detrás del frasco' : 'delante del frasco'}</span></span>
+          <button type="button" data-acc="quitar" title="Quitar">✕</button>
+        </li>`).join('');
+      $('#sinElementos').hidden = items.length > 0;
+      panel();
+    }
+
+    function panel() {
+      $('#propiedades').hidden = !sel;
+      if (!sel) return;
+      $('#nombreSel').textContent = etiqueta(sel.nombre);
+      for (const c of CONTROLES) {
+        document.querySelectorAll(`#controles [data-k="${c.k}"]`).forEach((inp) => { inp.value = +(+sel[c.k]).toFixed(c.paso < 1 ? 2 : 0); });
+      }
+      $('#espejo').checked = !!sel.espejo;
+      $('#ubicSel').textContent = (capaDe(sel) === 'atras' ? 'Detrás' : 'Delante') + ' del frasco, a ' + Math.abs(sel.z).toFixed(1) + ' cm de profundidad';
+    }
+
+    function seleccionar(it) {
+      sel = it;
+      items.forEach((x) => x.img?.classList.toggle('sel', x === sel));
+      decor.actualizar();
+      document.querySelectorAll('#lista li').forEach((li) => li.classList.toggle('sel', items[li.dataset.i] === sel));
+      panel();
+    }
+
+    function cambiar(fn, rehacer = false) {
+      if (!sel) return;
+      fn(sel);
+      marcar(true);
+      if (rehacer) { const s = sel; redibujar(); seleccionar(s); } else { decor.actualizar(); panel(); }
+    }
+
+    // ── panel ────────────────────────────────────────────────
+    $('#controles').addEventListener('input', (e) => {
+      const k = e.target.dataset.k;
+      if (!k || e.target.value === '') return;
+      cambiar((s) => { s[k] = +e.target.value; }, k === 'z');
+    });
+    $('#espejo').addEventListener('change', (e) => cambiar((s) => { s.espejo = e.target.checked; }));
+    $('#blur').addEventListener('change', (e) => { blur = e.target.checked; decor.desenfoque = blur; decor.actualizar(); marcar(true); });
+    $('#lista').addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      const it = items[li.dataset.i];
+      const acc = e.target.closest('button')?.dataset.acc;
+      if (!acc) return seleccionar(it);
+      const i = items.indexOf(it);
+      if (acc === 'quitar') { items.splice(i, 1); if (sel === it) sel = null; }
+      marcar(true);
+      redibujar();
+    });
+    $('#agregar').addEventListener('click', () => {
+      const nombre = $('#nuevo').value;
+      if (items.some((x) => x.nombre === nombre) && !confirm('Ese elemento ya está en la composición. ¿Agregarlo igual?')) return;
+      const planta = ['palmera', 'monstera', 'lavanda', 'pasto'].includes(nombre.split(':')[0]);
+      const it = { nombre, x: planta ? -2 : 4, y: 0, z: planta ? -3 : 2.2, rot: 0, escala: 1, espejo: false };
+      items.push(it);
+      sel = it;
+      marcar(true);
+      redibujar();
+    });
+    const sep = (v) => {
+      separacion = +v;
+      $('#sepR').value = $('#sepN').value = separacion;
+      estudio.separacion = separacion;
+      marcar(true);
+      estudio.mostrar(actual.productos).then(() => decor.actualizar());
+    };
+    $('#sepR').addEventListener('change', (e) => sep(e.target.value));
+    $('#sepN').addEventListener('change', (e) => sep(e.target.value));
+    $('#giro').addEventListener('input', (e) => { giro = +e.target.value; estudio.fijar({ giro }, true); marcar(true); });
+
+    // ── manipulación directa ────────────────────────────────
+    // cm por píxel de pantalla en el lugar del elemento
+    function cmPorPx(it) {
+      const a = estudio.proyectar(it.x, it.y, it.z), b = estudio.proyectar(it.x, it.y + 1, it.z);
+      return 1 / Math.max(0.001, Math.abs(a.y - b.y));
+    }
+    let arrastre = null;
+    escenaEl.addEventListener('pointerdown', (e) => {
+      const img = e.target.closest('.decor-img');
+      if (!img) { seleccionar(null); return; }
+      const it = decor.items.find((x) => x.img === img);
+      seleccionar(it);
+      arrastre = { x: e.clientX, y: e.clientY, x0: it.x, y0: it.y, f: cmPorPx(it) };
+      escenaEl.setPointerCapture(e.pointerId);
+      escenaEl.classList.add('arrastrando');
+    });
+    escenaEl.addEventListener('pointermove', (e) => {
+      if (!arrastre || !sel) return;
+      const dx = (e.clientX - arrastre.x) * arrastre.f, dy = (e.clientY - arrastre.y) * arrastre.f;
+      sel.x = +(arrastre.x0 + dx).toFixed(2);
+      sel.y = +(arrastre.y0 - dy).toFixed(2);
+      marcar(true);
+      decor.actualizar();
+      panel();
+    });
+    const soltar = () => { arrastre = null; escenaEl.classList.remove('arrastrando'); };
+    escenaEl.addEventListener('pointerup', soltar);
+    escenaEl.addEventListener('pointercancel', soltar);
+    escenaEl.addEventListener('wheel', (e) => {
+      if (!sel) return;
+      e.preventDefault();
+      const d = Math.sign(e.deltaY);
+      cambiar((s) => {
+        if (e.shiftKey) s.rot = Math.round(s.rot - d * 3);
+        else if (e.altKey) s.z = +(s.z - d * 0.25).toFixed(2);
+        else s.escala = +Math.max(0.1, s.escala * (d > 0 ? 0.95 : 1.05)).toFixed(3);
+      }, e.altKey);
+    }, { passive: false });
+    addEventListener('keydown', (e) => {
+      if (!sel || /input|select/i.test(document.activeElement?.tagName)) return;
+      const paso = e.shiftKey ? 1 : 0.1;
+      const mover = { ArrowLeft: ['x', -paso], ArrowRight: ['x', paso], ArrowUp: ['y', paso], ArrowDown: ['y', -paso] }[e.key];
+      if (mover) { e.preventDefault(); cambiar((s) => { s[mover[0]] = +(s[mover[0]] + mover[1]).toFixed(2); }); }
+      if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); items.splice(items.indexOf(sel), 1); sel = null; marcar(true); redibujar(); }
+    });
+
+    // ── guardar ─────────────────────────────────────────────
+    // relee el archivo antes de escribir y cambia solo esta clave (no pisa lo guardado desde otra pestaña)
+    async function escribir(clave, valor) {
+      comps = await composicionesActuales();
+      if (valor) comps[clave] = valor; else delete comps[clave];
+      const js = '// Composiciones guardadas con tools/editor.html — no editar a mano.\n'
+        + '// Clave: id del producto o "promo-N". x/y/z en cm (y = altura, z = profundidad), rot en grados.\n'
+        + 'export const COMPOSICIONES = ' + JSON.stringify(comps, null, 2) + ';\n';
+      const r = await fetch('guardar?en=datos&n=composiciones.js', { method: 'POST', body: new Blob([js]) });
+      if (!r.ok) throw new Error(await r.text());
+    }
+    let fotografo;
+    async function actualizarFicha() {
+      if (!actual.producto) return '';
+      fotografo ??= crearFotografo();
+      // exactamente la composición recién guardada (o la automática si se restableció)
+      const blob = await fotografo.foto(actual.producto, comps[actual.clave] || null);
+      const r = await fetch(`guardar?en=productos&n=${actual.producto.id}.webp`, { method: 'POST', body: blob });
+      if (!r.ok) throw new Error(await r.text());
+      return ' Foto del catálogo actualizada.';
+    }
+    $('#guardar').addEventListener('click', async () => {
+      $('#guardar').disabled = true;
+      $('#estado').textContent = 'Guardando…';
+      try {
+        await escribir(actual.clave, {
+          elementos: items.map(({ nombre, x, y, z, rot, escala, espejo }) => ({ nombre, x, y, z, rot, escala, espejo })),
+          ...(blur ? {} : { desenfoque: false }),
+          ...(actual.productos.length > 1 ? { separacion } : {}),
+          giro: +giro.toFixed(3),
+        });
+        $('#estado').textContent = 'Guardado. Generando la foto del catálogo…';
+        const extra = await actualizarFicha();
+        marcar(false);
+        $('#estado').textContent = 'Guardado.' + extra;
+      } catch (err) {
+        $('#estado').textContent = 'No se pudo guardar: ' + err.message + '. ¿Está corriendo node tools/recibir.js?';
+      } finally {
+        $('#guardar').disabled = false;
+      }
+    });
+    $('#auto').addEventListener('click', async () => {
+      if (!confirm('¿Volver a la composición automática? Se borra la guardada para este producto.')) return;
+      try { await escribir(actual.clave, null); await actualizarFicha(); } catch (err) { $('#estado').textContent = 'No se pudo guardar: ' + err.message; return; }
+      await cargar(actual.clave);
+      $('#estado').textContent = 'Restablecida a la composición automática.';
+    });
+
+    let anterior = claves[0].clave;
+    $('#clave').addEventListener('change', async (e) => {
+      if (sucio && !confirm('Hay cambios sin guardar. ¿Descartarlos?')) { e.target.value = anterior; return; }
+      anterior = e.target.value;
+      await cargar(e.target.value);
+    });
+    addEventListener('beforeunload', (e) => { if (sucio) e.preventDefault(); });
+
+    const inicial = new URLSearchParams(location.search).get('p');
+    if (inicial && claves.some((c) => c.clave === inicial)) { $('#clave').value = inicial; anterior = inicial; }
+    await cargar($('#clave').value);
+    window.editorListo = true;
+  </script>
+</body>
+</html>

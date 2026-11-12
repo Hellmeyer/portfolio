@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herbácea · herramientas</title>
+  <base href="../">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { margin: 0; background: var(--papel); color: var(--tinta); }
+    .hub { max-width: 64rem; margin: 0 auto; padding: clamp(2.5rem, 6vw, 4.5rem) var(--gutter) 4rem; }
+    .hub h1 { font-size: var(--t-xl); margin-bottom: 0.6rem; }
+    .hub > p { color: var(--piedra); max-width: 52ch; margin-bottom: 2.5rem; }
+    .tarjetas { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; }
+    .tarjeta { display: grid; grid-template-rows: auto auto 1fr auto; gap: 0.6rem; height: 100%; padding: 1.4rem; border-radius: 1.1rem; background: #fff; border: 1px solid var(--linea); text-decoration: none; color: inherit; }
+    .tarjeta:hover { border-color: var(--tinta); }
+    .tarjeta .ico { width: 2.6rem; height: 2.6rem; border-radius: 50%; display: grid; place-items: center; background: var(--papel); color: var(--musgo); }
+    .tarjeta h2 { font-size: var(--t-l); }
+    .tarjeta p { color: var(--piedra); font-size: var(--t-s); }
+    .tarjeta span { font-weight: 500; font-size: var(--t-s); }
+    .nota { margin-top: 2.5rem; font-size: var(--t-s); color: var(--piedra); }
+    .nota code { background: #fff; padding: 0.1rem 0.4rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main class="hub">
+    <h1>Herramientas</h1>
+    <p>Todo lo que usamos para mantener el sitio y las redes de Herbácea. Desde la barra de arriba podés pasar de una herramienta a otra en cualquier momento.</p>
+    <ul class="tarjetas" id="tarjetas"></ul>
+    <p class="nota">Estas herramientas funcionan en esta compu mientras corre <code>node tools/recibir.js</code>.</p>
+  </main>
+  <script type="module">
+    import { HERRAMIENTAS, montarBarra, icono, urlSitio } from './tools/herramientas.js';
+    montarBarra('inicio');
+    document.getElementById('tarjetas').innerHTML = [
+      ...HERRAMIENTAS.map((h) => `
+        <li><a class="tarjeta" href="${h.url}">
+          <span class="ico">${icono(h.icono, 20)}</span>
+          <h2>${h.nombre}</h2>
+          <p>${h.descripcion}</p>
+          <span>Abrir</span>
+        </a></li>`),
+      `<li><a class="tarjeta" href="${urlSitio()}" target="_blank" rel="noopener">
+          <span class="ico">${icono('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>', 20)}</span>
+          <h2>Sitio web</h2>
+          <p>El catálogo tal como lo ven tus clientes, para revisar los cambios.</p>
+          <span>Abrir en otra pestaña</span>
+        </a></li>`,
+    ].join('');
+  </script>
+</body>
+</html>

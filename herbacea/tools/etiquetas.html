@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herbácea · etiquetas</title>
+  <base href="../">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+  <style>
+    :root { --panel: #f7f8f3; --borde: #d3d8cb; }
+    body { margin: 0; background: #e4e7de; color: var(--tinta); font: 14px/1.45 var(--sans); }
+    .et { display: grid; grid-template-columns: 270px minmax(0, 1fr) 360px; height: calc(100svh - var(--hub, 0px)); }
+    aside, .props { background: var(--panel); overflow-y: auto; padding: 1rem; }
+    aside { border-right: 1px solid var(--borde); }
+    .props { border-left: 1px solid var(--borde); display: grid; gap: 1rem; align-content: start; }
+    h1 { font: 400 1.2rem var(--serif); margin: 0 0 0.6rem; }
+    h2 { font: 600 12.5px var(--sans); color: var(--piedra); margin: 0 0 0.5rem; }
+    .grupo + .grupo { margin-top: 0.9rem; }
+    .lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+    .lista button { width: 100%; text-align: left; font: inherit; padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid transparent; background: none; cursor: pointer; color: inherit; display: flex; gap: 0.5rem; align-items: center; }
+    .lista button:hover { background: #fff; }
+    .lista button[aria-current=true] { background: #fff; border-color: var(--tinta); }
+    .muestra { width: 14px; height: 14px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px #0002; }
+    .badge { margin-left: auto; font-size: 10.5px; padding: 0.1rem 0.45rem; border-radius: 999px; background: #e7e9e1; color: var(--piedra); }
+    .badge.final { background: #1f321e; color: #e9d7a0; }
+    .centro { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+    .barra { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; padding: 0.7rem 1rem; border-bottom: 1px solid var(--borde); background: var(--panel); }
+    .barra .empuje { flex: 1; }
+    .pestanas { display: flex; gap: 4px; }
+    .pestanas button, .chip { font: 500 12.5px/1 var(--sans); padding: 0.5rem 0.8rem; border-radius: 999px; border: 1px solid var(--borde); background: #fff; cursor: pointer; color: inherit; }
+    .pestanas button[aria-pressed=true] { background: var(--tinta); color: #eef0e8; border-color: var(--tinta); }
+    .lienzo { overflow: auto; padding: 1.5rem; display: grid; place-items: center; align-content: center; gap: 0.8rem; }
+    .lienzo canvas { max-width: 100%; height: auto; box-shadow: 0 1px 0 #0001, 0 10px 30px -18px #0004; background: #fff; }
+    .nota { font-size: 12px; color: var(--piedra); text-align: center; max-width: 60ch; }
+    label.campo { display: grid; gap: 4px; font-size: 12.5px; color: var(--piedra); }
+    label.campo input, label.campo textarea, label.campo select { font: 14px/1.4 var(--sans); color: var(--tinta); padding: 0.45rem 0.6rem; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
+    textarea { resize: vertical; }
+    .colores { display: flex; flex-wrap: wrap; gap: 5px; }
+    .colores button { width: 26px; height: 26px; border-radius: 50%; border: 0; cursor: pointer; box-shadow: inset 0 0 0 1px #0003; }
+    .colores button[aria-pressed=true] { outline: 2px solid var(--tinta); outline-offset: 2px; }
+    .fila { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .boton-chico { font: 500 13px/1 var(--sans); padding: 0.6rem 0.95rem; border-radius: 999px; border: 1px solid var(--tinta); background: transparent; color: var(--tinta); cursor: pointer; }
+    .boton-chico.principal { background: var(--tinta); color: #eef0e8; }
+    .boton-chico:disabled { opacity: 0.45; cursor: default; }
+    .estado { font-size: 12.5px; color: var(--piedra); }
+    .estado.ok { color: #2e6b3a; } .estado.error { color: #9e2b27; }
+    .asignar { display: grid; gap: 0.5rem; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="et">
+    <aside>
+      <h1>Etiquetas</h1>
+      <div class="fila" style="margin-bottom:0.8rem">
+        <select id="nuevoFormato" style="flex:1;font:inherit;padding:0.4rem;border:1px solid var(--borde);border-radius:8px"></select>
+        <button class="boton-chico" id="nueva" type="button">Nueva</button>
+      </div>
+      <div id="lista"></div>
+    </aside>
+
+    <section class="centro">
+      <div class="barra">
+        <div class="pestanas" id="pestanas">
+          <button type="button" data-v="etiqueta" aria-pressed="true">Etiqueta</button>
+          <button type="button" data-v="plancha" aria-pressed="false">Plancha e impresión</button>
+        </div>
+        <label class="fila" id="ctlGuias" style="gap:0.35rem"><input type="checkbox" id="guias" checked> Guías de corte</label>
+        <span class="empuje"></span>
+        <span class="estado" id="estado"></span>
+      </div>
+      <div class="lienzo" id="lienzo"></div>
+    </section>
+
+    <section class="props" id="panelEtiqueta">
+      <div>
+        <h2>Etiqueta</h2>
+        <label class="campo">Nombre interno<input data-k="titulo"></label>
+        <p class="estado" id="formatoInfo" style="margin:0.4rem 0 0"></p>
+        <label class="campo" style="margin-top:0.6rem">Producto del sitio<select data-k="producto" id="producto"></select></label>
+      </div>
+      <div>
+        <h2>Colores</h2>
+        <p class="estado" style="margin:0 0 0.3rem">Fondo</p><div class="colores" data-color="fondo"></div>
+        <p class="estado" style="margin:0.6rem 0 0.3rem">Textos, logo y marco</p><div class="colores" data-color="tinta"></div>
+        <p class="estado" style="margin:0.6rem 0 0.3rem">Ilustraciones</p><div class="colores" data-color="acento"></div>
+      </div>
+      <div id="campos"></div>
+      <div>
+        <h2>Estado</h2>
+        <div class="fila">
+          <button class="boton-chico" id="guardar" type="button">Guardar borrador</button>
+          <button class="boton-chico principal" id="final" type="button">Marcar como final</button>
+        </div>
+        <p class="estado" style="margin-top:0.5rem">Al marcarla como final, se guarda y reemplaza la etiqueta del frasco 3D del producto vinculado en el sitio y en su foto del catálogo.</p>
+        <div class="fila" style="margin-top:0.6rem">
+          <button class="boton-chico" id="duplicar" type="button">Duplicar</button>
+          <button class="boton-chico" id="borrar" type="button">Borrar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="props" id="panelPlancha" hidden>
+      <div>
+        <h2>Plancha (31 × 45 cm)</h2>
+        <label class="campo">Distribución<select id="preset"></select></label>
+      </div>
+      <div>
+        <h2>Qué etiqueta va en cada columna</h2>
+        <div class="asignar" id="asignar"></div>
+        <button class="boton-chico" id="todasIgual" type="button" style="margin-top:0.6rem">Usar la primera en todas</button>
+      </div>
+      <div>
+        <h2>Exportar</h2>
+        <button class="boton-chico principal" id="exportar" type="button" style="width:100%">Descargar PDF (impresión + corte)</button>
+        <p class="estado" style="margin-top:0.5rem">Página 1: impresión a 600 dpi con 3 mm de sangrado y marcas de corte. Página 2: matriz de corte en vector (0,25 pt), en las mismas posiciones. Una copia queda también en la carpeta <code>etiquetas-pdf</code> del proyecto.</p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { montarBarra } from './tools/herramientas.js';
+    montarBarra('etiquetas');
+    import { FORMATOS, PALETA, PLANCHAS, HOJA, SANGRADO, cajaLugar } from './tools/etiquetas-formatos.js';
+    import { dibujarEtiqueta, fuentesEtiqueta } from './tools/etiquetas-render.js';
+    import { exportarPlancha } from './tools/etiquetas-pdf.js';
+    import { crearFotografo } from './tools/fichas.js';
+    import { actualizarEtiquetasFinales } from './js/bottle3d.js';
+    import { ILUSTRACIONES } from './js/assets.js';
+    import { PRODUCTOS } from './js/products.js';
+
+    const $ = (s) => document.querySelector(s);
+    const clon = (o) => JSON.parse(JSON.stringify(o));
+    let disenos = (await import('./tools/datos/etiquetas.js?t=' + Date.now())).DISENOS;
+    let actual = disenos[0], vista = 'etiqueta', sucio = false;
+
+    // ── lista ──
+    $('#nuevoFormato').innerHTML = Object.entries(FORMATOS).map(([k, f]) => `<option value="${k}">${f.nombre}</option>`).join('');
+    function listar() {
+      $('#lista').innerHTML = Object.entries(FORMATOS).map(([k, f]) => {
+        const items = disenos.filter((d) => d.formato === k);
+        if (!items.length) return '';
+        return `<div class="grupo"><h2>${f.nombre} · ${f.w}×${f.h} mm</h2><ul class="lista">${items.map((d) => `
+          <li><button type="button" data-id="${d.id}" aria-current="${d === actual}">
+            <span class="muestra" style="background:${d.fondo}"></span>${d.titulo}
+            <span class="badge ${d.estado === 'final' ? 'final' : ''}">${d.estado === 'final' ? 'Final' : 'Borrador'}</span>
+          </button></li>`).join('')}</ul></div>`;
+      }).join('');
+    }
+    $('#lista').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-id]');
+      if (!b) return;
+      if (sucio && !confirm('Hay cambios sin guardar en esta etiqueta. ¿Cambiar igual?')) return;
+      actual = disenos.find((d) => d.id === b.dataset.id);
+      sucio = false;
+      abrir();
+    });
+
+    // ── productos compatibles con el formato ──
+    function opcionesProducto(formato) {
+      const forma = FORMATOS[formato].forma;
+      const ops = [['', 'Ninguno (solo impresión)']];
+      for (const p of PRODUCTOS) {
+        if (p.variantes) p.variantes.forEach((v, i) => { if (v.forma === forma) ops.push([`${p.id}#${i}`, `${p.nombre} ${v.medida}`]); });
+        else if (p.forma === forma) ops.push([p.id, `${p.nombre} ${p.medida}`]);
+      }
+      return ops;
+    }
+
+    // ── panel de propiedades ──
+    const ETIQ = {
+      linea1: ['Línea superior (cursiva)', 'input'], nombre: ['Nombre del producto', 'input'], subtitulo: ['Subtítulo', 'input'],
+      medida: ['Medida', 'input'], textoIzq: ['Texto izquierdo (uso)', 'textarea'], textoDer: ['Texto derecho', 'textarea'],
+      apto: ['Nota (ej. Apto vegano.)', 'input'], pie1: ['Pie 1', 'input'], pie2: ['Pie 2', 'input'],
+      ilusIzq: ['Ilustración izquierda', 'ilus'], ilusDer: ['Ilustración derecha', 'ilus'],
+    };
+    function colores() {
+      document.querySelectorAll('.colores').forEach((cont) => {
+        const k = cont.dataset.color;
+        const lista = k === 'fondo' ? PALETA.fondos : k === 'tinta' ? PALETA.tintas : PALETA.acentos;
+        cont.innerHTML = lista.map(([hex, nombre]) => `<button type="button" title="${nombre}" style="background:${hex}" data-hex="${hex}" aria-pressed="${actual[k].toUpperCase() === hex.toUpperCase()}"></button>`).join('');
+      });
+    }
+    function abrir() {
+      const f = FORMATOS[actual.formato];
+      document.querySelector('[data-k="titulo"]').value = actual.titulo;
+      $('#formatoInfo').textContent = `${f.nombre} · corte ${f.w} × ${f.h} mm${f.rotar ? ' · en la plancha va parada' : ''}`;
+      $('#producto').innerHTML = opcionesProducto(actual.formato).map(([v, t]) => `<option value="${v}" ${actual.producto === v ? 'selected' : ''}>${t}</option>`).join('');
+      colores();
+      $('#campos').innerHTML = '<h2>Textos e ilustraciones</h2>' + f.campos.map((k) => {
+        const [nombre, tipo] = ETIQ[k];
+        const v = actual[k] ?? '';
+        if (tipo === 'textarea') return `<label class="campo" style="margin-bottom:0.5rem">${nombre}<textarea data-k="${k}" rows="4">${v}</textarea></label>`;
+        if (tipo === 'ilus') return `<label class="campo" style="margin-bottom:0.5rem">${nombre}<select data-k="${k}"><option value="">Ninguna</option>${ILUSTRACIONES.map((n) => `<option ${v === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>`;
+        return `<label class="campo" style="margin-bottom:0.5rem">${nombre}<input data-k="${k}" value="${String(v).replace(/"/g, '&quot;')}"></label>`;
+      }).join('');
+      $('#final').textContent = actual.estado === 'final' ? 'Actualizar final' : 'Marcar como final';
+      listar();
+      dibujar();
+    }
+    $('#panelEtiqueta').addEventListener('input', (e) => {
+      const k = e.target.dataset.k;
+      if (!k) return;
+      actual[k] = e.target.value;
+      sucio = true;
+      if (k === 'titulo') listar();
+      dibujarPronto();
+    });
+    $('#panelEtiqueta').addEventListener('click', (e) => {
+      const b = e.target.closest('.colores button');
+      if (!b) return;
+      const k = b.closest('.colores').dataset.color;
+      actual[k] = b.dataset.hex;
+      sucio = true;
+      colores(); listar(); dibujarPronto();
+    });
+
+    // ── vista previa ──
+    let turno = 0, espera;
+    const dibujarPronto = () => { clearTimeout(espera); espera = setTimeout(dibujar, 120); };
+    async function dibujar() {
+      const mio = ++turno;
+      if (vista === 'etiqueta') {
+        const f = FORMATOS[actual.formato];
+        const disp = $('#lienzo').clientWidth - 48;
+        const pxmm = Math.min(14, disp / (f.w + 2 * SANGRADO)) * (window.devicePixelRatio || 1);
+        const c = await dibujarEtiqueta(actual, { pxmm, guias: $('#guias').checked });
+        if (mio !== turno) return;
+        c.style.width = (c.width / (window.devicePixelRatio || 1)) + 'px';
+        $('#lienzo').replaceChildren(c, Object.assign(document.createElement('p'), { className: 'nota', textContent: 'La línea punteada es el corte; el fondo de afuera es el sangrado de 3 mm. Así se ve a tamaño de pantalla, el PDF sale a 600 dpi.' }));
+      } else {
+        await dibujarPlancha(mio);
+      }
+    }
+    $('#guias').addEventListener('change', dibujar);
+    addEventListener('resize', dibujarPronto);
+
+    // ── guardar ──
+    async function escribir() {
+      const js = '// Diseños de etiquetas guardados con tools/etiquetas.html — se reescribe al guardar.\n'
+        + '// estado: \'borrador\' | \'final\'. Las finales con producto vinculado reemplazan la etiqueta del sitio.\n'
+        + '// producto: id del sitio (js/products.js), con \'#n\' para la variante n (ej. \'aceite-luxor#1\').\n'
+        + 'export const DISENOS = ' + JSON.stringify(disenos, null, 2) + ';\n';
+      const r = await fetch('guardar?en=herramientas&n=etiquetas.js', { method: 'POST', body: new Blob([js]) });
+      if (!r.ok) throw new Error(await r.text());
+    }
+    function aviso(t, tipo = '') { $('#estado').className = 'estado ' + tipo; $('#estado').textContent = t; }
+    $('#guardar').addEventListener('click', async () => {
+      try { await escribir(); sucio = false; aviso('Guardado.', 'ok'); } catch (e) { aviso('No se pudo guardar: ' + e.message, 'error'); }
+    });
+
+    // final: imagen para el sitio + registro en js/etiquetas-finales.js + foto del catálogo
+    let fotografo;
+    $('#final').addEventListener('click', async () => {
+      const b = $('#final'); b.disabled = true;
+      try {
+        actual.estado = 'final';
+        await escribir();
+        sucio = false;
+        if (!actual.producto) { aviso('Marcada como final (no está vinculada a un producto del sitio).', 'ok'); return; }
+        aviso('Generando la etiqueta para el sitio…');
+        // la etiqueta tal como queda pegada: sin sangrado, a buena resolución para la textura 3D
+        const c = await dibujarEtiqueta(actual, { pxmm: 26, sangrado: false });
+        const blob = await new Promise((ok) => c.toBlob(ok, 'image/webp', 0.92));
+        const archivo = 'final-' + actual.producto.replace('#', '-v') + '.webp';
+        let r = await fetch(`guardar?en=etiquetas&n=${archivo}`, { method: 'POST', body: blob });
+        if (!r.ok) throw new Error(await r.text());
+        const finales = { ...(await import('./js/etiquetas-finales.js?t=' + Date.now())).ETIQUETAS_FINALES };
+        finales[actual.producto] = { imagen: `assets/etiquetas/${archivo}`, v: Date.now(), diseno: actual.id };
+        const js = '// Etiquetas marcadas como "final" en tools/etiquetas.html — se reescribe al marcar.\n// Clave: id del producto (con #n para la variante n). Tienen prioridad sobre la etiqueta de products.js.\nexport const ETIQUETAS_FINALES = ' + JSON.stringify(finales, null, 2) + ';\n';
+        r = await fetch('guardar?en=datos&n=etiquetas-finales.js', { method: 'POST', body: new Blob([js]) });
+        if (!r.ok) throw new Error(await r.text());
+        // foto del catálogo del producto (solo la variante principal tiene ficha)
+        const [id, v] = actual.producto.split('#');
+        if (!v || v === '0') {
+          aviso('Actualizando la foto del catálogo…');
+          actualizarEtiquetasFinales(finales);
+          fotografo ??= crearFotografo();
+          const p = PRODUCTOS.find((x) => x.id === id);
+          const foto = await fotografo.foto(p);
+          await fetch(`guardar?en=productos&n=${id}.webp`, { method: 'POST', body: foto });
+        }
+        aviso('Final: ya se ve en el sitio (recargá la página del producto).', 'ok');
+      } catch (e) {
+        aviso('No se pudo completar: ' + e.message, 'error');
+      } finally {
+        b.disabled = false; abrir();
+      }
+    });
+
+    $('#nueva').addEventListener('click', () => {
+      const formato = $('#nuevoFormato').value;
+      const base = disenos.find((d) => d.formato === formato);
+      const d = base ? clon(base) : { formato, fondo: '#E9EBE9', tinta: '#1D1D1B', acento: '#535A86', linea1: '', nombre: 'Nuevo producto', subtitulo: '', medida: '', textoIzq: '', textoDer: '', apto: '', pie1: 'Hecho en Argentina', pie2: '@herbáceafitomedicina', ilusIzq: '', ilusDer: '' };
+      Object.assign(d, { id: formato + '-' + Date.now().toString(36), titulo: 'Nueva etiqueta', producto: '', estado: 'borrador' });
+      disenos.push(d); actual = d; sucio = true; abrir();
+    });
+    $('#duplicar').addEventListener('click', () => {
+      const d = clon(actual);
+      Object.assign(d, { id: actual.formato + '-' + Date.now().toString(36), titulo: actual.titulo + ' (copia)', producto: '', estado: 'borrador' });
+      disenos.push(d); actual = d; sucio = true; abrir();
+    });
+    $('#borrar').addEventListener('click', async () => {
+      if (!confirm(`¿Borrar "${actual.titulo}"? (La imagen final que ya esté en el sitio no se borra.)`)) return;
+      disenos = disenos.filter((d) => d !== actual);
+      actual = disenos[0];
+      try { await escribir(); aviso('Borrada.', 'ok'); } catch (e) { aviso('No se pudo guardar: ' + e.message, 'error'); }
+      abrir();
+    });
+
+    // ── plancha ──
+    const CLAVE = 'herbacea-planchas-v1';
+    let asignaciones = {};
+    try { asignaciones = JSON.parse(localStorage.getItem(CLAVE) || '{}'); } catch {}
+    const persistir = () => { try { localStorage.setItem(CLAVE, JSON.stringify(asignaciones)); } catch {} };
+    $('#preset').innerHTML = Object.entries(PLANCHAS).map(([k, p]) => `<option value="${k}">${p.nombre}</option>`).join('');
+    const grupos = (p) => [...new Map(p.lugares.map((l) => [`${l.formato}:${l.col}`, l])).keys()];
+    function asignacion(preset) {
+      const p = PLANCHAS[preset];
+      const a = (asignaciones[preset] ??= {});
+      for (const g of grupos(p)) {
+        const [formato] = g.split(':');
+        if (!disenos.some((d) => d.id === a[g])) a[g] = disenos.find((d) => d.formato === formato)?.id || '';
+      }
+      return a;
+    }
+    function panelPlancha() {
+      const preset = $('#preset').value, p = PLANCHAS[preset], a = asignacion(preset);
+      $('#asignar').innerHTML = grupos(p).map((g) => {
+        const [formato, col] = g.split(':');
+        const n = p.lugares.filter((l) => `${l.formato}:${l.col}` === g).length;
+        return `<label class="campo">${FORMATOS[formato].nombre} · columna ${+col + 1} (${n})
+          <select data-g="${g}"><option value="">Vacía</option>${disenos.filter((d) => d.formato === formato).map((d) => `<option value="${d.id}" ${a[g] === d.id ? 'selected' : ''}>${d.titulo}${d.estado === 'final' ? ' ✓' : ''}</option>`).join('')}</select></label>`;
+      }).join('');
+    }
+    $('#preset').addEventListener('change', () => { panelPlancha(); dibujar(); });
+    $('#asignar').addEventListener('change', (e) => {
+      const g = e.target.dataset.g; if (!g) return;
+      asignacion($('#preset').value)[g] = e.target.value; persistir(); dibujar();
+    });
+    $('#todasIgual').addEventListener('click', () => {
+      const preset = $('#preset').value, a = asignacion(preset), gs = grupos(PLANCHAS[preset]);
+      for (const g of gs) { const prim = gs.find((x) => x.split(':')[0] === g.split(':')[0]); a[g] = a[prim]; }
+      persistir(); panelPlancha(); dibujar();
+    });
+    const disenoDe = (preset) => (l) => disenos.find((d) => d.id === asignacion(preset)[`${l.formato}:${l.col}`]) || null;
+
+    const cacheMini = new Map();
+    async function mini(d, rotar) {
+      const k = d.id + JSON.stringify(d) + rotar;
+      if (cacheMini.has(k)) return cacheMini.get(k);
+      let c = await dibujarEtiqueta(d, { pxmm: 5, sangrado: true });
+      if (rotar) { const r = document.createElement('canvas'); r.width = c.height; r.height = c.width; const x = r.getContext('2d'); x.translate(0, r.height); x.rotate(-Math.PI / 2); x.drawImage(c, 0, 0); c = r; }
+      cacheMini.set(k, c);
+      return c;
+    }
+    async function dibujarPlancha(mio) {
+      const preset = $('#preset').value, p = PLANCHAS[preset], de = disenoDe(preset);
+      const disp = Math.min($('#lienzo').clientWidth - 48, ($('#lienzo').clientHeight - 60) * HOJA.w / HOJA.h);
+      const pxmm = disp / HOJA.w * (window.devicePixelRatio || 1);
+      const c = document.createElement('canvas');
+      c.width = Math.round(HOJA.w * pxmm); c.height = Math.round(HOJA.h * pxmm);
+      const x = c.getContext('2d');
+      x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+      for (const l of p.lugares) {
+        const d = de(l), b = cajaLugar(l);
+        if (d) {
+          const m = await mini(d, FORMATOS[l.formato].rotar);
+          if (mio !== turno) return;
+          x.drawImage(m, (b.x - SANGRADO) * pxmm, (b.y - SANGRADO) * pxmm, (b.w + 2 * SANGRADO) * pxmm, (b.h + 2 * SANGRADO) * pxmm);
+        }
+        x.strokeStyle = '#e0245e'; x.lineWidth = 1; x.setLineDash([3, 2]);
+        x.strokeRect(b.x * pxmm, b.y * pxmm, b.w * pxmm, b.h * pxmm);
+      }
+      c.style.width = (c.width / (window.devicePixelRatio || 1)) + 'px';
+      const usadas = p.lugares.filter(de).length;
+      $('#lienzo').replaceChildren(c, Object.assign(document.createElement('p'), { className: 'nota', textContent: `${usadas} de ${p.lugares.length} lugares con etiqueta. La línea punteada es la matriz de corte (página 2 del PDF).` }));
+    }
+    $('#exportar').addEventListener('click', async () => {
+      const b = $('#exportar'); b.disabled = true;
+      try {
+        const preset = $('#preset').value;
+        const { blob, nombreArchivo } = await exportarPlancha(PLANCHAS[preset], disenoDe(preset), { titulo: PLANCHAS[preset].nombre.split(' · ')[0], progreso: (t) => aviso(t) });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = nombreArchivo; a.click();
+        await fetch(`guardar?en=pdf&n=${nombreArchivo}`, { method: 'POST', body: blob }).catch(() => {});
+        aviso(`PDF listo: ${nombreArchivo} (también en la carpeta etiquetas-pdf).`, 'ok');
+      } catch (e) {
+        aviso('No se pudo exportar: ' + e.message, 'error');
+      } finally { b.disabled = false; }
+    });
+
+    // ── pestañas ──
+    $('#pestanas').addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      vista = b.dataset.v;
+      document.querySelectorAll('#pestanas button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      $('#panelEtiqueta').hidden = vista !== 'etiqueta';
+      $('#panelPlancha').hidden = vista !== 'plancha';
+      $('#ctlGuias').hidden = vista !== 'etiqueta';
+      if (vista === 'plancha') panelPlancha();
+      dibujar();
+    });
+    addEventListener('beforeunload', (e) => { if (sucio) e.preventDefault(); });
+
+    await fuentesEtiqueta();
+    // la plancha de aceites esenciales arranca como la original: lavanda, tea tree, citronella
+    if (!asignaciones.ae10) { asignaciones.ae10 = { 'ae10:0': 'ae-lavanda', 'ae10:1': 'ae-teatree', 'ae10:2': 'ae-citronella' }; persistir(); }
+    abrir();
+    window.etiquetasListo = true;
+  </script>
+</body>
+</html>
